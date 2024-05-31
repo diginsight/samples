@@ -7,7 +7,7 @@
     <UserSecretsId>23ff649e-5c90-4e70-85dc-f30a3eca5742</UserSecretsId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>AuthenticationSampleApi.xml</DocumentationFile>
+    <DocumentationFile>SampleWebApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,18 +19,25 @@
     <PackageReference Include="Diginsight.Diagnostics" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
     <PackageReference Include="Diginsight.Diagnostics.AspNetCore.OpenTelemetry" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
     <PackageReference Include="Diginsight.Diagnostics.Log4Net" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
-    
+
     <ProjectReference Include="$(DiginsightSmartCacheSolutionDirectory)Diginsight.SmartCache.Externalization.AspNetCore\Diginsight.SmartCache.Externalization.AspNetCore.csproj" Condition="'$(DiginsightSmartCacheDirectImport)' == 'true'" />
     <ProjectReference Include="$(DiginsightSmartCacheSolutionDirectory)Diginsight.SmartCache.Externalization.ServiceBus\Diginsight.SmartCache.Externalization.ServiceBus.csproj" Condition="'$(DiginsightSmartCacheDirectImport)' == 'true'" />
     <PackageReference Include="Diginsight.SmartCache.Externalization.AspNetCore" Version="$(DiginsightSmartcacheVersion)" Condition="'$(DiginsightSmartcacheDirectImport)' != 'true'" />
     <PackageReference Include="Diginsight.SmartCache.Externalization.ServiceBus" Version="$(DiginsightSmartcacheVersion)" Condition="'$(DiginsightSmartcacheDirectImport)' != 'true'" />
-    
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.*" />
-    <PackageReference Include="Asp.Versioning.Abstractions" Version="8.*" />
-    <PackageReference Include="Asp.Versioning.Http" Version="8.*" />
-    <PackageReference Include="Asp.Versioning.Http.Client" Version="8.*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.*" />
+
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.32.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="7.0.0" />
+
+    <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.5" />
+
+    <PackageReference Include="Asp.Versioning.Abstractions" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Http.Client" Version="8.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
 
     <PackageReference Include="Scrutor" Version="4.*" />
@@ -52,7 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.*" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

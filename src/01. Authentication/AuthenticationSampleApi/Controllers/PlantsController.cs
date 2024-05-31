@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Diginsight.CAOptions;
 using Diginsight.Diagnostics;
 using Diginsight.SmartCache;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 namespace SampleWebApi.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "common")]
     public class PlantsController : ControllerBase

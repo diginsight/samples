@@ -10,6 +10,9 @@ using Diginsight.SmartCache.Externalization.ServiceBus;
 using Diginsight.SmartCache;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Diginsight.SmartCache.Externalization.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Logging;
+using System.Reflection;
 
 namespace SampleWebApi
 {
@@ -29,6 +32,9 @@ namespace SampleWebApi
             services.AddHttpContextAccessor();
             services.AddObservability(configuration);
             services.AddDynamicLogLevel<DefaultDynamicLogLevelInjector>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+            IdentityModelEventSource.ShowPII = true;
 
             services.ConfigureClassAware<FeatureFlagOptions>(configuration.GetSection("FeatureManagement"))
                 .PostConfigureClassAwareFromHttpRequestHeaders<FeatureFlagOptions>();
@@ -79,8 +85,11 @@ namespace SampleWebApi
                     //opt.Conventions.Add(new DataExportConvention() as IActionModelConvention);
                 });
 
-            SmartCacheBuilder smartCacheBuilder = services.AddSmartCache().AddHttpHeaderSupport();
+            //services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+            SmartCacheBuilder smartCacheBuilder = services.AddSmartCache().AddHttpHeaderSupport();
             IConfigurationSection smartCacheServiceBusConfiguration = configuration.GetSection("Diginsight:SmartCache:ServiceBus");
             if (!string.IsNullOrEmpty(smartCacheServiceBusConfiguration[nameof(SmartCacheServiceBusOptions.ConnectionString)]) &&
                 !string.IsNullOrEmpty(smartCacheServiceBusConfiguration[nameof(SmartCacheServiceBusOptions.TopicName)]))
@@ -93,7 +102,6 @@ namespace SampleWebApi
                         }
                     );
             }
-
             services.TryAddSingleton<ICacheKeyProvider, MyCacheKeyProvider>();
 
 
@@ -122,13 +130,21 @@ namespace SampleWebApi
             if (IsSwaggerEnabled)
             {
                 app.UseSwaggerDocumentation();
+
+                //app.UseSwagger(); scope.LogDebug($"app.UseSwagger();");
+                //app.UseSwaggerUI(options => options.OAuthClientId(builder.Configuration["SwaggerAuthentication:WebAppClientId"])); scope.LogDebug($"app.UseSwaggerUI(options => options.OAuthClientId(builder.Configuration[\"SwaggerAuthentication:WebAppClientId\"]));");
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication(); // If you have this, it should be before UseAuthorization
+            app.UseAuthorization();  // Make sure this is between UseRouting and UseEndpoints
+
             app.UseCors();
+
+            //app.UseMiddleware<HandleExceptionsMiddleware>(); scope.LogDebug($"app.UseMiddleware<HandleExceptionsMiddleware>();");
 
             app.UseEndpoints(endpoints =>
             {
