@@ -13,9 +13,9 @@
 		<PackageProjectUrl>https://github.com/diginsight/telemetry_samples</PackageProjectUrl>
 
 		<DiginsightDiagnosticsVersion>2.0.0.23</DiginsightDiagnosticsVersion>
-		<DiginsightVersion>3.0.0-alpha.184</DiginsightVersion>
-		<DiginsightSmartcacheVersion>33.0.0-alpha.185</DiginsightSmartcacheVersion>
-		<PackageTags>diginsight;telemetry</PackageTags>
+    <DiginsightCoreVersion>3.0.0-alpha.184</DiginsightCoreVersion>
+    <DiginsightSmartCacheVersion>3.0.0-alpha.185</DiginsightSmartCacheVersion>
+    <PackageTags>diginsight;telemetry</PackageTags>
 		<!-- TODO <PackageIcon> -->
 		<!-- TODO <Description> in each csproj -->
 
@@ -32,5 +32,26 @@
 
 	</PropertyGroup>
 
-	<Import Project="Directory.build.props.user" Condition="Exists('Directory.build.props.user')" />
+  <Import Project="$(MSBuildThisFileDirectory)Directory.build.props.user" Condition="Exists('$(MSBuildThisFileDirectory)Directory.build.props.user')" />
+
+  <PropertyGroup Condition="'$(DiginsightCoreSolutionDirectory)' == ''">
+    <DiginsightCoreDirectImport>false</DiginsightCoreDirectImport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightCoreSolutionDirectory)' != ''">
+    <DiginsightCoreSolutionDirectory>$([MSBuild]::EnsureTrailingSlash('$(DiginsightCoreSolutionDirectory)'))</DiginsightCoreSolutionDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightCoreDirectImport)' == ''">
+    <DiginsightCoreDirectImport>false</DiginsightCoreDirectImport>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(DiginsightSmartCacheSolutionDirectory)' == ''">
+    <DiginsightSmartCacheDirectImport>false</DiginsightSmartCacheDirectImport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightSmartCacheSolutionDirectory)' != ''">
+    <DiginsightSmartCacheSolutionDirectory>$([MSBuild]::EnsureTrailingSlash('$(DiginsightSmartCacheSolutionDirectory)'))</DiginsightSmartCacheSolutionDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightSmartCacheDirectImport)' == ''">
+    <DiginsightSmartCacheDirectImport>false</DiginsightSmartCacheDirectImport>
+  </PropertyGroup>
+  
 </Project>
