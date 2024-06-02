@@ -77,6 +77,7 @@
 	<ItemGroup>
 		<Folder Include="Extensions\" />
 		<Folder Include="Helpers\" />
+		<Folder Include="Image\" />
 		<Folder Include="Services\" />
 	</ItemGroup>
 
