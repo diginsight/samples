@@ -24,5 +24,33 @@
 		</None>
 	</ItemGroup>
 
+  <PropertyGroup Condition="'$(DiginsightCoreDirectImport)' == ''">
+    <DiginsightCoreDirectImport>false</DiginsightCoreDirectImport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightSmartCacheDirectImport)' == ''">
+    <DiginsightSmartCacheDirectImport>false</DiginsightSmartCacheDirectImport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightLegacyDirectImport)' == ''">
+    <DiginsightLegacyDirectImport>false</DiginsightLegacyDirectImport>
+  </PropertyGroup>
 
+  <PropertyGroup Condition="'$(DiginsightCoreSolutionDirectory)' == ''">
+    <DiginsightCoreSolutionDirectory>E:\dev.darioa\Diginsight\telemetry\src\</DiginsightCoreSolutionDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightSmartCacheSolutionDirectory)' == ''">
+    <DiginsightSmartCacheSolutionDirectory >E:\dev.darioa\Diginsight\smartcache\src\</DiginsightSmartCacheSolutionDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightLegacySolutionDirectory)' == ''">
+    <DiginsightLegacySolutionDirectory >E:\dev.darioa\Diginsight\telemetry_legacy\</DiginsightLegacySolutionDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(DiginsightCoreSolutionDirectory)' != ''">
+    <DiginsightCoreSolutionDirectory>$([MSBuild]::EnsureTrailingSlash('$(DiginsightCoreSolutionDirectory)'))</DiginsightCoreSolutionDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightSmartCacheSolutionDirectory)' != ''">
+    <DiginsightSmartCacheSolutionDirectory>$([MSBuild]::EnsureTrailingSlash('$(DiginsightSmartCacheSolutionDirectory)'))</DiginsightSmartCacheSolutionDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DiginsightLegacySolutionDirectory)' != ''">
+    <DiginsightLegacySolutionDirectory>$([MSBuild]::EnsureTrailingSlash('$(DiginsightLegacySolutionDirectory)'))</DiginsightLegacySolutionDirectory>
+  </PropertyGroup>
 </Project>
