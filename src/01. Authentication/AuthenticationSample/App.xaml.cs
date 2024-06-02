@@ -193,7 +193,13 @@ namespace AuthenticationSample
 
             //services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();
-            //services.AddClassConfiguration();
+
+            services.ConfigureClassAware<AppSettingsOptions>(configuration.GetSection("AppSettings"));
+            //.PostConfigureClassAwareFromHttpRequestHeaders<AppSettingsOptions>();
+
+            services.ConfigureClassAware<FeatureFlagOptions>(configuration.GetSection("AppSettings"));
+            //.PostConfigureClassAwareFromHttpRequestHeaders<FeatureFlagOptions>();
+
 
             //var appSettingsSection = configuration.GetSection(nameof(AppSettings));
             //var settings = appSettingsSection.Get<AppSettings>();
