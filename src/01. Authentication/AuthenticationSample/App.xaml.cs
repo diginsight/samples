@@ -124,8 +124,6 @@ namespace AuthenticationSample
 
                     loggingBuilder.AddConfiguration(context.Configuration.GetSection("Logging"));
                     loggingBuilder.ClearProviders();
-                    //var classConfigurationGetter = new ClassConfigurationGetter<App>(context.Configuration);
-                    //var appInsightKey = classConfigurationGetter.Get(CONFIGVALUE_APPINSIGHTSKEY, DEFAULTVALUE_APPINSIGHTSKEY);
 
                     var services = loggingBuilder.Services;
                     services.AddLogging(
