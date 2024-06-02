@@ -3,6 +3,7 @@ using Diginsight.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
 using OpenTelemetry.Resources;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,25 @@ namespace AuthenticationSample
 
             try
             {
+
+
+            }
+            catch (Exception _) { }
+        }
+
+        private void Login_Click(object sender, RoutedEventArgs e)
+        {
+            using var activity = App.ActivitySource.StartMethodActivity(logger, new { sender, e });
+
+            try
+            {
+                //var app = PublicClientApplicationBuilder
+                //            .Create(_clientId)
+                //            .WithAuthority(AzureCloudInstance.AzurePublic, _tenantId)
+                //            .WithRedirectUri("http://localhost")
+                //            .Build();
+                //string[] scopes = { "user.read" };
+                //AuthenticationResult result = await app.AcquireTokenInteractive(scopes).ExecuteAsync();
 
 
             }

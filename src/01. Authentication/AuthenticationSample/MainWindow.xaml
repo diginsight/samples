@@ -86,7 +86,7 @@
       <Label x:Uid="lbLogin" Grid.Column="9"  Content="Login">
         <Label.Template>
           <ControlTemplate>
-            <Button Command="{Binding LoginCommand}" BorderThickness="0" >
+            <Button Command="{Binding LoginCommand}" BorderThickness="0" Click="Login_Click" >
               <ContentControl Width="24" Height="24" Content="{StaticResource viewBoxUser}" Margin="0" />
             </Button>
           </ControlTemplate>
