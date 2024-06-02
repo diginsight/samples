@@ -61,19 +61,13 @@ namespace AuthenticationSample
             DiginsightActivitiesOptions activitiesOptions = new() { LogActivities = true };
             var deferredLoggerFactory = new DeferredLoggerFactory(activitiesOptions: activitiesOptions);
             deferredLoggerFactory.ActivitySources.Add(ActivitySource);
-
             LoggerFactory = DeferredLoggerFactory = deferredLoggerFactory;
             var logger = LoggerFactory.CreateLogger<App>();
 
             using var activity = ActivitySource.StartMethodActivity(logger);
-
             try
             {
-                // logger.LogDebug("this is a debug trace");
-                // logger.LogInformation("this is a Information trace");
-                // logger.LogWarning("this is a Warning trace");
-                // logger.LogError("this is a error trace");
-                throw new InvalidOperationException("this is an exception");
+
             }
             catch (Exception /*ex*/) { /*sec.Exception(ex);*/ }
         }
