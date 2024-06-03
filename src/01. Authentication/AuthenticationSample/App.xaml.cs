@@ -189,11 +189,8 @@ namespace AuthenticationSample
             services.AddHttpContextAccessor();
 
             services.ConfigureClassAware<AppSettingsOptions>(configuration.GetSection("AppSettings"));
-            //.PostConfigureClassAwareFromHttpRequestHeaders<AppSettingsOptions>();
-
             services.ConfigureClassAware<FeatureFlagOptions>(configuration.GetSection("AppSettings"));
-            //.PostConfigureClassAwareFromHttpRequestHeaders<FeatureFlagOptions>();
-
+            services.ConfigureClassAware<AzureOptions>(configuration.GetSection("AzureKeyVault"));
 
             //var appSettingsSection = configuration.GetSection(nameof(AppSettings));
             //var settings = appSettingsSection.Get<AppSettings>();
