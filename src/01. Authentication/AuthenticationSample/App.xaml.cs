@@ -49,7 +49,7 @@ namespace AuthenticationSample
     public partial class App : Application
     {
         const string CONFIGVALUE_APPINSIGHTSKEY = "AppInsightsKey", DEFAULTVALUE_APPINSIGHTSKEY = "";
-        internal static IDeferredLoggerFactory DeferredLoggerFactory { get; private set; }
+        private static readonly IDeferredLoggerFactory DeferredLoggerFactory;
         internal static ILoggerFactory LoggerFactory { get; private set; }
         internal static readonly ActivitySource ActivitySource = new(typeof(App).Namespace ?? typeof(App).Name!);
         static Type T = typeof(App);
@@ -74,7 +74,7 @@ namespace AuthenticationSample
 
         public App()
         {
-            var logger = DeferredLoggerFactory.CreateLogger<App>();
+            var logger = LoggerFactory.CreateLogger<App>();
             using var activity = ActivitySource.StartMethodActivity(logger);
 
             //var logger = Host.Services.GetRequiredService<ILogger<App>>();
