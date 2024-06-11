@@ -13,22 +13,32 @@ using Diginsight.SmartCache.Externalization.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using System.Reflection;
+using Diginsight.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace SampleWebApi
 {
     public class Startup
     {
         private static readonly string SmartCacheServiceBusSubscriptionName = Guid.NewGuid().ToString("N");
+        private readonly IDeferredLoggerFactory deferredLoggerFactory;
+        private readonly ILogger logger;
 
         private readonly IConfiguration configuration;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IDeferredLoggerFactory deferredLoggerFactory)
         {
             this.configuration = configuration;
+            this.deferredLoggerFactory = deferredLoggerFactory;
+            this.logger = this.deferredLoggerFactory.CreateLogger<Startup>();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            using var activity = DiginsightDefaults.ActivitySource.StartMethodActivity(logger, new { services });
+
+            services.FlushOnCreateServiceProvider(deferredLoggerFactory);
+
             services.AddHttpContextAccessor();
             services.AddObservability(configuration);
             services.AddDynamicLogLevel<DefaultDynamicLogLevelInjector>();
@@ -115,6 +125,8 @@ namespace SampleWebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using var activity = DiginsightDefaults.ActivitySource.StartMethodActivity(logger, new { app, env });
+
             if (env.IsDevelopment())
             {
                 //IdentityModelEventSource.ShowPII = true;
