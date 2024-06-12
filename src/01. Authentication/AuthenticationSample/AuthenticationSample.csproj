@@ -28,13 +28,14 @@
 		<PackageReference Include="log4net" Version="2.0.17" />
 		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.22.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="8.0.5" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" />
+		<PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="8.*" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.*" />
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.60.3" />
+
 		<PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
 		<PackageReference Include="OpenTelemetry" Version="1.8.1" />
-
 		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.8.1" />
 		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.8.1" />
 		<PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.5.0-rc.1" />
@@ -47,20 +48,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(DiginsightLegacySolutionDirectory)Common.Diagnostics\Common.Diagnostics.csproj" Condition="'$(DiginsightLegacyDirectImport)' == 'true'" />
-    <ProjectReference Include="$(DiginsightLegacySolutionDirectory)telemetry_legacy\Common.Diagnostics.Logstrings.Wpf\Common.Diagnostics.Logstrings.Wpf.csproj" Condition="'$(DiginsightLegacyDirectImport)' == 'true'" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Diginsight.Core" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
-    <PackageReference Include="Diginsight.Diagnostics" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
-    <PackageReference Include="Diginsight.Diagnostics.Log4Net" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
-    <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Core\Diginsight.Core.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
-    <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Diagnostics.Log4Net\Diginsight.Diagnostics.Log4Net.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
-    <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Diagnostics\Diginsight.Diagnostics.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Diginsight.Core" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
+		<PackageReference Include="Diginsight.Diagnostics" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
+		<PackageReference Include="Diginsight.Diagnostics.Log4Net" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
+		<ProjectReference Include="$(DiginsightLegacySolutionDirectory)Common.Diagnostics\Common.Diagnostics.csproj" Condition="'$(DiginsightLegacyDirectImport)' == 'true'" />
+		<ProjectReference Include="$(DiginsightLegacySolutionDirectory)telemetry_legacy\Common.Diagnostics.Logstrings.Wpf\Common.Diagnostics.Logstrings.Wpf.csproj" Condition="'$(DiginsightLegacyDirectImport)' == 'true'" />
+		<ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Core\Diginsight.Core.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
+		<ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Diagnostics.Log4Net\Diginsight.Diagnostics.Log4Net.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
+		<ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Diagnostics\Diginsight.Diagnostics.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
+	</ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
 		<ApplicationDefinition Update="App.xaml">
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<Generator>MSBuild:Compile</Generator>
@@ -76,7 +77,7 @@
 
 	<ItemGroup>
 		<Folder Include="Extensions\" />
-		<Folder Include="Helpers\" />
+		<Folder Include="Image\" />
 		<Folder Include="Services\" />
 	</ItemGroup>
 
