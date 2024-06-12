@@ -23,7 +23,6 @@ namespace SampleWebApi
         private static readonly string SmartCacheServiceBusSubscriptionName = Guid.NewGuid().ToString("N");
         private readonly IDeferredLoggerFactory deferredLoggerFactory;
         private readonly ILogger logger;
-
         private readonly IConfiguration configuration;
 
         public Startup(IConfiguration configuration, IDeferredLoggerFactory deferredLoggerFactory)
