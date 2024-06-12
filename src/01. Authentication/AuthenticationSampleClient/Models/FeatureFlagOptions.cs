@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthenticationSample
+namespace AuthenticationSampleClient
 {
     public class FeatureFlagOptions : IDynamicallyPostConfigurable
     {

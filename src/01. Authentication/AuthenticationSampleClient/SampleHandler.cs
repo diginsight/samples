@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace AuthenticationSample600v2
+namespace AuthenticationSampleClient600v2
 {
     public class SampleLogger
     {

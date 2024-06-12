@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "AuthenticationSample600v3": {
+    "AuthenticationSampleClient": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",

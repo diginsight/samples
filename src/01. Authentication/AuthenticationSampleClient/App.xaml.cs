@@ -42,7 +42,7 @@ using System.IO;
 using log4net.Repository.Hierarchy;
 #endregion
 
-namespace AuthenticationSample
+namespace AuthenticationSampleClient
 {
     /// <summary>Interaction logic for App.xaml</summary>
     public partial class App : Application
