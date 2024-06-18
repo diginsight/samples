@@ -1,6 +1,6 @@
 ﻿using Diginsight.CAOptions;
 
-namespace SampleWebApi;
+namespace AuthenticationSampleApi;
 
 public class FeatureFlagOptions : IDynamicallyPostConfigurable
 {

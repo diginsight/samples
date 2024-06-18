@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using Diginsight.CAOptions;
 
-namespace SampleWebApi;
+namespace AuthenticationSampleApi;
 
 public static class ApiVersions
 {

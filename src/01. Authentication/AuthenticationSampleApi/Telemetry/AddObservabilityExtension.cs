@@ -18,15 +18,13 @@ using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Text;
 
-namespace SampleWebApi;
+namespace AuthenticationSampleApi;
 
 public static class AddObservabilityExtension
 {
     public static IServiceCollection AddObservability(this IServiceCollection services, IConfiguration configuration)
     {
         AppContext.SetSwitch("Azure.Experimental.EnableActivitySource", true);
-
-        DiginsightDefaults.ActivitySource = Program.ActivitySource;
 
         IConfiguration openTelemetryConfiguration = configuration.GetSection("OpenTelemetry");
         OpenTelemetryOptions openTelemetryOptions = new();
@@ -36,26 +34,23 @@ public static class AddObservabilityExtension
         services.TryAddSingleton<IActivityLoggingSampler, HttpHeadersActivityLoggingSampler>();
         services.Decorate<IActivityLoggingSampler, MyActivityLoggingSampler>();
 
-        services.TryAddSingleton<ISpanDurationMetricRecorderSettings, MySpanDurationMetricRecorderSettings>();
-        services.TryAddEnumerable(
-            ServiceDescriptor.Singleton<IActivityListenerRegistration, MyDurationMetricRecorderRegistration<SpanDurationMetricRecorder>>());
+        services.TryAddSingleton<ISpanDurationMetricRecorderSettings, HttpHeadersSpanDurationMetricRecorderSettings>();
+        services.Decorate<ISpanDurationMetricRecorderSettings, MySpanDurationMetricRecorderSettings>();
 
-        services.TryAddSingleton<ICustomDurationMetricRecorderSettings, MyCustomDurationMetricRecorderSettings>();
-        services.TryAddEnumerable(
-            ServiceDescriptor.Singleton<IActivityListenerRegistration, MyDurationMetricRecorderRegistration<CustomDurationMetricRecorder>>());
+        services.AddSpanDurationMetricRecorder();
 
-        services.TryAddEnumerable(
-            ServiceDescriptor.Singleton<IActivityListenerRegistration, ActivitySourceDetectorRegistration>());
+        services.TryAddEnumerable(ServiceDescriptor.Singleton<IActivityListenerRegistration, ActivitySourceDetectorRegistration>());
 
         services.Configure<DiginsightDistributedContextOptions>(
             static x =>
             {
-                x.NonBaggageKeys.UnionWith(HttpHeadersActivityLoggingSampler.HeaderNames);
-                x.NonBaggageKeys.UnionWith(HttpHeadersSpanDurationMetricRecorderSettings.HeaderNames);
+                x.NonBaggageKeys.Add(HttpHeadersActivityLoggingSampler.HeaderName);
+                x.NonBaggageKeys.Add(HttpHeadersSpanDurationMetricRecorderSettings.HeaderName);
             }
         );
 
         var azureMonitorConnectionString = configuration["ApplicationInsights:ConnectionString"];
+
         services.AddLogging(
             loggingBuilder =>
             {
@@ -63,12 +58,11 @@ public static class AddObservabilityExtension
 
                 if (configuration.GetValue("AppSettings:ConsoleProviderEnabled", true))
                 {
-                    loggingBuilder.AddDiginsightConsole();
+                    loggingBuilder.AddDiginsightConsole(configuration.GetSection("Diginsight:Console").Bind);
                 }
 
                 if (configuration.GetValue("AppSettings:Log4NetProviderEnabled", false))
                 {
-                    //loggingBuilder.AddDiginsightLog4Net("log4net.config");
                     loggingBuilder.AddDiginsightLog4Net(
                         static sp =>
                         {
@@ -126,7 +120,7 @@ public static class AddObservabilityExtension
                         .AddAspNetCoreInstrumentation()
                         .AddRuntimeInstrumentation()
                         .AddHttpClientInstrumentation()
-                        .AddMeter(DiginsightDefaults.Meter.Name)
+                        .AddMeter(openTelemetryOptions.Meters.ToArray())
                         .AddPrometheusExporter();
 
                     if (!string.IsNullOrEmpty(azureMonitorConnectionString))
@@ -209,15 +203,7 @@ public static class AddObservabilityExtension
                             }
                         )
                         .AddSource(openTelemetryOptions.ActivitySources.ToArray())
-                        .AddSource(Program.ActivitySource.Name)
-                        .SetErrorStatusOnException()
-                        .SetHttpHeadersSampler(
-                            static sp =>
-                            {
-                                OpenTelemetryOptions openTelemetryOptions = sp.GetRequiredService<IOptions<OpenTelemetryOptions>>().Value;
-                                return new ParentBasedSampler(new TraceIdRatioBasedSampler(openTelemetryOptions.TracingSamplingRatio));
-                            }
-                        );
+                        .SetErrorStatusOnException();
 
                     if (!string.IsNullOrEmpty(azureMonitorConnectionString))
                     {
@@ -225,6 +211,15 @@ public static class AddObservabilityExtension
                             exporterOptions => { exporterOptions.ConnectionString = azureMonitorConnectionString; }
                         );
                     }
+
+                    tracerProviderBuilder
+                        .SetHttpHeadersSampler(
+                            static sp =>
+                            {
+                                OpenTelemetryOptions openTelemetryOptions = sp.GetRequiredService<IOptions<OpenTelemetryOptions>>().Value;
+                                return new ParentBasedSampler(new TraceIdRatioBasedSampler(openTelemetryOptions.TracingSamplingRatio));
+                            }
+                        );
                 }
             );
         }
@@ -232,85 +227,52 @@ public static class AddObservabilityExtension
         return services;
     }
 
-    private static IEnumerable<KeyValuePair<string, object?>> CoreExtractTags(Activity activity, OpenTelemetryOptions openTelemetryOptions)
-    {
-        return openTelemetryOptions.DurationMetricTags
-            .Select(k => (Key: k, Value: activity.GetAncestors(true).Select(a => a.GetTagItem(k)).FirstOrDefault(static v => v is not null)))
-            .Where(static x => x.Value is not null)
-            .Select(static x => KeyValuePair.Create(x.Key, x.Value));
-    }
-
-    private sealed class MyActivityLoggingSampler : IActivityLoggingSampler
+    private sealed class MyActivityLoggingSampler : NameBasedActivityLoggingSampler
     {
         private readonly IActivityLoggingSampler decoratee;
 
-        public MyActivityLoggingSampler(IActivityLoggingSampler decoratee)
+        public MyActivityLoggingSampler(IActivityLoggingSampler decoratee, IOptions<DiginsightActivitiesOptions> activitiesOptions)
+            : base(activitiesOptions)
         {
             this.decoratee = decoratee;
         }
 
-        public bool? ShouldLog(Activity activity)
+        public override bool? ShouldLog(Activity activity)
         {
-            return activity is { OperationName: "System.Net.Http.HttpRequestOut", Source.Name: "System.Net.Http" }
-                ? false
-                : decoratee.ShouldLog(activity);
+            return decoratee.ShouldLog(activity) ?? base.ShouldLog(activity);
         }
     }
 
-    private sealed class MySpanDurationMetricRecorderSettings : DefaultSpanDurationMetricRecorderSettings
+    private sealed class MySpanDurationMetricRecorderSettings : NameBasedSpanDurationMetricRecorderSettings
     {
+        private readonly ISpanDurationMetricRecorderSettings decoratee;
         private readonly IClassAwareOptionsMonitor<OpenTelemetryOptions> openTelemetryOptionsMonitor;
 
-        public MySpanDurationMetricRecorderSettings(IClassAwareOptionsMonitor<OpenTelemetryOptions> openTelemetryOptionsMonitor)
+        public MySpanDurationMetricRecorderSettings(
+            ISpanDurationMetricRecorderSettings decoratee,
+            IClassAwareOptionsMonitor<OpenTelemetryOptions> openTelemetryOptionsMonitor,
+            IOptions<DiginsightActivitiesOptions> activitiesOptions
+        )
+            : base(activitiesOptions)
         {
+            this.decoratee = decoratee;
             this.openTelemetryOptionsMonitor = openTelemetryOptionsMonitor;
+        }
+
+        public override bool? ShouldRecord(Activity activity)
+        {
+            return decoratee.ShouldRecord(activity) ?? base.ShouldRecord(activity);
         }
 
         public override IEnumerable<KeyValuePair<string, object?>> ExtractTags(Activity activity)
         {
             OpenTelemetryOptions openTelemetryOptions = openTelemetryOptionsMonitor.Get(activity.GetCallerType());
-            return base.ExtractTags(activity).Concat(CoreExtractTags(activity, openTelemetryOptions));
-        }
-    }
-
-    private sealed class MyCustomDurationMetricRecorderSettings : ICustomDurationMetricRecorderSettings
-    {
-        private readonly IClassAwareOptionsMonitor<OpenTelemetryOptions> openTelemetryOptionsMonitor;
-
-        public MyCustomDurationMetricRecorderSettings(IClassAwareOptionsMonitor<OpenTelemetryOptions> openTelemetryOptionsMonitor)
-        {
-            this.openTelemetryOptionsMonitor = openTelemetryOptionsMonitor;
-        }
-
-        public bool? ShouldRecord(Activity activity, Instrument instrument) => null;
-
-        public IEnumerable<KeyValuePair<string, object?>> ExtractTags(Activity activity, Instrument instrument)
-        {
-            OpenTelemetryOptions openTelemetryOptions = openTelemetryOptionsMonitor.Get(activity.GetCallerType());
-            return CoreExtractTags(activity, openTelemetryOptions);
-        }
-    }
-
-    private sealed class MyDurationMetricRecorderRegistration<T> : IActivityListenerRegistration
-        where T : IActivityListenerLogic
-    {
-        private readonly IDiginsightActivitiesOptions activitiesOptions;
-
-        public IActivityListenerLogic Logic { get; }
-
-        public MyDurationMetricRecorderRegistration(
-            IServiceProvider serviceProvider,
-            IOptions<DiginsightActivitiesOptions> activitiesOptions
-        )
-        {
-            Logic = ActivatorUtilities.CreateInstance<T>(serviceProvider);
-            this.activitiesOptions = activitiesOptions.Value;
-        }
-
-        public bool ShouldListenTo(ActivitySource activitySource)
-        {
-            string name = activitySource.Name;
-            return activitiesOptions.ActivitySources.Any(x => ActivityUtils.NameMatchesPattern(name, x));
+            return openTelemetryOptions.DurationMetricTags
+                .Select(k => (Key: k, Value: activity.GetAncestors(true).Select(a => a.GetTagItem(k)).FirstOrDefault(static v => v is not null)))
+                .Where(static x => x.Value is not null)
+                .Select(static x => KeyValuePair.Create(x.Key, x.Value))
+                .Concat(decoratee.ExtractTags(activity))
+                .Concat(base.ExtractTags(activity));
         }
     }
 }

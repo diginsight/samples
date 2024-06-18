@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.Configuration.Json;
 using System.Text;
 
-namespace SampleWebApi;
+namespace AuthenticationSampleApi;
 
 public static class HostBuilderExtensions
 {
@@ -16,7 +16,7 @@ public static class HostBuilderExtensions
     public static IHostBuilder ConfigureAppConfiguration2(this IHostBuilder hostBuilder, Func<IDictionary<string, string>, bool>? tagsMatch = null)
     {
         var logger = Program.DeferredLoggerFactory.CreateLogger(T);
-        using var activity = DiginsightDefaults.ActivitySource.StartMethodActivity(logger, () => new { hostBuilder, tagsMatch });
+        using var activity = Observability.ActivitySource.StartMethodActivity(logger, () => new { hostBuilder, tagsMatch });
 
         return hostBuilder.ConfigureAppConfiguration((hbc, cb) => ConfigureAppConfiguration2(hbc.HostingEnvironment, cb, tagsMatch));
     }
@@ -26,7 +26,7 @@ public static class HostBuilderExtensions
     )
     {
         var logger = Program.DeferredLoggerFactory.CreateLogger(T);
-        using var activity = DiginsightDefaults.ActivitySource.StartMethodActivity(logger, () => new { environment, builder, tagsMatch});
+        using var activity = Observability.ActivitySource.StartMethodActivity(logger, () => new { environment, builder, tagsMatch});
 
         bool isLocal = environment.IsDevelopment();
 
@@ -194,7 +194,7 @@ public static class HostBuilderExtensions
         public override bool Load(SecretProperties secret)
         {
             var logger = Program.DeferredLoggerFactory.CreateLogger(T);
-            using var activity = DiginsightDefaults.ActivitySource.StartMethodActivity(logger, new { secret });
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { secret });
 
             return secret.Enabled != false
                 && !(secret.NotBefore > now)
@@ -210,7 +210,7 @@ public static class WebHostBuilderExtensions
     public static IWebHostBuilder ConfigureAppConfiguration2(this IWebHostBuilder hostBuilder, Func<IDictionary<string, string>, bool>? tagsMatch = null)
     {
         var logger = Program.DeferredLoggerFactory.CreateLogger(T);
-        using var activity = DiginsightDefaults.ActivitySource.StartMethodActivity(logger);
+        using var activity = Observability.ActivitySource.StartMethodActivity(logger);
 
         return hostBuilder.ConfigureAppConfiguration((whbc, cb) => HostBuilderExtensions.ConfigureAppConfiguration2(whbc.HostingEnvironment, cb, tagsMatch));
     }

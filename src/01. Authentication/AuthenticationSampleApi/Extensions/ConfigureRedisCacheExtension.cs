@@ -1,13 +1,6 @@
-﻿using Azure.Core;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
-using Microsoft.Extensions.Configuration.Json;
-using System.Text;
+﻿namespace AuthenticationSampleApi;
 
-namespace SampleWebApi;
+
 
 public static class ConfigureRedisCacheExtension
 {

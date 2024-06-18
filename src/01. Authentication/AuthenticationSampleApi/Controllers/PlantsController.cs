@@ -10,10 +10,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 
-namespace SampleWebApi.Controllers
+namespace AuthenticationSampleApi
 {
-    [ApiController]
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "common")]
     public class PlantsController : ControllerBase
@@ -39,7 +39,7 @@ namespace SampleWebApi.Controllers
             this.smartCache = smartCache;
             this.cacheKeyService = cacheKeyService;
 
-            using var activity = Program.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
 
         }
 
@@ -47,11 +47,17 @@ namespace SampleWebApi.Controllers
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
         public async Task<IEnumerable<Plant>> GetPlantsImplAsync()
         {
-            using var activity = Program.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
 
             var result = default(IEnumerable<Plant>);
 
-            Thread.Sleep(1000);
+            var latency = 1000;
+            Thread.Sleep(latency);
+
+            logger.LogDebug("Thread.Sleep({latency});", latency); // Structured logging
+            logger.LogDebug($"Thread.Sleep({latency});"); // interpolation
+            // logger.LogDebug(() => $"Thread.Sleep({latency});"); // interpolation with delegate notation
+            // logger.LogDebug(new { result }); // variables loggin
 
             // read string plantsString from content file /Content/plants.json
             var plantsString = await System.IO.File.ReadAllTextAsync("Content/plants.json");
@@ -65,7 +71,7 @@ namespace SampleWebApi.Controllers
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
         public async Task<Plant> GetPlantByIdImplAsync([FromRoute] Guid id)
         {
-            using var activity = Program.ActivitySource.StartMethodActivity(logger, new { id });
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { id });
 
             var result = default(IEnumerable<Plant>);
 
@@ -84,11 +90,11 @@ namespace SampleWebApi.Controllers
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
         public async Task<IEnumerable<Plant>> GetPlantsAsync()
         {
-            using var activity = Program.ActivitySource.StartMethodActivity(logger);
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger);
 
             var options = new SmartCacheOperationOptions() { MaxAge = TimeSpan.FromMinutes(10) };
             var cacheKey = new MethodCallCacheKey(cacheKeyService, typeof(PlantsController), nameof(GetPlantsAsync));
-            
+
             var plants = await smartCache.GetAsync(cacheKey, _ => GetPlantsImplAsync(), options);
 
             activity?.SetOutput(plants);
@@ -99,7 +105,7 @@ namespace SampleWebApi.Controllers
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
         public async Task<Plant> GetPlantByIdAsync([FromRoute] Guid plantId)
         {
-            using var activity = Program.ActivitySource.StartMethodActivity(logger);
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger);
 
             var options = new SmartCacheOperationOptions() { MaxAge = TimeSpan.FromMinutes(10) };
             var cacheKey = new MethodCallCacheKey(cacheKeyService, typeof(PlantsController), nameof(GetPlantByIdAsync), plantId);
@@ -115,7 +121,7 @@ namespace SampleWebApi.Controllers
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
         public async Task<IEnumerable<Plant>> CreateOrUpdatePlant(Plant newplant)
         {
-            using var activity = Program.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
 
             var plants = (await GetPlantsImplAsync())?.ToList();
 

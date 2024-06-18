@@ -14,8 +14,8 @@
 		<PackageProjectUrl>https://github.com/diginsight/telemetry_samples</PackageProjectUrl>
 
 		<DiginsightDiagnosticsVersion>2.0.0.23</DiginsightDiagnosticsVersion>
-		<DiginsightCoreVersion>3.0.0-alpha.191</DiginsightCoreVersion>
-		<DiginsightSmartcacheVersion>3.0.0-alpha.191</DiginsightSmartcacheVersion>
+		<DiginsightCoreVersion>3.0.0-alpha.194</DiginsightCoreVersion>
+		<DiginsightSmartcacheVersion>3.0.0-alpha.194</DiginsightSmartcacheVersion>
 		<PackageTags>diginsight;telemetry</PackageTags>
 		<!-- TODO <PackageIcon> -->
 		<!-- TODO <Description> in each csproj -->

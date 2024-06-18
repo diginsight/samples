@@ -118,8 +118,10 @@
 
             <Label   x:Uid="lbInput" Grid.Column="0" >Input</Label>
             <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Path=Message, Mode=TwoWay}"  ></TextBox>
-            <Button x:Name="btnRun" x:Uid="btnRun" Grid.Column="2" Click="btnRun_Click"  Width="200" 
-                     HorizontalAlignment="Right" >Run</Button>
+            <Button x:Name="btnRestSharpCall" x:Uid="btnRun" Grid.Column="2" Click="btnRestSharpCall_Click"  Width="200" 
+                     HorizontalAlignment="Right" >RestSharpCall</Button>
+            <Button x:Name="btnHttpClientCall" x:Uid="btnRun" Grid.Column="3" Click="btnHttpClientCall_Click"  Width="200" 
+                     HorizontalAlignment="Right" >HttpClientCall</Button>
         </Grid>
 
         <Grid Grid.Row="3" >

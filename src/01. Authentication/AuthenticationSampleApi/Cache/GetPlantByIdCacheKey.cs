@@ -20,11 +20,11 @@ public record PlantInvalidationRule(Guid PlantId) : IInvalidationRule;
 //    }
 //}
 
-internal sealed class GetPlantByIdCacheKey : IInvalidatable //, IManualSize
+internal sealed class GetPlantByIdCacheKey : IInvalidatable
 {
     private readonly EqualityCore equalityCore;
 
-    public Func<Task>? ReloadAsync { private get; set; }
+    public Func<Task> ReloadAsync { private get; set; }
 
     [JsonProperty]
     private Guid PlantId => equalityCore.PlantId;
@@ -38,7 +38,7 @@ internal sealed class GetPlantByIdCacheKey : IInvalidatable //, IManualSize
     private GetPlantByIdCacheKey(Guid plantId) : this(new EqualityCore(plantId)) { }
     private GetPlantByIdCacheKey(EqualityCore equalityCore) { this.equalityCore = equalityCore; }
 
-    public bool IsInvalidatedBy(IInvalidationRule invalidationRule, out Func<Task>? ic)
+    public bool IsInvalidatedBy(IInvalidationRule invalidationRule, out Func<Task> ic)
     {
         if (invalidationRule is PlantInvalidationRule air && (PlantId == Guid.Empty || air.PlantId == PlantId))
         {
@@ -50,7 +50,7 @@ internal sealed class GetPlantByIdCacheKey : IInvalidatable //, IManualSize
         return false;
     }
 
-    public override bool Equals(object? obj) => equalityCore == (obj as GetPlantByIdCacheKey)?.equalityCore;
+    public override bool Equals(object obj) => equalityCore == (obj as GetPlantByIdCacheKey)?.equalityCore;
 
     public override int GetHashCode() => equalityCore.GetHashCode();
 

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Hosting;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
-namespace SampleWebApi;
+namespace AuthenticationSampleApi;
 
 public static class KeyVaultExtensions
 {

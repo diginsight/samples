@@ -13,36 +13,41 @@ using Diginsight.SmartCache.Externalization.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using System.Reflection;
+using Microsoft.Identity.Web;
 using Diginsight.Diagnostics;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SampleWebApi
+namespace AuthenticationSampleApi
 {
     public class Startup
     {
         private static readonly string SmartCacheServiceBusSubscriptionName = Guid.NewGuid().ToString("N");
-        private readonly IDeferredLoggerFactory deferredLoggerFactory;
-        private readonly ILogger logger;
         private readonly IConfiguration configuration;
+        private readonly IHostEnvironment hostEnvironment;
+        private readonly IDeferredLoggerFactory deferredLoggerFactory;
 
-        public Startup(IConfiguration configuration, IDeferredLoggerFactory deferredLoggerFactory)
+        public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment, IDeferredLoggerFactory deferredLoggerFactory = null)
         {
             this.configuration = configuration;
             this.deferredLoggerFactory = deferredLoggerFactory;
-            this.logger = this.deferredLoggerFactory.CreateLogger<Startup>();
+            this.hostEnvironment = hostEnvironment;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            using var activity = DiginsightDefaults.ActivitySource.StartMethodActivity(logger, new { services });
-
-            services.FlushOnCreateServiceProvider(deferredLoggerFactory);
+            var logger = deferredLoggerFactory.CreateLogger<Startup>();
+            using var innerActivity = Observability.ActivitySource.StartMethodActivity(logger, new { services });
 
             services.AddHttpContextAccessor();
             services.AddObservability(configuration);
             services.AddDynamicLogLevel<DefaultDynamicLogLevelInjector>();
+            services.FlushOnCreateServiceProvider(deferredLoggerFactory);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddMicrosoftIdentityWebApi(configuration); //.AddJwtBearer() 
+            services.AddAuthorization();
+
             IdentityModelEventSource.ShowPII = true;
 
             services.ConfigureClassAware<FeatureFlagOptions>(configuration.GetSection("FeatureManagement"))
@@ -98,18 +103,25 @@ namespace SampleWebApi
             //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-            SmartCacheBuilder smartCacheBuilder = services.AddSmartCache().AddHttpHeaderSupport();
+            SmartCacheBuilder smartCacheBuilder = services.AddSmartCache(configuration, hostEnvironment, deferredLoggerFactory)
+                                                          .AddHttpHeaderSupport();
+            
             IConfigurationSection smartCacheServiceBusConfiguration = configuration.GetSection("Diginsight:SmartCache:ServiceBus");
             if (!string.IsNullOrEmpty(smartCacheServiceBusConfiguration[nameof(SmartCacheServiceBusOptions.ConnectionString)]) &&
                 !string.IsNullOrEmpty(smartCacheServiceBusConfiguration[nameof(SmartCacheServiceBusOptions.TopicName)]))
             {
                 smartCacheBuilder.SetServiceBusCompanion(
-                        sbo =>
-                        {
-                            smartCacheServiceBusConfiguration.Bind(sbo);
-                            sbo.SubscriptionName = SmartCacheServiceBusSubscriptionName; // add a GUID as a service bus subscription
-                        }
-                    );
+                    static (c, _) =>
+                    {
+                        IConfiguration sbc = c.GetSection("Diginsight:SmartCache:ServiceBus");
+                        return !string.IsNullOrEmpty(sbc[nameof(SmartCacheServiceBusOptions.ConnectionString)])
+                            && !string.IsNullOrEmpty(sbc[nameof(SmartCacheServiceBusOptions.TopicName)]);
+                    },
+                    sbo =>
+                    {
+                        configuration.GetSection("Diginsight:SmartCache:ServiceBus").Bind(sbo);
+                        sbo.SubscriptionName = SmartCacheServiceBusSubscriptionName;
+                    });
             }
             services.TryAddSingleton<ICacheKeyProvider, MyCacheKeyProvider>();
 
@@ -124,7 +136,8 @@ namespace SampleWebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using var activity = DiginsightDefaults.ActivitySource.StartMethodActivity(logger, new { app, env });
+            var logger = deferredLoggerFactory.CreateLogger<Startup>();
+            using var innerActivity = Observability.ActivitySource.StartMethodActivity(logger, new { app, env });
 
             if (env.IsDevelopment())
             {
@@ -141,19 +154,16 @@ namespace SampleWebApi
             if (IsSwaggerEnabled)
             {
                 app.UseSwaggerDocumentation();
-
                 //app.UseSwagger(); scope.LogDebug($"app.UseSwagger();");
                 //app.UseSwaggerUI(options => options.OAuthClientId(builder.Configuration["SwaggerAuthentication:WebAppClientId"])); scope.LogDebug($"app.UseSwaggerUI(options => options.OAuthClientId(builder.Configuration[\"SwaggerAuthentication:WebAppClientId\"]));");
             }
 
-            app.UseHttpsRedirection();
-
+            //app.UseHttpsRedirection();
             app.UseRouting();
+            //app.UseCors();
 
             app.UseAuthentication(); // If you have this, it should be before UseAuthorization
             app.UseAuthorization();  // Make sure this is between UseRouting and UseEndpoints
-
-            app.UseCors();
 
             //app.UseMiddleware<HandleExceptionsMiddleware>(); scope.LogDebug($"app.UseMiddleware<HandleExceptionsMiddleware>();");
 
