@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<LangVersion>11</LangVersion>
+		<LangVersion>12</LangVersion>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
 		<Authors>diginsight</Authors>
@@ -14,8 +14,8 @@
     <PackageProjectUrl>https://github.com/diginsight/telemetry_samples</PackageProjectUrl>
 
 		<DiginsightDiagnosticsVersion>2.0.0.23</DiginsightDiagnosticsVersion>
-    <DiginsightCoreVersion>3.0.0-alpha.185</DiginsightCoreVersion>
-    <DiginsightSmartcacheVersion>3.0.0-alpha.187</DiginsightSmartcacheVersion>
+    <DiginsightCoreVersion>3.0.0-alpha.195</DiginsightCoreVersion>
+    <DiginsightSmartcacheVersion>3.0.0-alpha.195</DiginsightSmartcacheVersion>
     <PackageTags>diginsight;telemetry</PackageTags>
 		<!-- TODO <PackageIcon> -->
 		<!-- TODO <Description> in each csproj -->

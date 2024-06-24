@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Json2Csv": {
+      "commandName": "Project",
+      "commandLineArgs": "-h"
+    },
+    "Json2Csv convert": {
+      "commandName": "Project",
+      "commandLineArgs": "convert -f InputFiles/CoreServices-GroupMembers-Dev.json"
+    }
+  }
+}
