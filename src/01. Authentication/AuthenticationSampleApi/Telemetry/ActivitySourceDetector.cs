@@ -1,12 +1,13 @@
 ﻿using Diginsight.Diagnostics;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 
-namespace SampleWebApi;
+namespace AuthenticationSampleApi;
 
 internal sealed class ActivitySourceDetector : IActivityListenerLogic
 {
     private readonly ILogger logger;
-    private readonly ISet<string> seenActivitySources = new HashSet<string>();
+    private readonly ConcurrentDictionary<string, ValueTuple> seenActivitySources = new ConcurrentDictionary<string, ValueTuple>();
 
     public ActivitySourceDetector(ILogger<ActivitySourceDetector> logger)
     {
@@ -17,12 +18,10 @@ internal sealed class ActivitySourceDetector : IActivityListenerLogic
     {
         string activitySourceName = activity.Source.Name;
 
-        bool isNewActivitySource = false;
-        lock (seenActivitySources) { isNewActivitySource = seenActivitySources.Add(activitySourceName); }
-
-        if (isNewActivitySource)
+        if (seenActivitySources.TryAdd(activitySourceName, default))
         {
             logger.LogDebug("New activity source detected: {ActivitySource}", activitySourceName);
         }
     }
 }
+

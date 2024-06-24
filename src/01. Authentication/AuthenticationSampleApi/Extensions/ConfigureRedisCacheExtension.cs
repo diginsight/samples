@@ -1,4 +1,4 @@
-﻿namespace SampleWebApi;
+﻿namespace AuthenticationSampleApi;
 
 
 

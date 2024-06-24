@@ -20,7 +20,7 @@ public record PlantInvalidationRule(Guid PlantId) : IInvalidationRule;
 //    }
 //}
 
-internal sealed class GetPlantByIdCacheKey : IInvalidatable, IManualSize
+internal sealed class GetPlantByIdCacheKey : IInvalidatable
 {
     private readonly EqualityCore equalityCore;
 

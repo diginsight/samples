@@ -1,9 +1,9 @@
-﻿<Window x:Class="AuthenticationSample.MainWindow"
+﻿<Window x:Class="AuthenticationSampleClient.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AuthenticationSample"
+        xmlns:local="clr-namespace:AuthenticationSampleClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         Background="White" Name="wndMain"
@@ -118,8 +118,10 @@
 
             <Label   x:Uid="lbInput" Grid.Column="0" >Input</Label>
             <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Path=Message, Mode=TwoWay}"  ></TextBox>
-            <Button x:Name="btnRun" x:Uid="btnRun" Grid.Column="2" Click="btnRun_Click"  Width="200" 
-                     HorizontalAlignment="Right" >Run</Button>
+            <Button x:Name="btnRestSharpCall" x:Uid="btnRun" Grid.Column="2" Click="btnRestSharpCall_Click"  Width="200" 
+                     HorizontalAlignment="Right" >RestSharpCall</Button>
+            <Button x:Name="btnHttpClientCall" x:Uid="btnRun" Grid.Column="3" Click="btnHttpClientCall_Click"  Width="200" 
+                     HorizontalAlignment="Right" >HttpClientCall</Button>
         </Grid>
 
         <Grid Grid.Row="3" >

@@ -1,33 +1,39 @@
+using Diginsight.Diagnostics;
 using Diginsight.Diagnostics.AspNetCore;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Diagnostics;
-namespace SampleWebApi;
+namespace AuthenticationSampleApi;
 
 public class Program
 {
-    internal static readonly ActivitySource ActivitySource = new(typeof(Program).Namespace ?? typeof(Program).Name!);
+    public static IDeferredLoggerFactory DeferredLoggerFactory;
 
     public static void Main(string[] args)
     {
-        //DiginsightActivitiesOptions activitiesOptions = new ()
-        //{
-        //    LogActivities = true,
-        //};
-        //IDeferredLoggerFactory loggerFactory = new DeferredLoggerFactory(activitiesOptions: activitiesOptions);
-        //ILogger logger = loggerFactory.CreateLogger<Program>();
-        //ActivitySource deferredActivitySource = loggerFactory.ActivitySource;
+        var activitiesOptions = new DiginsightActivitiesOptions() { LogActivities = true };
+        DeferredLoggerFactory = new DeferredLoggerFactory(activitiesOptions: activitiesOptions);
+        DeferredLoggerFactory.ActivitySources.Add(Observability.ActivitySource);
+        var logger = DeferredLoggerFactory.CreateLogger<Program>();
 
         IWebHost host;
-        //using (deferredActivitySource.StartMethodActivity(logger))
+        using (var activity = Observability.ActivitySource.StartMethodActivity(logger, new { args }))
         {
             host = WebHost.CreateDefaultBuilder(args)
-                .AddKeyVault()
+                .ConfigureAppConfiguration2()
                 .UseStartup<Startup>()
-                //.ConfigureServices(s => s.FlushOnCreateServiceProvider(loggerFactory))
+                .ConfigureServices(services =>
+                {
+                    var logger = DeferredLoggerFactory.CreateLogger<Startup>();
+                    using var innerActivity = Observability.ActivitySource.StartRichActivity(logger, "ConfigureServicesCallback", new { services });
+
+                    services.TryAddSingleton(DeferredLoggerFactory);
+                })
                 .UseDiginsightServiceProvider()
                 .Build();
 
-            //logger.LogDebug("Host built");
+            logger.LogDebug("Host built");
         }
 
         host.Run();

@@ -1,6 +1,6 @@
 using Diginsight.Strings;
 
-namespace AuthenticationSampleApi
+namespace AuthenticationSampleClient
 {
     public class Plant
     {
