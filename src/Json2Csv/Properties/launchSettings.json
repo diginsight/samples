@@ -6,7 +6,8 @@
     },
     "Json2Csv convert": {
       "commandName": "Project",
-      "commandLineArgs": "convert -f InputFiles/CoreServices-GroupMembers-Dev.json"
+      //convert -f  -o appSettings.csv --path-separator -- --key-value-separator ;
+      "commandLineArgs": "appSettings.json"
     }
   }
 }

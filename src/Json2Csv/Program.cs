@@ -26,9 +26,9 @@ internal class Program
 
     private static readonly JsonSerializerOptions MyJsonSerializerOptions = new(JsonSerializerOptions.Default) { ReadCommentHandling = JsonCommentHandling.Skip };
     public static IHost host;
-    private IProvisioner? provisioner;
 
-    private IProvisioner Provisioner => provisioner ??= new Provisioner(loggerFactory.CreateLogger<Provisioner>());
+    //private IFileConverter? provisioner;
+    //private IFileConverter Provisioner => provisioner ??= new FileConverter(loggerFactory.CreateLogger<FileConverter>());
 
     public Program(ILogger<Program> logger,
                    IConfiguration configuration,
@@ -51,12 +51,17 @@ internal class Program
         catch (Exception /*ex*/) { /*sec.Exception(ex);*/ }
     }
 
-    private static Task Main(string[] args)
+    private async static Task Main(string[] args)
     {
         var activitiesOptions = new DiginsightActivitiesOptions() { LogActivities = true };
         var deferredLoggerFactory = new DeferredLoggerFactory(activitiesOptions: activitiesOptions);
         deferredLoggerFactory.ActivitySources.Add(Observability.ActivitySource);
         var logger = deferredLoggerFactory.CreateLogger<Program>();
+
+        if (args is [var arg])
+        {
+            args = ["convert", "-f", arg];
+        }
 
         CoconaApp app;
         using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { args });
@@ -70,9 +75,6 @@ internal class Program
                       .AddEnvironmentVariables();
 
             IServiceCollection services = appBuilder.Services;
-            //services.Configure<GraphClientCredentialsOptions>(appBuilder.Configuration.GetSection("GraphClient"));
-            //services.Configure<ArmClientCredentialsCollection>(appBuilder.Configuration.GetSection("ArmClients"));
-
             IConfiguration configuration = appBuilder.Configuration;
 
             services.AddLogging(
@@ -146,33 +148,48 @@ internal class Program
             logger.LogDebug("App");
             app = appBuilder.Build();
 
+            
             Program program = app.Services.GetRequiredService<Program>();
 
+            
+            //app.AddCommand("", );
             app.AddCommand("convert", program.ConvertJsonFileAsync);
             //app.AddCommand("assign-roles", program.AssignRolesAsync);
             //app.AddCommand("assign-kv-policies", program.AssignKvAccessPoliciesAsync);
-
         }
 
-        var task = app.RunAsync();
-        return task;
+        await app.RunAsync();
     }
 
     private async Task ConvertJsonFileAsync(
-        [Option('f', Description = "appsettings file")] string file,
-        [Option('o', Description = "output csv file")] string outputFile,
-        [Option('s', Description = "separator")] string separator,
-        CoconaAppContext appContext)
+        CoconaAppContext appContext,
+        [Option('f', ValueName = "jsonFile", Description = "appsettings file")] string file,
+        [Option('o', ValueName = "outputFile", Description = "output csv file")] string? outputFile = null,
+        [Option("pathSeparator", Description = "path separator")] string pathSeparator = ":",
+        [Option("keyValueSeparator", Description = "key value separator")] string kvSeparator = ";")
     {
-        using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { file, outputFile, separator });
+        string kiSeparator = "--";
+        using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { file, outputFile, kiSeparator, kvSeparator });
 
         CancellationToken cancellationToken = appContext.CancellationToken;
 
-        //const string fullPath = @"D:\Projects\ABB\EL-BackOffice-Backend\ABB.Ability.EL.BackOffice.Api\appsettings.json";
         JObject root = JObject.Parse(File.ReadAllText(file));
         var configurationEntries = new Dictionary<string, string>();
 
         Flatten(root, configurationEntries, null);
+
+        if (string.IsNullOrEmpty(outputFile))
+        {
+            outputFile = Path.ChangeExtension(file, "csv");
+        }
+
+        using (var writer = new StreamWriter(outputFile))
+        {
+            configurationEntries.ToList().ForEach(entry => writer.WriteLine($"\"{entry.Key.Replace("\"", "\"\"")}\"{kvSeparator}\"{entry.Value.Replace("\"", "\"\"")}\""));
+
+            // writer.WriteLine("Key;Value");
+            writer.Flush();
+        }
     }
 
 
