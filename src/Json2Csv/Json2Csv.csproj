@@ -12,10 +12,10 @@
   <ItemGroup>
     <PackageReference Include="Cocona" Version="2.*" />
 
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+    <!--<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    </PackageReference>-->
     <PackageReference Include="log4net" Version="2.0.17" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>

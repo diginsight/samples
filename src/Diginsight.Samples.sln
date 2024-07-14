@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Json2Csv", "Json2Csv\Json2C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSampleClient", "01. Authentication\AuthenticationSampleClient\AuthenticationSampleClient.csproj", "{177E4962-B062-445F-9C44-121001803D6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleWebapp", "01. Authentication\AuthenticationSampleWebapp\AuthenticationSampleWebapp.csproj", "{C4C89811-5D55-4269-8324-64BC4F0C8DC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{177E4962-B062-445F-9C44-121001803D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{177E4962-B062-445F-9C44-121001803D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{177E4962-B062-445F-9C44-121001803D6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4C89811-5D55-4269-8324-64BC4F0C8DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4C89811-5D55-4269-8324-64BC4F0C8DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4C89811-5D55-4269-8324-64BC4F0C8DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4C89811-5D55-4269-8324-64BC4F0C8DC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{2E274394-C051-4A02-844C-2948D71547E5} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 		{FBEF37D8-4F81-4CD9-94D1-480B42769E41} = {095D6B0D-206E-4792-AF4B-6795F1BF999B}
 		{177E4962-B062-445F-9C44-121001803D6F} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
+		{C4C89811-5D55-4269-8324-64BC4F0C8DC0} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}
