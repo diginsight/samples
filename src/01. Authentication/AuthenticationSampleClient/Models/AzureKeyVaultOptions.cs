@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AuthenticationSampleClient
 {
-    public class AzureKeyVaultOptions : IDynamicallyPostConfigurable
+    public class AzureKeyVaultOptions : IDynamicallyConfigurable, IVolatilelyConfigurable
     {
         public string TenantId { get; set; }
         public string ClientId { get; set; }
@@ -15,7 +15,7 @@ namespace AuthenticationSampleClient
         public string Uri { get; set; }
         public string RedirectUri { get; set; }
     }
-    public class AzureAdOptions : IDynamicallyPostConfigurable
+    public class AzureAdOptions : IDynamicallyConfigurable, IVolatilelyConfigurable
     {
         public string TenantId { get; set; }
         public string ClientId { get; set; }

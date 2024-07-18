@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AuthenticationSampleClient
 {
-    public class AzureOptions : IDynamicallyPostConfigurable
+    public class AzureOptions : IDynamicallyConfigurable, IVolatilelyConfigurable
     {
         public string TenantId { get; set; }
         public string ClientId { get; set; }

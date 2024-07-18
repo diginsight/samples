@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AuthenticationSampleClient
 {
-    public class AppSettingsOptions : IDynamicallyPostConfigurable
+    public class AppSettingsOptions : IDynamicallyConfigurable, IVolatilelyConfigurable
     {
         public bool PermissionCheckEnabled { get; set; } = true;
         public bool TraceRequestBody { get; set; }

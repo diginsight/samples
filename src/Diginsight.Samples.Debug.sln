@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSample", "01. Authentication\AuthenticationSample\AuthenticationSample.csproj", "{203D5FA3-5D7B-43E0-AB15-D1D6CF04D1A8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D97AD3A-A8AC-47AB-B9BA-FF0CDB665F28}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
@@ -51,16 +49,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diginsight.SmartCache.Exter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diginsight.SmartCache.Externalization.ServiceBus", "..\..\smartcache\src\Diginsight.SmartCache.Externalization.ServiceBus\Diginsight.SmartCache.Externalization.ServiceBus.csproj", "{28A31ED2-3AA4-448A-854A-5065B3CE3401}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSampleClient", "01. Authentication\AuthenticationSampleClient\AuthenticationSampleClient.csproj", "{760CB8DE-1313-4749-828D-64A5D52D0A86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{203D5FA3-5D7B-43E0-AB15-D1D6CF04D1A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{203D5FA3-5D7B-43E0-AB15-D1D6CF04D1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{203D5FA3-5D7B-43E0-AB15-D1D6CF04D1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{203D5FA3-5D7B-43E0-AB15-D1D6CF04D1A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E274394-C051-4A02-844C-2948D71547E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E274394-C051-4A02-844C-2948D71547E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E274394-C051-4A02-844C-2948D71547E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -121,12 +117,15 @@ Global
 		{28A31ED2-3AA4-448A-854A-5065B3CE3401}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A31ED2-3AA4-448A-854A-5065B3CE3401}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A31ED2-3AA4-448A-854A-5065B3CE3401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{760CB8DE-1313-4749-828D-64A5D52D0A86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{760CB8DE-1313-4749-828D-64A5D52D0A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{760CB8DE-1313-4749-828D-64A5D52D0A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{760CB8DE-1313-4749-828D-64A5D52D0A86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{203D5FA3-5D7B-43E0-AB15-D1D6CF04D1A8} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 		{2E274394-C051-4A02-844C-2948D71547E5} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 		{67ECB27F-17DD-431F-847D-E6BF29164060} = {67A07738-078E-4297-9F4B-068CFA18C6B6}
 		{F5D098E8-26F3-4EE5-A78F-683693D0836E} = {67A07738-078E-4297-9F4B-068CFA18C6B6}
@@ -142,6 +141,7 @@ Global
 		{6F8FB1BB-4BFA-4161-8F78-A995B8B97B85} = {67A07738-078E-4297-9F4B-068CFA18C6B6}
 		{2BA343E0-503A-49CC-8289-67498A1C4876} = {67A07738-078E-4297-9F4B-068CFA18C6B6}
 		{28A31ED2-3AA4-448A-854A-5065B3CE3401} = {67A07738-078E-4297-9F4B-068CFA18C6B6}
+		{760CB8DE-1313-4749-828D-64A5D52D0A86} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}

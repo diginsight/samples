@@ -106,7 +106,7 @@ public static class AddObservabilityExtension
         );
 
         services.ConfigureClassAware<DiginsightActivitiesOptions>(configuration.GetSection("Diginsight:Activities"));
-        services.PostConfigureFromHttpRequestHeaders<DiginsightActivitiesOptions>();
+        services.DynamicallyConfigureClassAwareFromHttpRequestHeaders<DiginsightActivitiesOptions>();
 
         var builder = services.AddDiginsightOpenTelemetry();
 

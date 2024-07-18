@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AuthenticationSampleClient
 {
-    public class FeatureFlagOptions : IDynamicallyPostConfigurable
+    public class FeatureFlagOptions : IDynamicallyConfigurable, IVolatilelyConfigurable
     {
         public bool DeviceDeleteHierarchyEnabled { get; set; }
     }
