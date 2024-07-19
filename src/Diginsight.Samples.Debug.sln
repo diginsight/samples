@@ -18,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10. AI", "10. AI", "{4A1F2D54-C6AD-486D-AAC6-4739DD2564FA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "11. OpenAI", "11. OpenAI", "{D74A9E51-4A3E-4034-B662-4772A018E3B5}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_ext", "_ext", "{67A07738-078E-4297-9F4B-068CFA18C6B6}"
 EndProject
