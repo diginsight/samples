@@ -27,11 +27,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSampleClient"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSampleWebapp", "01. Authentication\AuthenticationSampleWebapp\AuthenticationSampleWebapp.csproj", "{C4C89811-5D55-4269-8324-64BC4F0C8DC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleBlazorapp", "01. Authentication\AuthenticationSampleBlazorapp\AuthenticationSampleBlazorapp\AuthenticationSampleBlazorapp.csproj", "{B58470D6-A40C-4ECE-9876-33924E2DF7D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSampleBlazorapp", "01. Authentication\AuthenticationSampleBlazorapp\AuthenticationSampleBlazorapp\AuthenticationSampleBlazorapp.csproj", "{B58470D6-A40C-4ECE-9876-33924E2DF7D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleBlazorapp.Client", "01. Authentication\AuthenticationSampleBlazorapp\AuthenticationSampleBlazorapp.Client\AuthenticationSampleBlazorapp.Client.csproj", "{EF603D52-AE90-49FC-81BA-99080BC0B77B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSampleBlazorapp.Client", "01. Authentication\AuthenticationSampleBlazorapp\AuthenticationSampleBlazorapp.Client\AuthenticationSampleBlazorapp.Client.csproj", "{EF603D52-AE90-49FC-81BA-99080BC0B77B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleBlazorappClient", "01. Authentication\AuthenticationSampleBlazorAppClient\AuthenticationSampleBlazorappClient.csproj", "{4CC8CF8F-AD59-4C6A-997B-0CDB18DF1F9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSampleBlazorappClient", "01. Authentication\AuthenticationSampleBlazorAppClient\AuthenticationSampleBlazorappClient.csproj", "{4CC8CF8F-AD59-4C6A-997B-0CDB18DF1F9B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03. Azure", "03. Azure", "{90BD4A5D-1B66-4D40-9EAA-8F894953694F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.01 AzureFunctions", "03.01 AzureFunctions", "{7C281AAE-282A-48D8-9F30-A27E48691D65}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basic", "03.01 AzureFunctions\01. Basic\Basic.csproj", "{DDC783F4-8348-41C0-ADFD-3B6FDE49238A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsolatedSample", "03.01 AzureFunctions\02. Isolated\IsolatedSample.csproj", "{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +75,14 @@ Global
 		{4CC8CF8F-AD59-4C6A-997B-0CDB18DF1F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CC8CF8F-AD59-4C6A-997B-0CDB18DF1F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CC8CF8F-AD59-4C6A-997B-0CDB18DF1F9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDC783F4-8348-41C0-ADFD-3B6FDE49238A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDC783F4-8348-41C0-ADFD-3B6FDE49238A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDC783F4-8348-41C0-ADFD-3B6FDE49238A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDC783F4-8348-41C0-ADFD-3B6FDE49238A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +95,8 @@ Global
 		{B58470D6-A40C-4ECE-9876-33924E2DF7D9} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 		{EF603D52-AE90-49FC-81BA-99080BC0B77B} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 		{4CC8CF8F-AD59-4C6A-997B-0CDB18DF1F9B} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
+		{DDC783F4-8348-41C0-ADFD-3B6FDE49238A} = {7C281AAE-282A-48D8-9F30-A27E48691D65}
+		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6} = {7C281AAE-282A-48D8-9F30-A27E48691D65}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}

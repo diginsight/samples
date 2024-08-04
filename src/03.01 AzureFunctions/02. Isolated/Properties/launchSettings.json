@@ -1,0 +1,32 @@
+{
+  "profiles": {
+    "Isolatedsample Test": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppsettingsEnvironmentName": "Test"
+      }
+    },
+    "Isolatedsample Stage": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppsettingsEnvironmentName": "Stage"
+      }
+    },
+    "Isolatedsample Prod": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppsettingsEnvironmentName": "Prod"
+      }
+    },
+    "Isolatedsample Prodcn": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppsettingsEnvironmentName": "Prodcn"
+      }
+    }
+  }
+}

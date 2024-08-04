@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
+		<OutputType>Exe</OutputType>
+		<Nullable>enable</Nullable>
+		<UserSecretsId>9eea66ae-51fc-48d7-8ca3-4954cf317393</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="appsettings.Development.json" />
+		<None Remove="appsettings.local.json" />
+		<None Remove="appsettings.Prod.json" />
+		<None Remove="appsettings.Stage.json" />
+		<None Remove="appsettings.Test.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.*" />
+		<PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.*" />
+		<PackageReference Include="Diginsight.Diagnostics.AspNetCore" Version="$(DiginsightCoreVersion)" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.*" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.*" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.*" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" Version="4.*" />
+		<!--<PackageReference Include="NH.Shared.Hosting.AspNetCore" Version="$(NHSharedHostingVersion)" Condition="'$(NHSharedHostingDirectImport)' != 'true'" />-->
+		<!--<ProjectReference Include="$(NHSharedHostingSolutionDirectory)NH.Shared.Hosting\NH.Shared.Hosting.csproj" Condition="'$(NHSharedHostingDirectImport)' == 'true'" />-->
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.*" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.*" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.*" />
+
+		<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.*" />
+		<PackageReference Include="Azure.Identity" Version="1.*" />
+		<PackageReference Include="Diginsight.Diagnostics.Log4Net" Version="$(DiginsightCoreVersion)" />
+		<PackageReference Include="Diginsight.Diagnostics.OpenTelemetry" Version="$(DiginsightCoreVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.*" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="host.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="local.settings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="appsettings.Development.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.local.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.Prod.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.Stage.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.Test.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+</Project>
