@@ -1,9 +1,10 @@
 <Project>
 
 	<PropertyGroup>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>12</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
 		<Authors>diginsight</Authors>
@@ -14,9 +15,9 @@
 		<PackageProjectUrl>https://github.com/diginsight/telemetry_samples</PackageProjectUrl>
 
 		<DiginsightDiagnosticsVersion>2.0.0.23</DiginsightDiagnosticsVersion>
-    <DiginsightCoreVersion>3.0.0-alpha.199</DiginsightCoreVersion>
-    <DiginsightSmartcacheVersion>3.0.0-alpha.199</DiginsightSmartcacheVersion>
-    <PackageTags>diginsight;telemetry</PackageTags>
+		<DiginsightCoreVersion>3.0.0-alpha.199</DiginsightCoreVersion>
+		<DiginsightSmartcacheVersion>3.0.0-alpha.199</DiginsightSmartcacheVersion>
+		<PackageTags>diginsight;telemetry</PackageTags>
 		<!-- TODO <PackageIcon> -->
 		<!-- TODO <Description> in each csproj -->
 

@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basic", "03.01 AzureFunctio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsolatedSample", "03.01 AzureFunctions\02. Isolated\IsolatedSample.csproj", "{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureProvisioning", "AzureProvisioning\AzureProvisioning\AzureProvisioning.csproj", "{BC60676C-A381-42E6-8C03-E3E8D3E23BB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC60676C-A381-42E6-8C03-E3E8D3E23BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC60676C-A381-42E6-8C03-E3E8D3E23BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC60676C-A381-42E6-8C03-E3E8D3E23BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC60676C-A381-42E6-8C03-E3E8D3E23BB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{4CC8CF8F-AD59-4C6A-997B-0CDB18DF1F9B} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 		{DDC783F4-8348-41C0-ADFD-3B6FDE49238A} = {7C281AAE-282A-48D8-9F30-A27E48691D65}
 		{24B87E44-8DCD-4FC4-8F50-E9E016F18EE6} = {7C281AAE-282A-48D8-9F30-A27E48691D65}
+		{BC60676C-A381-42E6-8C03-E3E8D3E23BB5} = {095D6B0D-206E-4792-AF4B-6795F1BF999B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}

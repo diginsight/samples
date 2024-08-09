@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>false</SelfContained>
+		<UserSecretsId>6eec13ed-7afc-4e3e-97ae-ac8497043469</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Configurations\" />
+		<Folder Include="InputFiles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Identity" Version="1.*" />
+		<PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.2.0" />
+		<PackageReference Include="Azure.ResourceManager.Authorization" Version="1.*" />
+		<PackageReference Include="Azure.ResourceManager.KeyVault" Version="1.*" />
+		<PackageReference Include="Cocona" Version="2.*" />
+		<PackageReference Include="Diginsight.Diagnostics.Log4Net" Version="$(DiginsightCoreVersion)" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.*-*" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.*-*" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.*-*" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.*" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.*" />
+		<PackageReference Include="Microsoft.Graph" Version="5.*" />
+		<PackageReference Include="NGuid" Version="0.2.*" />
+		<PackageReference Include="System.Linq.Async" Version="6.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="InputFiles/**/*">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
+
+</Project>

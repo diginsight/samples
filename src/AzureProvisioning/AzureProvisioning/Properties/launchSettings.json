@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "NH.AzureProvisioning.Main help": {
+      "commandName": "Project",
+      "commandLineArgs": "-h",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    },
+    "NH.AzureProvisioning.Main ensure-groups": {
+      "commandName": "Project",
+      "commandLineArgs": "ensure-groups -f InputFiles/CoreServices-GroupMembers-Test.json",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "/subscriptions/79d25380-99f2-41e8-a84c-68a6ac35f040": {
+    "DevSamples-Administrators-TEST": [ "Cost Management Reader" ]
+  },
+  "/subscriptions/f4245a45-778d-4b27-93ff-93f81db7f243": {
+    "DevSamples-Administrators-TEST": [ "Cost Management Reader" ]
+  },
+  "/subscriptions/79d25380-99f2-41e8-a84c-68a6ac35f040/resourceGroups/dev-diginsight-rg": {
+    "DevSamples-Viewers-TEST": [ "Reader" ],
+    "DevSamples-DataViewers-TEST": [ "Cosmos DB Account Reader Role", "Monitoring Data Reader", "Storage Blob Data Reader", "Storage Queue Data Reader", "Storage Table Data Reader" ],
+    "DevSamples-Contributors-TEST": [ "Contributor", "Security Reader" ],
+    "DevSamples-Administrators-TEST": [ "Role Based Access Control Administrator" ]
+  },
+  "/subscriptions/79d25380-99f2-41e8-a84c-68a6ac35f040/resourceGroups/dev-samples-101-rg": {
+    "DevSamples-Viewers-TEST": [ "Reader" ],
+    "DevSamples-DataViewers-TEST": [ "Cosmos DB Account Reader Role", "Monitoring Data Reader", "Storage Blob Data Reader", "Storage Queue Data Reader", "Storage Table Data Reader" ],
+    "DevSamples-Contributors-TEST": [ "Contributor", "Security Reader" ],
+    "DevSamples-Administrators-TEST": [ "Role Based Access Control Administrator" ]
+  },
+  "/subscriptions/79d25380-99f2-41e8-a84c-68a6ac35f040/resourceGroups/dev-samples-102-rg": {
+    "DevSamples-Viewers-TEST": [ "Reader" ],
+    "DevSamples-DataViewers-TEST": [ "Cosmos DB Account Reader Role", "Monitoring Data Reader", "Storage Blob Data Reader", "Storage Queue Data Reader", "Storage Table Data Reader" ],
+    "DevSamples-Contributors-TEST": [ "Contributor", "Security Reader" ],
+    "DevSamples-Administrators-TEST": [ "Role Based Access Control Administrator" ]
+  },
+  "/subscriptions/79d25380-99f2-41e8-a84c-68a6ac35f040/resourceGroups/dev-samples-103-rg": {
+    "DevSamples-Viewers-TEST": [ "Reader" ],
+    "DevSamples-DataViewers-TEST": [ "Cosmos DB Account Reader Role", "Monitoring Data Reader", "Storage Blob Data Reader", "Storage Queue Data Reader", "Storage Table Data Reader" ],
+    "DevSamples-Contributors-TEST": [ "Contributor", "Security Reader" ],
+    "DevSamples-Administrators-TEST": [ "Role Based Access Control Administrator" ]
+  },
+  "/subscriptions/79d25380-99f2-41e8-a84c-68a6ac35f040/resourceGroups/dev-samples-104-rg": {
+    "DevSamples-Viewers-TEST": [ "Reader" ],
+    "DevSamples-DataViewers-TEST": [ "Cosmos DB Account Reader Role", "Monitoring Data Reader", "Storage Blob Data Reader", "Storage Queue Data Reader", "Storage Table Data Reader" ],
+    "DevSamples-Contributors-TEST": [ "Contributor", "Security Reader" ],
+    "DevSamples-Administrators-TEST": [ "Role Based Access Control Administrator" ]
+  },
+  "/subscriptions/79d25380-99f2-41e8-a84c-68a6ac35f040/resourceGroups/dev-samples-105-rg": {
+    "DevSamples-Viewers-TEST": [ "Reader" ],
+    "DevSamples-DataViewers-TEST": [ "Cosmos DB Account Reader Role", "Monitoring Data Reader", "Storage Blob Data Reader", "Storage Queue Data Reader", "Storage Table Data Reader" ],
+    "DevSamples-Contributors-TEST": [ "Contributor", "Security Reader" ],
+    "DevSamples-Administrators-TEST": [ "Role Based Access Control Administrator" ]
+  },
+  "/subscriptions/79d25380-99f2-41e8-a84c-68a6ac35f040/resourceGroups/dev-samples-106-rg": {
+    "DevSamples-Viewers-TEST": [ "Reader" ],
+    "DevSamples-DataViewers-TEST": [ "Cosmos DB Account Reader Role", "Monitoring Data Reader", "Storage Blob Data Reader", "Storage Queue Data Reader", "Storage Table Data Reader" ],
+    "DevSamples-Contributors-TEST": [ "Contributor", "Security Reader" ],
+    "DevSamples-Administrators-TEST": [ "Role Based Access Control Administrator" ]
+  }
+}

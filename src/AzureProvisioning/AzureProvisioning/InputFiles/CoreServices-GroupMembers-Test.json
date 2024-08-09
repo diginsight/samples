@@ -1,0 +1,61 @@
+{
+  "DevSamples-Viewers-TEST": {
+    "Owners": [
+      "dario.airoldi@microsoft.com",
+      "filippo.mineo@microsoft.com"
+    ],
+    "Members": [
+      "DevSamples-DataViewers-TEST"
+    ]
+  },
+  "DevSamples-DataViewers-TEST": {
+    "Owners": [
+      "dario.airoldi@microsoft.com",
+      "filippo.mineo@microsoft.com"
+    ],
+    "Members": [
+      "DevSamples-Contributors-TEST"
+    ]
+  },
+  "DevSamples-Contributors-TEST": {
+    "Owners": [
+      "dario.airoldi@microsoft.com",
+      "filippo.mineo@microsoft.com"
+    ],
+    "Members": [
+      "DevSamples-Administrators-TEST",
+      "dario.airoldi@microsoft.com",
+      "filippo.mineo@microsoft.com",
+      "dario.airoldi@it.abb.com",
+      "filippo.mineo@it.abb.com"
+    ]
+  },
+  "DevSamples-Administrators-TEST": {
+    "Owners": [
+      "dario.airoldi@microsoft.com",
+      "filippo.mineo@microsoft.com"
+    ],
+    "Members": [
+      "dario.airoldi@microsoft.com",
+      "filippo.mineo@microsoft.com"
+    ]
+  },
+  "DevSamples-PRApprovers-TEST": {
+    "Owners": [
+      "dario.airoldi@microsoft.com",
+      "filippo.mineo@microsoft.com"
+    ],
+    "Members": [
+      "DevSamples-Administrators-TEST"
+    ]
+  },
+  "DevSamples-DeploymentApprovers-TEST": {
+    "Owners": [
+      "dario.airoldi@microsoft.com",
+      "filippo.mineo@microsoft.com"
+    ],
+    "Members": [
+      "DevSamples-Administrators-TEST"
+    ]
+  }
+}
