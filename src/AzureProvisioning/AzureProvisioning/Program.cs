@@ -30,9 +30,9 @@ internal class Program
 
     private IProvisioner? provisioner;
     private IProvisioner Provisioner => provisioner ??= new Provisioner(
-                                                                configuration["TenantId"]!, 
-                                                                LoggerFactory.CreateLogger<Provisioner>(), 
-                                                                graphClientCredentialsOptions, 
+                                                                configuration["TenantId"]!,
+                                                                LoggerFactory.CreateLogger<Provisioner>(),
+                                                                graphClientCredentialsOptions,
                                                                 armClientCredentialsOptionsDict,
                                                                 hostEnvironment);
 
@@ -41,7 +41,6 @@ internal class Program
     public Program(
         ILogger<Program> logger,
         IConfiguration configuration,
-        //ILoggerFactory loggerFactory,
         IHostEnvironment hostEnvironment,
         IOptions<GraphClientCredentialsOptions> graphClientCredentialsOptions,
         IOptions<ArmClientCredentialsCollection> armClientCredentialsCollectionOptions
@@ -50,7 +49,6 @@ internal class Program
         this.logger = logger;
         this.configuration = configuration;
         this.hostEnvironment = hostEnvironment;
-        //this.LoggerFactory = loggerFactory;
 
         fileProvider = hostEnvironment.ContentRootFileProvider;
         this.graphClientCredentialsOptions = graphClientCredentialsOptions.Value;

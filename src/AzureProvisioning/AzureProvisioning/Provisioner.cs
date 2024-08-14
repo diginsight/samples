@@ -102,7 +102,7 @@ internal sealed class Provisioner : IProvisioner
         IHostEnvironment hostEnvironment
     )
     {
-        using var activity = Observability.ActivitySource.StartMethodActivity(logger);
+        using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { tenantId, graphClientCredentialsOptions, armClientCredentialsOptionsDict });
 
         this.logger = logger;
         this.hostEnvironment = hostEnvironment;
@@ -113,8 +113,7 @@ internal sealed class Provisioner : IProvisioner
         {
             credential = new ClientSecretCredential(
                 graphClientCredentialsOptions.TenantId ?? tenantId,
-                graphClientCredentialsOptions.ClientId,
-                graphClientCredentialsOptions.ClientSecret
+                graphClientCredentialsOptions.ClientId, graphClientCredentialsOptions.ClientSecret
             );
         }
         if (credential == null)
@@ -122,6 +121,7 @@ internal sealed class Provisioner : IProvisioner
             var environmentName = hostEnvironment.EnvironmentName;
             bool isChina = environmentName.EndsWith("cn", StringComparison.OrdinalIgnoreCase);
             AzureCliCredentialOptions credentialOptions = new();
+            credentialOptions.TenantId = tenantId;
             if (isChina)
             {
                 credentialOptions.AuthorityHost = AzureAuthorityHosts.AzureChina;
@@ -147,6 +147,7 @@ internal sealed class Provisioner : IProvisioner
                     var environmentName = hostEnvironment.EnvironmentName;
                     bool isChina = environmentName.EndsWith("cn", StringComparison.OrdinalIgnoreCase);
                     AzureCliCredentialOptions credentialOptions = new();
+                    credentialOptions.TenantId = tenantId;
                     if (isChina)
                     {
                         credentialOptions.AuthorityHost = AzureAuthorityHosts.AzureChina;
@@ -247,15 +248,33 @@ internal sealed class Provisioner : IProvisioner
         {
             logger.LogTrace("Getting group '{GroupName}'", name);
 
-            group = groupCache[name] = (await graphClient.Groups.GetAsync(
-                    rc =>
-                    {
-                        rc.QueryParameters.Filter = $"displayName eq '{name}'";
-                        rc.QueryParameters.Select = ["id", "displayName"];
-                    }
-                ))
-                ?.Value
-                ?.FirstOrDefault();
+            var groups = (await graphClient.Groups.GetAsync(rc =>
+            {
+                rc.QueryParameters.Filter = $"displayName eq '{name}'";
+                rc.QueryParameters.Select = ["id", "displayName"];
+            }
+                ))?.Value;
+
+            //var groups01 = (await graphClient.Groups.GetAsync(rc =>
+            //{
+            //    rc.QueryParameters.Filter = $"contains(displayName, 'DevSamples')";
+            //    rc.QueryParameters.Select = ["id", "displayName"];
+            //}))?.Value;
+            //
+            //var group02 = await graphClient.Groups["6c39f206-cb73-4ff1-b607-4a3352d64549"].GetAsync();
+
+
+            var groupsAll = (await graphClient.Groups.GetAsync())?.Value;
+
+            if (groupsAll != null)
+            {
+                foreach (var grp in groupsAll)
+                {
+                    logger.LogDebug("{groupDisplayName} ({groupId} {groupUniqueName})", grp.DisplayName, grp.Id, grp.UniqueName);
+                }
+            }
+
+            group = groupCache[name] = groups?.FirstOrDefault();
         }
 
         activity.SetOutput(group);
@@ -332,19 +351,20 @@ internal sealed class Provisioner : IProvisioner
         {
             logger.LogTrace("Getting user '{Mail}'", mail);
 
-            userIdCache[mail] = userId = (await graphClient.Users.GetAsync(
+            var users = (await graphClient.Users.GetAsync(
                     rc =>
                     {
                         rc.QueryParameters.Filter = $"mail eq '{mail}'";
                         rc.QueryParameters.Select = ["id"];
                     }
-                ))
-                ?.Value
-                ?.FirstOrDefault()
-                ?.Id;
+                ))?.Value;
+
+            userIdCache[mail] = userId = (users?.FirstOrDefault())?.Id;
         }
 
-        return userId ?? throw new ProvisioningException($"User '{mail}' not found");
+        var ret = userId ?? throw new ProvisioningException($"User '{mail}' not found");
+        activity?.SetOutput(ret);
+        return ret;
     }
 
     private async Task SetMembersAsync(Group group, IEnumerable<string> desiredMemberIds, IDictionary<string, ISet<string>> excessMembersByGroup)
