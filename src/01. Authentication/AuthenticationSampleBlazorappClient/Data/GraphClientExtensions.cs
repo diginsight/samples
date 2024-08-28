@@ -16,24 +16,21 @@ using Microsoft.Kiota.Abstractions;
 
 internal static class GraphClientExtensions
 {
-    public static IServiceCollection AddGraphClient(
-        this IServiceCollection services, string? baseUrl, List<string>? scopes)
+    public static IServiceCollection AddGraphClient(this IServiceCollection services, string? baseUrl, List<string>? scopes)
     {
-        services.Configure<RemoteAuthenticationOptions<MsalProviderOptions>>(
-            options =>
+        services.Configure<RemoteAuthenticationOptions<MsalProviderOptions>>(options =>
+        {
+            scopes?.ForEach((scope) =>
             {
-                scopes?.ForEach((scope) =>
-                {
-                    options.ProviderOptions.AdditionalScopesToConsent.Add(scope);
-                });
+                options.ProviderOptions.AdditionalScopesToConsent.Add(scope);
             });
+        });
+
         services.AddScoped<IAuthenticationProvider, GraphAuthenticationProvider>();
         services.AddScoped(sp =>
         {
-            return new GraphServiceClient(
-                new HttpClient(),
-                sp.GetRequiredService<IAuthenticationProvider>(),
-                baseUrl);
+            var authenticationProvider = sp.GetRequiredService<IAuthenticationProvider>();
+            return new GraphServiceClient(new HttpClient(), authenticationProvider, baseUrl);
         });
         return services;
     }
@@ -42,8 +39,7 @@ internal static class GraphClientExtensions
     {
         private readonly IConfiguration config;
 
-        public GraphAuthenticationProvider(Microsoft.AspNetCore.Components.WebAssembly.Authentication.IAccessTokenProvider tokenProvider,
-            IConfiguration config)
+        public GraphAuthenticationProvider(Microsoft.AspNetCore.Components.WebAssembly.Authentication.IAccessTokenProvider tokenProvider, IConfiguration config)
         {
             TokenProvider = tokenProvider;
             this.config = config;
@@ -53,11 +49,10 @@ internal static class GraphClientExtensions
 
         public async Task AuthenticateRequestAsync(RequestInformation request, Dictionary<string, object>? additionalAuthenticationContext = null, CancellationToken cancellationToken = default)
         {
-            var result = await TokenProvider.RequestAccessToken(
-                new AccessTokenRequestOptions()
-                {
-                    Scopes = config.GetSection("MicrosoftGraph:Scopes").Get<string[]>()
-                });
+            var result = await TokenProvider.RequestAccessToken(new AccessTokenRequestOptions()
+            {
+                Scopes = config.GetSection("MicrosoftGraph:Scopes").Get<string[]>()
+            });
 
             if (result.TryGetToken(out var token))
             {
