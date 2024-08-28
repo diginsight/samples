@@ -4,5 +4,5 @@ namespace AuthenticationSampleApi;
 
 public class RedisCacheOptions
 {
-    public string Connectionstring { get; set; }
+    public string? Connectionstring { get; set; }
 }

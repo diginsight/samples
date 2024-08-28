@@ -45,7 +45,7 @@ namespace AuthenticationSampleApi
 
         [HttpGet("getplantsimpl", Name = nameof(GetPlantsImplAsync))]
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
-        public async Task<IEnumerable<Plant>> GetPlantsImplAsync()
+        public async Task<IEnumerable<Plant>?> GetPlantsImplAsync()
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
 
@@ -69,7 +69,7 @@ namespace AuthenticationSampleApi
 
         [HttpGet("getplantbyidimpl/{id}", Name = nameof(GetPlantByIdImplAsync))]
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
-        public async Task<Plant> GetPlantByIdImplAsync([FromRoute] Guid id)
+        public async Task<Plant?> GetPlantByIdImplAsync([FromRoute] Guid id)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { id });
 
@@ -79,7 +79,7 @@ namespace AuthenticationSampleApi
 
             var plants = await GetPlantsAsync();
 
-            var plant = plants.FirstOrDefault(p => p.Id == id);
+            var plant = plants?.FirstOrDefault(p => p.Id == id);
 
             activity?.SetOutput(plant);
             return plant;
@@ -88,7 +88,7 @@ namespace AuthenticationSampleApi
 
         [HttpGet("getplants", Name = nameof(GetPlantsAsync))]
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
-        public async Task<IEnumerable<Plant>> GetPlantsAsync()
+        public async Task<IEnumerable<Plant>?> GetPlantsAsync()
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger);
 
@@ -103,7 +103,7 @@ namespace AuthenticationSampleApi
 
         [HttpGet("getplantbyid/{plantId}", Name = nameof(GetPlantByIdAsync))]
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
-        public async Task<Plant> GetPlantByIdAsync([FromRoute] Guid plantId)
+        public async Task<Plant?> GetPlantByIdAsync([FromRoute] Guid plantId)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger);
 
@@ -119,7 +119,7 @@ namespace AuthenticationSampleApi
 
         [HttpPost("createorupdateplant", Name = nameof(CreateOrUpdatePlant))]
         [ApiVersion(ApiVersions.V_2024_04_26.Name)]
-        public async Task<IEnumerable<Plant>> CreateOrUpdatePlant(Plant newplant)
+        public async Task<IEnumerable<Plant>?> CreateOrUpdatePlant(Plant newplant)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
 

@@ -60,11 +60,11 @@ namespace AuthenticationSampleClient
 
         private string GetScope([CallerMemberName] string memberName = "") { return memberName; }
 
-        public static IPublicClientApplication IdentityClient { get; set; }
+        public static IPublicClientApplication IdentityClient { get; set; } = null!;
         #region AuthenticationResult
-        public AuthenticationResult AuthenticationResult
+        public AuthenticationResult? AuthenticationResult
         {
-            get { return (AuthenticationResult)GetValue(AuthenticationResultProperty); }
+            get { return (AuthenticationResult?)GetValue(AuthenticationResultProperty); }
             set { SetValue(AuthenticationResultProperty, value); }
         }
         public static readonly DependencyProperty AuthenticationResultProperty = DependencyProperty.Register("AuthenticationResult", typeof(AuthenticationResult), typeof(MainWindow), new PropertyMetadata());
@@ -134,13 +134,13 @@ namespace AuthenticationSampleClient
 
             try
             {
-                var credential = DelegatedTokenCredential.Create(null, async (tokenRequestContext, cancellationToken) =>
+                var credential = DelegatedTokenCredential.Create(null!, async (tokenRequestContext, cancellationToken) =>
                 {
-                    AuthenticationResult result = await GetAuthenticationToken();
+                    AuthenticationResult result = (await GetAuthenticationToken())!;
                     return new AccessToken(result.AccessToken, result.ExpiresOn);
                 });
                 var service = new RestSharpService(credential);
-                var res = await service.Get("https://localhost:7213/api/Plants/getplants", null, null);
+                var res = await service.Get("https://localhost:7213/api/Plants/getplants", new(), null);
 
             }
             catch (Exception _) { }
@@ -151,9 +151,9 @@ namespace AuthenticationSampleClient
 
             try
             {
-                var credential = DelegatedTokenCredential.Create(null, async (tokenRequestContext, cancellationToken) =>
+                var credential = DelegatedTokenCredential.Create(null!, async (tokenRequestContext, cancellationToken) =>
                 {
-                    AuthenticationResult result = await GetAuthenticationToken();
+                    AuthenticationResult result = (await GetAuthenticationToken())!;
                     return new AccessToken(result.AccessToken, result.ExpiresOn);
                 });
 
@@ -166,7 +166,7 @@ namespace AuthenticationSampleClient
 
                 using var responseMessage = await httpClient.SendAsync(request);
 
-                var requestString = request?.Content != null ? await request?.Content?.ReadAsStringAsync() : null;
+                var requestString = request?.Content != null ? await request.Content.ReadAsStringAsync() : null;
 
                 await ThrowExceptionIfNotSuccessAsync(responseMessage);
 
@@ -184,7 +184,7 @@ namespace AuthenticationSampleClient
             try
             {
                 string[] scopes = Constants.Scopes;
-                AuthenticationResult result = await GetAuthenticationToken();
+                AuthenticationResult? result = (await GetAuthenticationToken())!;
                 this.AuthenticationResult = result;
                 this.ClaimsPrincipal = result.ClaimsPrincipal;
                 var identity = this.ClaimsPrincipal.Identity; // getClaim name
@@ -192,7 +192,7 @@ namespace AuthenticationSampleClient
             catch (Exception _) { }
         }
 
-        public async Task<AuthenticationResult> GetAuthenticationToken()
+        public async Task<AuthenticationResult?> GetAuthenticationToken()
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger);
 
@@ -200,8 +200,7 @@ namespace AuthenticationSampleClient
             AuthenticationResult? result = null;
             try
             {
-                result = await IdentityClient.AcquireTokenSilent(Constants.Scopes, accounts.FirstOrDefault())
-                    .ExecuteAsync();
+                result = await IdentityClient.AcquireTokenSilent(Constants.Scopes, accounts.FirstOrDefault()).ExecuteAsync();
             }
             catch (MsalUiRequiredException)
             {
@@ -249,7 +248,7 @@ namespace AuthenticationSampleClient
             );
         }
 
-        protected static async Task<TContent> ReadDeserializedContentAsync<TContent>(HttpResponseMessage responseMessage)
+        protected static async Task<TContent?> ReadDeserializedContentAsync<TContent>(HttpResponseMessage responseMessage)
         {
             //if (DumpFullRequestResponse)
             //{
@@ -268,8 +267,8 @@ namespace AuthenticationSampleClient
             //}
 
             return responseMessage.Content.Headers.ContentType?.MediaType == "text/plain" && typeof(TContent) == typeof(string)
-                ? (TContent)(object)rawContent
-                : JsonConvert.DeserializeObject<TContent>(rawContent, Statics.SerializerSettings);
+                ? (TContent?)(object)rawContent
+                : JsonConvert.DeserializeObject<TContent?>(rawContent, Statics.SerializerSettings);
         }
 
     }

@@ -19,6 +19,8 @@ namespace AuthenticationSampleBlazorappClient.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            logger.LogDebug("OnInitializedAsync START");
+
             forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
         }
 

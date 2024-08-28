@@ -16,8 +16,8 @@ namespace Microsoft.Azure.Functions.Samples.DependencyInjectionBasic
 {
     public class SampleStartup : FunctionsStartup
     {
-        public static ILoggerFactory LoggerFactory;
-        private readonly ILogger logger;
+        public static ILoggerFactory LoggerFactory = null!;
+        private readonly ILogger logger = null!;
 
         //private static readonly JsonSerializerOptions MyJsonSerializerOptions = new(JsonSerializerOptions.Default) { ReadCommentHandling = JsonCommentHandling.Skip };
         //public static IHost host;

@@ -54,7 +54,7 @@ namespace AuthenticationSampleClient
         public static IDeferredLoggerFactory DeferredLoggerFactory;
 
         static Type T = typeof(App);
-        public static IHost Host;
+        public static IHost Host = null!;
         //private ILogger<App> logger;
 
         static App()

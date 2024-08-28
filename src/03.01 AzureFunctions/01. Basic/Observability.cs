@@ -10,5 +10,5 @@ namespace Microsoft.Azure.Functions.Samples.DependencyInjectionBasic;
 
 internal static class Observability
 {
-    public static readonly ActivitySource ActivitySource = new ActivitySource(Assembly.GetExecutingAssembly().GetName().Name);
+    public static readonly ActivitySource ActivitySource = new ActivitySource(Assembly.GetExecutingAssembly().GetName().Name!);
 }

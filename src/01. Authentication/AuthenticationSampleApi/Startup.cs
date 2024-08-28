@@ -27,7 +27,7 @@ namespace AuthenticationSampleApi
         private readonly IHostEnvironment hostEnvironment;
         private readonly IDeferredLoggerFactory deferredLoggerFactory;
 
-        public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment, IDeferredLoggerFactory deferredLoggerFactory = null)
+        public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment, IDeferredLoggerFactory deferredLoggerFactory)
         {
             this.configuration = configuration;
             this.deferredLoggerFactory = deferredLoggerFactory;

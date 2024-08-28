@@ -8,7 +8,7 @@ namespace AuthenticationSampleApi;
 
 public class Program
 {
-    public static IDeferredLoggerFactory DeferredLoggerFactory;
+    public static IDeferredLoggerFactory DeferredLoggerFactory = null!;
 
     public static void Main(string[] args)
     {

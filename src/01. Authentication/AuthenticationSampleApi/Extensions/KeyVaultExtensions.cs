@@ -32,7 +32,7 @@ public static class KeyVaultExtensions
             .Select(static x => x.index)
             .First();
 
-        string appsettingsEnvName = Environment.GetEnvironmentVariable("AppsettingsEnvironmentName");
+        var appsettingsEnvName = Environment.GetEnvironmentVariable("AppsettingsEnvironmentName");
         if (!string.IsNullOrEmpty(appsettingsEnvName))
         {
             ((JsonConfigurationSource)builder.Sources[appsettingsEnvIndex]).Path = $"appsettings.{appsettingsEnvName}.json";
@@ -50,7 +50,7 @@ public static class KeyVaultExtensions
         }
 
         IConfiguration configuration = builder.Build();
-        TokenCredential credential = null;
+        TokenCredential? credential = null;
         if (isLocal)
         {
             var clientId = configuration["AzureKeyVault:ClientId"];

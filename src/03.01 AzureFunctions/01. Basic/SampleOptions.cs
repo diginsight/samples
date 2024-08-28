@@ -2,6 +2,6 @@
 {
     public class SampleOptions
     {
-        public string SampleSetting { get; set; }
+        public string SampleSetting { get; set; } = null!;
     }
 }

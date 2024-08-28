@@ -25,7 +25,7 @@ internal class Program
     private readonly IFileProvider fileProvider;
 
     private static readonly JsonSerializerOptions MyJsonSerializerOptions = new(JsonSerializerOptions.Default) { ReadCommentHandling = JsonCommentHandling.Skip };
-    public static IHost host;
+    public static IHost host = null!;
 
     //private IFileConverter? provisioner;
     //private IFileConverter Provisioner => provisioner ??= new FileConverter(loggerFactory.CreateLogger<FileConverter>());
@@ -225,7 +225,7 @@ internal class Program
                     object? value = jvalue.Value;
                     string? valueString = value is null ? null : value is IFormattable formattable ? formattable.ToString(null, CultureInfo.InvariantCulture) : value.ToString();
 
-                    configurationEntries.Add(key, valueString);
+                    configurationEntries.Add(key, valueString ?? "");
 
                     //Console.Write(valueString is null ? "" : valueString.Replace("\"", "\"\""));
                     //Console.WriteLine('"');

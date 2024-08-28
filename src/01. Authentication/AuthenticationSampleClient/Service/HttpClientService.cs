@@ -30,17 +30,17 @@ namespace AuthenticationSampleClient
         }
 
         private DownstreamApiException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+            //: base(info, context)
         {
-            Method = new HttpMethod(info.GetString("Method"));
-            Uri = (Uri)info.GetValue("Uri", typeof(Uri));
+            Method = new HttpMethod(info.GetString("Method")!);
+            Uri = (Uri)info.GetValue("Uri", typeof(Uri))!;
             StatusCode = (HttpStatusCode)info.GetInt32("StatusCode");
-            RawContent = (byte[])info.GetValue("RawContent", typeof(byte[]));
+            RawContent = (byte[])info.GetValue("RawContent", typeof(byte[]))!;
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            base.GetObjectData(info, context);
+            //base.GetObjectData(info, context);
             info.AddValue("Method", Method.Method);
             info.AddValue("Uri", Uri);
             info.AddValue("StatusCode", (int)StatusCode);

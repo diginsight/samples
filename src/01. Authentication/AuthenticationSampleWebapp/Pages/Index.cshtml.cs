@@ -21,7 +21,7 @@ namespace AuthenticationSampleWebapp.Pages
         public async Task OnGet()
         {
             var user = await _graphServiceClient.Me.GetAsync();
-            ViewData["GraphApiResult"] = user.DisplayName;;
+            ViewData["GraphApiResult"] = user?.DisplayName;;
 
         }
     }

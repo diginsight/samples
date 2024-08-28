@@ -22,6 +22,8 @@ namespace AuthenticationSampleBlazorappClient.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            logger.LogDebug("OnInitializedAsync START");
+
             try
             {
                 user = await GraphServiceClient.Me.GetAsync();
