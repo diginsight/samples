@@ -1,0 +1,23 @@
+[
+  {
+    "Id": "963d1c02-fde3-460b-a866-c7c0a71353a2",
+    "Name": "Plant1 Name",
+    "Description": null,
+    "Address": null,
+    "CreationDate": "0001-01-01"
+  },
+  {
+    "Id": "b69b1a27-1d8c-4cc1-8291-faa23c51fd30",
+    "Name": "Plant2 Name",
+    "Description": null,
+    "Address": null,
+    "CreationDate": "0001-01-01"
+  },
+  {
+    "Id": "77903d8a-ba6e-4510-b1bb-d96f415f2120",
+    "Name": "Annone Building",
+    "Description": "Annone Building Site",
+    "Address": "via Fornace, 7",
+    "CreationDate": "1951-01-01"
+  }
+]

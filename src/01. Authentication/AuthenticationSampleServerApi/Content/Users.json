@@ -1,0 +1,16 @@
+[
+  {
+    "Id": "963d1c02-fde3-460b-a866-c7c0a71353a2",
+    "Name": "Dario",
+    "Surname": "Airoldi",
+    "Email": "darioa@microsoft.com",
+    "CreationDate": "0001-01-01"
+  },
+  {
+    "Id": "b69b1a27-1d8c-4cc1-8291-faa23c51fd30",
+    "Name": "Filippo",
+    "Surname": "Mineo",
+    "Email": "filippo.mineo@microsoft.com",
+    "CreationDate": "0001-01-01"
+  }
+]

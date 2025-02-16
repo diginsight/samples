@@ -1,0 +1,88 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D97AD3A-A8AC-47AB-B9BA-FF0CDB665F28}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Authentication", "01. Authentication", "{4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. OpenAPI", "02. OpenAPI", "{B5238526-7228-48D6-9959-0A1FFBE196DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10. AI", "10. AI", "{4A1F2D54-C6AD-486D-AAC6-4739DD2564FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "11. OpenAI", "11. OpenAI", "{D74A9E51-4A3E-4034-B662-4772A018E3B5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Json2Csv", "Json2Csv", "{095D6B0D-206E-4792-AF4B-6795F1BF999B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.00 Azure", "03.00 Azure", "{90BD4A5D-1B66-4D40-9EAA-8F894953694F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.09 AzureFunctions", "03.09 AzureFunctions", "{7C281AAE-282A-48D8-9F30-A27E48691D65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.01 CosmosDB", "03.01 CosmosDB", "{3F391121-DA22-4635-A2D2-294D24F28A3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.02 AzureSql", "03.02 AzureSql", "{488430D6-82B1-48AE-B3FF-5F9B1C63E3E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.05 ServiceBus", "03.05 ServiceBus", "{A2F8D814-C370-4EEC-91A4-75C92F09BFAA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.06 EventHub", "03.06 EventHub", "{7891C7B3-0A38-46D7-AD4D-4965B425EFBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.03 DataExplorer", "03.03 DataExplorer", "{E287B735-8874-431A-A303-AD0E1F517339}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.07 IotHub", "03.07 IotHub", "{5BCAEB0C-41E2-4FE0-B30C-6BED4A1EE9CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityAPI", "03..01 CosmosDB\IdentityAPI\IdentityAPI.csproj", "{D8A13F16-E948-45DE-B1F7-C0A47A6F9602}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationAPI", "03..01 CosmosDB\LocationAPI\LocationAPI.csproj", "{D8C98C1D-FCDB-47FA-82C4-E2DE295735F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleServerApi", "01. Authentication\AuthenticationSampleServerApi\AuthenticationSampleServerApi.csproj", "{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleApi", "01. Authentication\AuthenticationSampleApi\AuthenticationSampleApi.csproj", "{9CCC752C-95AB-685B-D4FD-DFB8A8E0B4F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleClient", "01. Authentication\AuthenticationSampleClient\AuthenticationSampleClient.csproj", "{E44A1EFA-3A6F-A72A-78E2-A0635C491357}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8A13F16-E948-45DE-B1F7-C0A47A6F9602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8A13F16-E948-45DE-B1F7-C0A47A6F9602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8A13F16-E948-45DE-B1F7-C0A47A6F9602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8A13F16-E948-45DE-B1F7-C0A47A6F9602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8C98C1D-FCDB-47FA-82C4-E2DE295735F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8C98C1D-FCDB-47FA-82C4-E2DE295735F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8C98C1D-FCDB-47FA-82C4-E2DE295735F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8C98C1D-FCDB-47FA-82C4-E2DE295735F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CCC752C-95AB-685B-D4FD-DFB8A8E0B4F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CCC752C-95AB-685B-D4FD-DFB8A8E0B4F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CCC752C-95AB-685B-D4FD-DFB8A8E0B4F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CCC752C-95AB-685B-D4FD-DFB8A8E0B4F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E44A1EFA-3A6F-A72A-78E2-A0635C491357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E44A1EFA-3A6F-A72A-78E2-A0635C491357}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E44A1EFA-3A6F-A72A-78E2-A0635C491357}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E44A1EFA-3A6F-A72A-78E2-A0635C491357}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D8A13F16-E948-45DE-B1F7-C0A47A6F9602} = {3F391121-DA22-4635-A2D2-294D24F28A3A}
+		{D8C98C1D-FCDB-47FA-82C4-E2DE295735F1} = {3F391121-DA22-4635-A2D2-294D24F28A3A}
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
+		{9CCC752C-95AB-685B-D4FD-DFB8A8E0B4F4} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
+		{E44A1EFA-3A6F-A72A-78E2-A0635C491357} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AuthenticationSampleServerApi</name>
+    </assembly>
+    <members>
+        <member name="T:AuthenticationSampleServerApi.ApiVersions">
+            <summary>
+            Contains API version information.
+            </summary>
+        </member>
+        <member name="T:AuthenticationSampleServerApi.ApiVersions.V_2024_04_26">
+            <summary>
+            API version 2024-04-26.
+            </summary>
+        </member>
+        <member name="F:AuthenticationSampleServerApi.ApiVersions.V_2024_04_26.Name">
+            <summary>
+            The name of the API version.
+            </summary>
+        </member>
+        <member name="F:AuthenticationSampleServerApi.ApiVersions.V_2024_04_26.Version">
+            <summary>
+            The API version.
+            </summary>
+        </member>
+    </members>
+</doc>
