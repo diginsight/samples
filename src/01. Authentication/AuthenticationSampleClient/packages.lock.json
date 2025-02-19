@@ -27,66 +27,6 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         }
       },
-      "Diginsight.Components": {
-        "type": "Direct",
-        "requested": "[0.0.*, )",
-        "resolved": "0.0.0.32",
-        "contentHash": "GQSJpEr6GFpR4C3DEBp5k0iJkJJtKylUyQCQve1U+IJIEg0YQMKt2xAoMfLR5cbxsa4JfLFg8KaR24K/8/nIBA==",
-        "dependencies": {
-          "Diginsight.Components.Abstractions": "0.0.0.32",
-          "Diginsight.Components.Configuration": "0.0.0.32",
-          "Diginsight.Core": "3.4.0",
-          "Diginsight.Diagnostics": "3.4.0",
-          "Microsoft.Extensions.Configuration": "9.0.1",
-          "Microsoft.Extensions.Configuration.Abstractions": "9.0.1",
-          "Microsoft.Extensions.Http": "9.0.1",
-          "Microsoft.Extensions.Logging": "9.0.1",
-          "Microsoft.Extensions.Logging.Abstractions": "9.0.1",
-          "Microsoft.Identity.Client": "4.68.0",
-          "Newtonsoft.Json": "13.0.3",
-          "System.IdentityModel.Tokens.Jwt": "8.4.0",
-          "System.Net.Security": "4.3.2",
-          "System.Security.AccessControl": "6.0.1",
-          "System.Security.Claims": "4.3.0",
-          "System.Security.Cryptography.Algorithms": "4.3.1",
-          "System.Security.Cryptography.Csp": "4.3.0",
-          "System.Security.Cryptography.Encoding": "4.3.0",
-          "System.Security.Cryptography.Primitives": "4.3.0",
-          "System.Security.Cryptography.ProtectedData": "9.0.1",
-          "System.Security.Cryptography.X509Certificates": "4.3.2",
-          "System.Security.Principal": "4.3.0"
-        }
-      },
-      "Diginsight.Components.Configuration": {
-        "type": "Direct",
-        "requested": "[0.0.*, )",
-        "resolved": "0.0.0.32",
-        "contentHash": "xEwQvggLBbLdc83A2Rz6OiPgaqBtZa5wDaIKmYb1SPBo/TSPN4GOlWL/iqkS6TMzwvdwWBjx/j3GUD72WlLsIw==",
-        "dependencies": {
-          "Azure.Core": "1.45.0",
-          "Azure.Extensions.AspNetCore.Configuration.Secrets": "1.4.0",
-          "Azure.Identity": "1.13.2",
-          "Azure.Monitor.OpenTelemetry.AspNetCore": "1.2.0",
-          "Diginsight.Core": "3.4.0",
-          "Diginsight.Diagnostics": "3.4.0",
-          "Diginsight.Diagnostics.AspNetCore": "3.4.0",
-          "Diginsight.Diagnostics.AspNetCore.OpenTelemetry": "3.4.0",
-          "Diginsight.Diagnostics.Log4Net": "3.4.0",
-          "Diginsight.Diagnostics.OpenTelemetry": "3.4.0",
-          "Microsoft.Extensions.Configuration": "9.0.1",
-          "Microsoft.Extensions.Configuration.Abstractions": "9.0.1",
-          "Microsoft.Extensions.Configuration.Binder": "9.0.1",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "9.0.1",
-          "Microsoft.Extensions.Configuration.FileExtensions": "9.0.1",
-          "Microsoft.Extensions.Configuration.Json": "9.0.1",
-          "Microsoft.Extensions.Hosting": "9.0.1",
-          "Microsoft.Extensions.Hosting.Abstractions": "9.0.1",
-          "Microsoft.Extensions.Options": "9.0.1",
-          "Microsoft.Identity.Client": "4.68.0",
-          "OpenTelemetry.Instrumentation.Runtime": "1.11.0",
-          "Scrutor": "6.0.1"
-        }
-      },
       "Diginsight.Core": {
         "type": "Direct",
         "requested": "[3.4.*, )",
@@ -350,14 +290,6 @@
         "dependencies": {
           "Diginsight.Core": "3.4.0",
           "Scrutor": "5.1.2"
-        }
-      },
-      "Diginsight.Components.Abstractions": {
-        "type": "Transitive",
-        "resolved": "0.0.0.32",
-        "contentHash": "ftPcOT6TrUnNNHFxZLpeprc2hJUSFEspx1fu4yi8U62ATzFjIMpQsObzxm0sDwD8VhkdYImqXNHBVHzBbfLzng==",
-        "dependencies": {
-          "Microsoft.Identity.Client": "4.68.0"
         }
       },
       "Diginsight.Diagnostics.AspNetCore": {
@@ -733,33 +665,33 @@
       },
       "Microsoft.IdentityModel.Abstractions": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "4dDpw7DJ2yx2vFM/w0sceXoByUhrU68eMdlXyzsPTWPtAfgCbkuMl7jfLBLegmgerbOzGNMm7zq5xwr4+7yTSg=="
+        "resolved": "8.5.0",
+        "contentHash": "wdhxpIzpCW49+MR0oeoJqjDA8vtVXCJPrqXx19UsUOpnE+8PX9byVdFJuVPtT8tkExhU+c8eQxw6OLNQW3i0wg=="
       },
       "Microsoft.IdentityModel.JsonWebTokens": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "lyMsODXEMNvV0oTUehuz6wkohldFqQg5su/2Hdzr2xS1kdvilqyywkoVnpbJVb7zYr7TA+6rVCTRV/0f2uSBPQ==",
+        "resolved": "8.5.0",
+        "contentHash": "Wbx1JbFosCdRaQU8TPDrlHfHx3+f7ef7ivDvyooQec7AmOC+uDXpPUiki7qYklSj6OXxfvtPzyMZBqQuEJrccA==",
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "8.4.0"
+          "Microsoft.IdentityModel.Tokens": "8.5.0"
         }
       },
       "Microsoft.IdentityModel.Logging": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "vIKIBDMD6l2MeCwkdeh1XHSHNVz9C/qp9PaHMG6SF3OUSAh/2XMVj2zaVc2hs27QRfhh5xR3tvMSs8R96WS2IA==",
+        "resolved": "8.5.0",
+        "contentHash": "UCTOGVp7h+PHrI4Q/yV0LT2k7dbjlzrnFhfqDUsQ91rOFH8ZNRMZYFY/J79KWSl+SZNnu3ecap31z//NevUaEw==",
         "dependencies": {
-          "Microsoft.IdentityModel.Abstractions": "8.4.0"
+          "Microsoft.IdentityModel.Abstractions": "8.5.0"
         }
       },
       "Microsoft.IdentityModel.Tokens": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "n/wBvhj7oq3rZyImUhkUv6bUjwPWK+jG1R3BsCfahLtwoOzIWSPLmzMQ61HCtd1BiCU43IdkX9M+cD1xMmE3xQ==",
+        "resolved": "8.5.0",
+        "contentHash": "dYxp8/JvBpRD5c4H9jBJbKRJnvzvqayEXajr8e1JFdEVMvQXAylPWNwnXghzuGCjKc4bbel2pnDKlKjQnWZlgQ==",
         "dependencies": {
           "Microsoft.Bcl.Memory": "9.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
-          "Microsoft.IdentityModel.Logging": "8.4.0"
+          "Microsoft.IdentityModel.Logging": "8.5.0"
         }
       },
       "Microsoft.NETCore.Platforms": {
@@ -1075,11 +1007,11 @@
       },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "HZ5WvpPz7l11u0iLM2kmql29nWrtcGrt/STcRs/Atv/oz7yiidu2d0DzsvkgWKWx6t5sFvQxsUEUcwpPd/P6Yw==",
+        "resolved": "8.5.0",
+        "contentHash": "ZUdVIyD2mJg5+hOtjnHFQRp+wCZraV6XTp734LFIGwVnCbvcgYKgsiUvlBCiS6fXs6wdY8wlMa7cFluD+RE+6g==",
         "dependencies": {
-          "Microsoft.IdentityModel.JsonWebTokens": "8.4.0",
-          "Microsoft.IdentityModel.Tokens": "8.4.0"
+          "Microsoft.IdentityModel.JsonWebTokens": "8.5.0",
+          "Microsoft.IdentityModel.Tokens": "8.5.0"
         }
       },
       "System.IO": {
@@ -1413,8 +1345,8 @@
       },
       "System.Security.Cryptography.ProtectedData": {
         "type": "Transitive",
-        "resolved": "9.0.1",
-        "contentHash": "u+4PH6GyDjEsWgcpKp1S/DiyxtGvazNPdaPFR6p6/qZr3TW+oZWvwfHO2H2CSpS4KGl2z2CBfU6eB38PsmoxtA=="
+        "resolved": "9.0.2",
+        "contentHash": "+z9JWtU9di45tW/w6zpuJms4SnAAqKY2Usmmxs7MpOhxWoIeR2pKl1vEkaFbEx52ZfrMFcZXsFe+8WERMozzGg=="
       },
       "System.Security.Cryptography.X509Certificates": {
         "type": "Transitive",
@@ -1525,6 +1457,66 @@
         "type": "Transitive",
         "resolved": "4.5.0",
         "contentHash": "okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ=="
+      },
+      "diginsight.components": {
+        "type": "Project",
+        "dependencies": {
+          "Diginsight.Components.Abstractions": "[1.0.0, )",
+          "Diginsight.Components.Configuration": "[1.0.0, )",
+          "Diginsight.Core": "[3.4.*, )",
+          "Diginsight.Diagnostics": "[3.4.*, )",
+          "Microsoft.Extensions.Configuration": "[9.*, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[9.*, )",
+          "Microsoft.Extensions.Http": "[9.0.1, )",
+          "Microsoft.Extensions.Logging": "[9.*, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[9.*, )",
+          "Microsoft.Identity.Client": "[4.*, )",
+          "Newtonsoft.Json": "[13.0.3, )",
+          "System.IdentityModel.Tokens.Jwt": "[8.*, )",
+          "System.Net.Security": "[4.3.2, )",
+          "System.Security.AccessControl": "[6.*, )",
+          "System.Security.Claims": "[4.3.0, )",
+          "System.Security.Cryptography.Algorithms": "[4.3.1, )",
+          "System.Security.Cryptography.Csp": "[4.3.0, )",
+          "System.Security.Cryptography.Encoding": "[4.3.0, )",
+          "System.Security.Cryptography.Primitives": "[4.3.0, )",
+          "System.Security.Cryptography.ProtectedData": "[9.*, )",
+          "System.Security.Cryptography.X509Certificates": "[4.3.2, )",
+          "System.Security.Principal": "[4.3.0, )"
+        }
+      },
+      "diginsight.components.abstractions": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Identity.Client": "[4.*, )"
+        }
+      },
+      "diginsight.components.configuration": {
+        "type": "Project",
+        "dependencies": {
+          "Azure.Core": "[1.*, )",
+          "Azure.Extensions.AspNetCore.Configuration.Secrets": "[1.*, )",
+          "Azure.Identity": "[1.*, )",
+          "Azure.Monitor.OpenTelemetry.AspNetCore": "[1.*, )",
+          "Diginsight.Core": "[3.4.*, )",
+          "Diginsight.Diagnostics": "[3.4.*, )",
+          "Diginsight.Diagnostics.AspNetCore": "[3.4.*, )",
+          "Diginsight.Diagnostics.AspNetCore.OpenTelemetry": "[3.4.*, )",
+          "Diginsight.Diagnostics.Log4Net": "[3.4.*, )",
+          "Diginsight.Diagnostics.OpenTelemetry": "[3.4.*, )",
+          "Microsoft.Extensions.Configuration": "[9.*, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[9.*, )",
+          "Microsoft.Extensions.Configuration.Binder": "[9.*, )",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[9.*, )",
+          "Microsoft.Extensions.Configuration.FileExtensions": "[9.*, )",
+          "Microsoft.Extensions.Configuration.Json": "[9.*, )",
+          "Microsoft.Extensions.Hosting": "[9.*, )",
+          "Microsoft.Extensions.Hosting.Abstractions": "[9.*, )",
+          "Microsoft.Extensions.Options": "[9.*, )",
+          "Microsoft.Identity.Client": "[4.*, )",
+          "OpenTelemetry.Instrumentation.Runtime": "[1.*, )",
+          "Scrutor": "[6.*, )"
+        }
       }
     },
     "net9.0-windows7.0": {
@@ -1551,66 +1543,6 @@
           "Microsoft.Identity.Client.Extensions.Msal": "4.67.2",
           "System.Memory": "4.5.5",
           "System.Threading.Tasks.Extensions": "4.5.4"
-        }
-      },
-      "Diginsight.Components": {
-        "type": "Direct",
-        "requested": "[0.0.*, )",
-        "resolved": "0.0.0.32",
-        "contentHash": "GQSJpEr6GFpR4C3DEBp5k0iJkJJtKylUyQCQve1U+IJIEg0YQMKt2xAoMfLR5cbxsa4JfLFg8KaR24K/8/nIBA==",
-        "dependencies": {
-          "Diginsight.Components.Abstractions": "0.0.0.32",
-          "Diginsight.Components.Configuration": "0.0.0.32",
-          "Diginsight.Core": "3.4.0",
-          "Diginsight.Diagnostics": "3.4.0",
-          "Microsoft.Extensions.Configuration": "9.0.1",
-          "Microsoft.Extensions.Configuration.Abstractions": "9.0.1",
-          "Microsoft.Extensions.Http": "9.0.1",
-          "Microsoft.Extensions.Logging": "9.0.1",
-          "Microsoft.Extensions.Logging.Abstractions": "9.0.1",
-          "Microsoft.Identity.Client": "4.68.0",
-          "Newtonsoft.Json": "13.0.3",
-          "System.IdentityModel.Tokens.Jwt": "8.4.0",
-          "System.Net.Security": "4.3.2",
-          "System.Security.AccessControl": "6.0.1",
-          "System.Security.Claims": "4.3.0",
-          "System.Security.Cryptography.Algorithms": "4.3.1",
-          "System.Security.Cryptography.Csp": "4.3.0",
-          "System.Security.Cryptography.Encoding": "4.3.0",
-          "System.Security.Cryptography.Primitives": "4.3.0",
-          "System.Security.Cryptography.ProtectedData": "9.0.1",
-          "System.Security.Cryptography.X509Certificates": "4.3.2",
-          "System.Security.Principal": "4.3.0"
-        }
-      },
-      "Diginsight.Components.Configuration": {
-        "type": "Direct",
-        "requested": "[0.0.*, )",
-        "resolved": "0.0.0.32",
-        "contentHash": "xEwQvggLBbLdc83A2Rz6OiPgaqBtZa5wDaIKmYb1SPBo/TSPN4GOlWL/iqkS6TMzwvdwWBjx/j3GUD72WlLsIw==",
-        "dependencies": {
-          "Azure.Core": "1.45.0",
-          "Azure.Extensions.AspNetCore.Configuration.Secrets": "1.4.0",
-          "Azure.Identity": "1.13.2",
-          "Azure.Monitor.OpenTelemetry.AspNetCore": "1.2.0",
-          "Diginsight.Core": "3.4.0",
-          "Diginsight.Diagnostics": "3.4.0",
-          "Diginsight.Diagnostics.AspNetCore": "3.4.0",
-          "Diginsight.Diagnostics.AspNetCore.OpenTelemetry": "3.4.0",
-          "Diginsight.Diagnostics.Log4Net": "3.4.0",
-          "Diginsight.Diagnostics.OpenTelemetry": "3.4.0",
-          "Microsoft.Extensions.Configuration": "9.0.1",
-          "Microsoft.Extensions.Configuration.Abstractions": "9.0.1",
-          "Microsoft.Extensions.Configuration.Binder": "9.0.1",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "9.0.1",
-          "Microsoft.Extensions.Configuration.FileExtensions": "9.0.1",
-          "Microsoft.Extensions.Configuration.Json": "9.0.1",
-          "Microsoft.Extensions.Hosting": "9.0.1",
-          "Microsoft.Extensions.Hosting.Abstractions": "9.0.1",
-          "Microsoft.Extensions.Options": "9.0.1",
-          "Microsoft.Identity.Client": "4.68.0",
-          "OpenTelemetry.Instrumentation.Runtime": "1.11.0",
-          "Scrutor": "6.0.1"
         }
       },
       "Diginsight.Core": {
@@ -1875,14 +1807,6 @@
         "dependencies": {
           "Diginsight.Core": "3.4.0",
           "Scrutor": "5.1.2"
-        }
-      },
-      "Diginsight.Components.Abstractions": {
-        "type": "Transitive",
-        "resolved": "0.0.0.32",
-        "contentHash": "ftPcOT6TrUnNNHFxZLpeprc2hJUSFEspx1fu4yi8U62ATzFjIMpQsObzxm0sDwD8VhkdYImqXNHBVHzBbfLzng==",
-        "dependencies": {
-          "Microsoft.Identity.Client": "4.68.0"
         }
       },
       "Diginsight.Diagnostics.AspNetCore": {
@@ -2248,32 +2172,32 @@
       },
       "Microsoft.IdentityModel.Abstractions": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "4dDpw7DJ2yx2vFM/w0sceXoByUhrU68eMdlXyzsPTWPtAfgCbkuMl7jfLBLegmgerbOzGNMm7zq5xwr4+7yTSg=="
+        "resolved": "8.5.0",
+        "contentHash": "wdhxpIzpCW49+MR0oeoJqjDA8vtVXCJPrqXx19UsUOpnE+8PX9byVdFJuVPtT8tkExhU+c8eQxw6OLNQW3i0wg=="
       },
       "Microsoft.IdentityModel.JsonWebTokens": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "lyMsODXEMNvV0oTUehuz6wkohldFqQg5su/2Hdzr2xS1kdvilqyywkoVnpbJVb7zYr7TA+6rVCTRV/0f2uSBPQ==",
+        "resolved": "8.5.0",
+        "contentHash": "Wbx1JbFosCdRaQU8TPDrlHfHx3+f7ef7ivDvyooQec7AmOC+uDXpPUiki7qYklSj6OXxfvtPzyMZBqQuEJrccA==",
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "8.4.0"
+          "Microsoft.IdentityModel.Tokens": "8.5.0"
         }
       },
       "Microsoft.IdentityModel.Logging": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "vIKIBDMD6l2MeCwkdeh1XHSHNVz9C/qp9PaHMG6SF3OUSAh/2XMVj2zaVc2hs27QRfhh5xR3tvMSs8R96WS2IA==",
+        "resolved": "8.5.0",
+        "contentHash": "UCTOGVp7h+PHrI4Q/yV0LT2k7dbjlzrnFhfqDUsQ91rOFH8ZNRMZYFY/J79KWSl+SZNnu3ecap31z//NevUaEw==",
         "dependencies": {
-          "Microsoft.IdentityModel.Abstractions": "8.4.0"
+          "Microsoft.IdentityModel.Abstractions": "8.5.0"
         }
       },
       "Microsoft.IdentityModel.Tokens": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "n/wBvhj7oq3rZyImUhkUv6bUjwPWK+jG1R3BsCfahLtwoOzIWSPLmzMQ61HCtd1BiCU43IdkX9M+cD1xMmE3xQ==",
+        "resolved": "8.5.0",
+        "contentHash": "dYxp8/JvBpRD5c4H9jBJbKRJnvzvqayEXajr8e1JFdEVMvQXAylPWNwnXghzuGCjKc4bbel2pnDKlKjQnWZlgQ==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0",
-          "Microsoft.IdentityModel.Logging": "8.4.0"
+          "Microsoft.IdentityModel.Logging": "8.5.0"
         }
       },
       "Microsoft.NETCore.Platforms": {
@@ -2589,11 +2513,11 @@
       },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "HZ5WvpPz7l11u0iLM2kmql29nWrtcGrt/STcRs/Atv/oz7yiidu2d0DzsvkgWKWx6t5sFvQxsUEUcwpPd/P6Yw==",
+        "resolved": "8.5.0",
+        "contentHash": "ZUdVIyD2mJg5+hOtjnHFQRp+wCZraV6XTp734LFIGwVnCbvcgYKgsiUvlBCiS6fXs6wdY8wlMa7cFluD+RE+6g==",
         "dependencies": {
-          "Microsoft.IdentityModel.JsonWebTokens": "8.4.0",
-          "Microsoft.IdentityModel.Tokens": "8.4.0"
+          "Microsoft.IdentityModel.JsonWebTokens": "8.5.0",
+          "Microsoft.IdentityModel.Tokens": "8.5.0"
         }
       },
       "System.IO": {
@@ -2922,8 +2846,8 @@
       },
       "System.Security.Cryptography.ProtectedData": {
         "type": "Transitive",
-        "resolved": "9.0.1",
-        "contentHash": "u+4PH6GyDjEsWgcpKp1S/DiyxtGvazNPdaPFR6p6/qZr3TW+oZWvwfHO2H2CSpS4KGl2z2CBfU6eB38PsmoxtA=="
+        "resolved": "9.0.2",
+        "contentHash": "+z9JWtU9di45tW/w6zpuJms4SnAAqKY2Usmmxs7MpOhxWoIeR2pKl1vEkaFbEx52ZfrMFcZXsFe+8WERMozzGg=="
       },
       "System.Security.Cryptography.X509Certificates": {
         "type": "Transitive",
@@ -3025,6 +2949,66 @@
         "type": "Transitive",
         "resolved": "4.5.0",
         "contentHash": "okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ=="
+      },
+      "diginsight.components": {
+        "type": "Project",
+        "dependencies": {
+          "Diginsight.Components.Abstractions": "[1.0.0, )",
+          "Diginsight.Components.Configuration": "[1.0.0, )",
+          "Diginsight.Core": "[3.4.*, )",
+          "Diginsight.Diagnostics": "[3.4.*, )",
+          "Microsoft.Extensions.Configuration": "[9.*, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[9.*, )",
+          "Microsoft.Extensions.Http": "[9.0.1, )",
+          "Microsoft.Extensions.Logging": "[9.*, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[9.*, )",
+          "Microsoft.Identity.Client": "[4.*, )",
+          "Newtonsoft.Json": "[13.0.3, )",
+          "System.IdentityModel.Tokens.Jwt": "[8.*, )",
+          "System.Net.Security": "[4.3.2, )",
+          "System.Security.AccessControl": "[6.*, )",
+          "System.Security.Claims": "[4.3.0, )",
+          "System.Security.Cryptography.Algorithms": "[4.3.1, )",
+          "System.Security.Cryptography.Csp": "[4.3.0, )",
+          "System.Security.Cryptography.Encoding": "[4.3.0, )",
+          "System.Security.Cryptography.Primitives": "[4.3.0, )",
+          "System.Security.Cryptography.ProtectedData": "[9.*, )",
+          "System.Security.Cryptography.X509Certificates": "[4.3.2, )",
+          "System.Security.Principal": "[4.3.0, )"
+        }
+      },
+      "diginsight.components.abstractions": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Identity.Client": "[4.*, )"
+        }
+      },
+      "diginsight.components.configuration": {
+        "type": "Project",
+        "dependencies": {
+          "Azure.Core": "[1.*, )",
+          "Azure.Extensions.AspNetCore.Configuration.Secrets": "[1.*, )",
+          "Azure.Identity": "[1.*, )",
+          "Azure.Monitor.OpenTelemetry.AspNetCore": "[1.*, )",
+          "Diginsight.Core": "[3.4.*, )",
+          "Diginsight.Diagnostics": "[3.4.*, )",
+          "Diginsight.Diagnostics.AspNetCore": "[3.4.*, )",
+          "Diginsight.Diagnostics.AspNetCore.OpenTelemetry": "[3.4.*, )",
+          "Diginsight.Diagnostics.Log4Net": "[3.4.*, )",
+          "Diginsight.Diagnostics.OpenTelemetry": "[3.4.*, )",
+          "Microsoft.Extensions.Configuration": "[9.*, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[9.*, )",
+          "Microsoft.Extensions.Configuration.Binder": "[9.*, )",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[9.*, )",
+          "Microsoft.Extensions.Configuration.FileExtensions": "[9.*, )",
+          "Microsoft.Extensions.Configuration.Json": "[9.*, )",
+          "Microsoft.Extensions.Hosting": "[9.*, )",
+          "Microsoft.Extensions.Hosting.Abstractions": "[9.*, )",
+          "Microsoft.Extensions.Options": "[9.*, )",
+          "Microsoft.Identity.Client": "[4.*, )",
+          "OpenTelemetry.Instrumentation.Runtime": "[1.*, )",
+          "Scrutor": "[6.*, )"
+        }
       }
     }
   }

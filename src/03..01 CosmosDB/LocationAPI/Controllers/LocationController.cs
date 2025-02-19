@@ -1,4 +1,5 @@
 using Diginsight.Diagnostics;
+using LocationAPI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
@@ -20,18 +21,50 @@ public class LocationController : ControllerBase
     {
         this.logger = logger;
 
-        this.locationCosmosDBOptions = serviceProvider.GetRequiredService<IOptionsMonitor<CosmosDbOptions>>().Get("LocationCosmosDbOptions");
+        this.locationCosmosDBOptions = serviceProvider.GetRequiredService<IOptionsMonitor<CosmosDbOptions>>().Get("LocationApi:CosmosDb");
 
     }
 
-    [HttpGet(Name = "GetAllLocations")]
-    public IEnumerable<WeatherForecast> GetAll()
+    [HttpGet("locations/{type}")]
+    public async Task<IEnumerable<LocationBase>> GetAllLocationsAsync(string type)
+    {
+        using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { type });
+
+        var cosmosClient = new CosmosClient(locationCosmosDBOptions.ConnectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
+        var container = cosmosClient.GetContainer(locationCosmosDBOptions.Database, locationCosmosDBOptions.Collection); logger.LogDebug($"container = cosmosClient.GetContainer({locationCosmosDBOptions.Database}, {locationCosmosDBOptions.Collection});");
+
+        //var iterator = container.GetItemQueryIterator<LocationBase>(new QueryDefinition($"SELECT * FROM c WHERE c.Type = '{type}'"));
+        var queryDefinition = new QueryDefinition("SELECT * FROM c WHERE c.Type = @type")
+                              .WithParameter("@type", type);
+        var iterator = container.GetItemQueryIterator<LocationBase>(queryDefinition);
+
+        var result = new List<LocationBase>();
+        while (iterator.HasMoreResults)
+        {
+            var response = await iterator.ReadNextAsync();
+            result.AddRange(response);
+        }
+
+        activity?.SetOutput(result);
+        return result;
+    }
+
+
+    [HttpGet("countries")]
+    public async Task<IEnumerable<WeatherForecast>> GetAllCountries()
     {
         using var activity = Observability.ActivitySource.StartMethodActivity(logger);
 
         var cosmosClient = new CosmosClient(locationCosmosDBOptions.ConnectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
         var container = cosmosClient.GetContainer(locationCosmosDBOptions.Database, locationCosmosDBOptions.Collection); logger.LogDebug($"container = cosmosClient.GetContainer({locationCosmosDBOptions.Database}, {locationCosmosDBOptions.Collection});");
 
+        // container.GetItemQueryIterator<LocationBase>
+
+        // SELECT * FROM c WHERE c.Type = 'Country' // {type}
+        // "Address",
+        // "Country",
+        // "Municipality",
+        // "Site"
 
 
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -42,4 +75,6 @@ public class LocationController : ControllerBase
         })
         .ToArray();
     }
+
+
 }

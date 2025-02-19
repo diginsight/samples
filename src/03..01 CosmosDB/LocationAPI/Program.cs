@@ -22,6 +22,10 @@ public class Program
 
             builder.Services.AddObservability(observabilityManager, builder.Configuration, builder.Environment); logger.LogDebug("builder.Services.AddObservability(observabilityManager, builder.Configuration, builder.Environment);");
 
+            // configure "LocationApi:CosmosDb"
+            builder.Services.Configure<CosmosDbOptions>("LocationApi:CosmosDb", builder.Configuration.GetSection("LocationApi:CosmosDb"));
+
+
             // Add services to the container.
             builder.Services.AddControllers(); logger.LogDebug("builder.Services.AddControllers();");
             builder.Services.AddEndpointsApiExplorer(); logger.LogDebug("builder.Services.AddEndpointsApiExplorer();");

@@ -9,19 +9,7 @@
     }
   },
   "profiles": {
-    "http": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7056;http://localhost:5082",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "AppsettingsEnvironmentName": "Testms",
-        "ExternalConfigurationFolder": "..\\..\\..\\..\\samples.internal"
-      }
-    },
-    "https": {
+    "https - testms": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -38,7 +26,9 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppsettingsEnvironmentName": "Testms",
+        "ExternalConfigurationFolder": "..\\..\\..\\..\\samples.internal"
       }
     }
   }
