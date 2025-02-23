@@ -4,5 +4,10 @@
         <name>IdentityAPI</name>
     </assembly>
     <members>
+        <member name="M:IdentityAPI.Controllers.ClaimsUserContextProvider.#ctor(Microsoft.Extensions.Logging.ILogger{IdentityAPI.Controllers.ClaimsUserContextProvider},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            User context provider that extracts user context from claims.
+            </summary>
+        </member>
     </members>
 </doc>

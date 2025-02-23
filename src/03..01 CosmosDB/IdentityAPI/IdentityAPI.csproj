@@ -89,4 +89,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.*" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
 </Project>

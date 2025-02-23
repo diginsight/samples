@@ -3,6 +3,11 @@ using LocationAPI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
+using System.Linq;
+using System.Collections.Generic;
+using LocationAPI;
+using System.Net.Http;
+using Diginsight.Components;
 
 namespace LocationAPI.Controllers;
 
@@ -13,16 +18,23 @@ public class LocationController : ControllerBase
     private static readonly string[] Summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
 
     private readonly ILogger<LocationController> logger;
-    private readonly CosmosDbOptions locationCosmosDBOptions;
+    private readonly CosmosDbOptions locationsCosmosDBOptions;
+    private readonly CosmosClient locationsCosmosClient;
+    private readonly IHttpClientFactory httpClientFactory;
+    private HttpClient identityApiHttpClient;
 
     public LocationController(
         ILogger<LocationController> logger,
+        IHttpClientFactory httpClientFactory,
         IServiceProvider serviceProvider)
     {
         this.logger = logger;
+        this.httpClientFactory = httpClientFactory;
 
-        this.locationCosmosDBOptions = serviceProvider.GetRequiredService<IOptionsMonitor<CosmosDbOptions>>().Get("LocationApi:CosmosDb");
+        this.locationsCosmosDBOptions = serviceProvider.GetRequiredService<IOptionsMonitor<CosmosDbOptions>>().Get("LocationApi:CosmosDb");
+        this.locationsCosmosClient = new CosmosClient(locationsCosmosDBOptions.ConnectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
 
+        this.identityApiHttpClient = httpClientFactory.CreateClient("IdentityApi");
     }
 
     [HttpGet("locations/{type}")]
@@ -30,51 +42,34 @@ public class LocationController : ControllerBase
     {
         using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { type });
 
-        var cosmosClient = new CosmosClient(locationCosmosDBOptions.ConnectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
-        var container = cosmosClient.GetContainer(locationCosmosDBOptions.Database, locationCosmosDBOptions.Collection); logger.LogDebug($"container = cosmosClient.GetContainer({locationCosmosDBOptions.Database}, {locationCosmosDBOptions.Collection});");
+        var response = await this.identityApiHttpClient.SendAsync(HttpMethod.Get, "User/users", null, "User/users", HttpContext.RequestAborted); // api/
 
-        //var iterator = container.GetItemQueryIterator<LocationBase>(new QueryDefinition($"SELECT * FROM c WHERE c.Type = '{type}'"));
+        var container = locationsCosmosClient.GetContainer(locationsCosmosDBOptions.Database, locationsCosmosDBOptions.Collection); logger.LogDebug($"container = cosmosClient.GetContainer({locationsCosmosDBOptions.Database}, {locationsCosmosDBOptions.Collection});");
         var queryDefinition = new QueryDefinition("SELECT * FROM c WHERE c.Type = @type")
-                              .WithParameter("@type", type);
-        var iterator = container.GetItemQueryIterator<LocationBase>(queryDefinition);
+                                                 .WithParameter("@type", type);
 
-        var result = new List<LocationBase>();
-        while (iterator.HasMoreResults)
-        {
-            var response = await iterator.ReadNextAsync();
-            result.AddRange(response);
-        }
+        var iterator = container.GetItemQueryIterator<LocationBase>(queryDefinition);
+        var result = await iterator.GetItemsAsync();
 
         activity?.SetOutput(result);
         return result;
     }
 
-
     [HttpGet("countries")]
-    public async Task<IEnumerable<WeatherForecast>> GetAllCountries()
+    public async Task<IEnumerable<LocationBase>> GetAllCountriesAsync()
     {
         using var activity = Observability.ActivitySource.StartMethodActivity(logger);
 
-        var cosmosClient = new CosmosClient(locationCosmosDBOptions.ConnectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
-        var container = cosmosClient.GetContainer(locationCosmosDBOptions.Database, locationCosmosDBOptions.Collection); logger.LogDebug($"container = cosmosClient.GetContainer({locationCosmosDBOptions.Database}, {locationCosmosDBOptions.Collection});");
+        var container = locationsCosmosClient.GetContainer(locationsCosmosDBOptions.Database, locationsCosmosDBOptions.Collection); logger.LogDebug($"container = cosmosClient.GetContainer({locationsCosmosDBOptions.Database}, {locationsCosmosDBOptions.Collection});");
 
-        // container.GetItemQueryIterator<LocationBase>
+        var type = "Country";
+        var queryDefinition = new QueryDefinition("SELECT * FROM c WHERE c.Type = @type")
+                                                 .WithParameter("@type", type);
 
-        // SELECT * FROM c WHERE c.Type = 'Country' // {type}
-        // "Address",
-        // "Country",
-        // "Municipality",
-        // "Site"
+        var iterator = container.GetItemQueryIterator<LocationBase>(queryDefinition);
+        var result = await iterator.GetItemsAsync();
 
-
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+        activity?.SetOutput(result);
+        return result;
     }
-
-
 }

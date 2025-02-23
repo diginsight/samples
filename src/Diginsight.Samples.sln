@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleApi", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleClient", "01. Authentication\AuthenticationSampleClient\AuthenticationSampleClient.csproj", "{E44A1EFA-3A6F-A72A-78E2-A0635C491357}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,7 @@ Global
 		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 		{9CCC752C-95AB-685B-D4FD-DFB8A8E0B4F4} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 		{E44A1EFA-3A6F-A72A-78E2-A0635C491357} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {4A1F2D54-C6AD-486D-AAC6-4739DD2564FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}

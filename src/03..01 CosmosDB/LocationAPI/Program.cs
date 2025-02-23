@@ -1,8 +1,10 @@
 
 using Diginsight;
+using Diginsight.Components;
 using Diginsight.Components.Configuration;
 using Diginsight.Diagnostics;
 using Diginsight.Stringify;
+using Microsoft.Extensions.Options;
 
 namespace LocationAPI;
 
@@ -20,16 +22,31 @@ public class Program
             var builder = WebApplication.CreateBuilder(args); logger.LogDebug($"WebApplication.CreateBuilder({args.Stringify()});");
             builder.Host.ConfigureAppConfiguration2(observabilityManager.LoggerFactory); logger.LogDebug("builder.Host.ConfigureAppConfiguration2(observabilityManager.LoggerFactory);");
 
-            builder.Services.AddObservability(observabilityManager, builder.Configuration, builder.Environment); logger.LogDebug("builder.Services.AddObservability(observabilityManager, builder.Configuration, builder.Environment);");
+            var services = builder.Services;
+            var configuration = builder.Configuration;
 
-            // configure "LocationApi:CosmosDb"
-            builder.Services.Configure<CosmosDbOptions>("LocationApi:CosmosDb", builder.Configuration.GetSection("LocationApi:CosmosDb"));
+            services.AddObservability(observabilityManager, builder.Configuration, builder.Environment); logger.LogDebug("services.AddObservability(observabilityManager, builder.Configuration, builder.Environment);");
 
+            services.Configure<CosmosDbOptions>("LocationApi:CosmosDb", builder.Configuration.GetSection("LocationApi:CosmosDb"));
+
+            services
+                   .Configure<AuthenticatedClientOptions>("IdentityApi", configuration.GetSection("IdentityApi"))
+                   .Configure<HttpClientOptions>("IdentityApi", configuration.GetSection("IdentityApi"))
+                   .AddHttpClient("IdentityApi")
+                   .ConfigureHttpClient(
+                       static (sp, hc) =>
+                       {
+                           IHttpClientOptions httpClientOptions = sp.GetRequiredService<IOptionsMonitor<HttpClientOptions>>().Get("IdentityApi");
+                           hc.BaseAddress = httpClientOptions.BaseUrl;
+                       }
+                   )
+                   .AddApplicationPermissionAuthentication()
+                   .AddBodyLoggingHandler();
 
             // Add services to the container.
-            builder.Services.AddControllers(); logger.LogDebug("builder.Services.AddControllers();");
-            builder.Services.AddEndpointsApiExplorer(); logger.LogDebug("builder.Services.AddEndpointsApiExplorer();");
-            builder.Services.AddSwaggerGen(); logger.LogDebug("builder.Services.AddSwaggerGen();");
+            services.AddControllers(); logger.LogDebug("services.AddControllers();");
+            services.AddEndpointsApiExplorer(); logger.LogDebug("services.AddEndpointsApiExplorer();");
+            services.AddSwaggerGen(); logger.LogDebug("services.AddSwaggerGen();");
 
             builder.UseDiginsightServiceProvider(true); logger.LogDebug("builder.UseDiginsightServiceProvider(true);");
             app = builder.Build(); logger.LogDebug("app = builder.Build();");
