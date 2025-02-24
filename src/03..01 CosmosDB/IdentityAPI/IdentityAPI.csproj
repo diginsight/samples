@@ -53,21 +53,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.*" />
     <PackageReference Include="Azure.Identity" Version="1.*" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.*" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.*" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.*" />
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.*" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.*" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="3.*" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.*" />
     <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="3.*" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.*" />
     <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="3.*" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.*" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.*" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.*" />
 
     <PackageReference Include="Asp.Versioning.Abstractions" Version="8.*" />
     <PackageReference Include="Asp.Versioning.Http" Version="8.*" />

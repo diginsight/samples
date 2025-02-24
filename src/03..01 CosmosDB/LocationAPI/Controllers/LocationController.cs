@@ -15,6 +15,7 @@ namespace LocationAPI.Controllers;
 [Route("[controller]")]
 public class LocationController : ControllerBase
 {
+    private static readonly Type T = typeof(LocationController);
     private static readonly string[] Summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
 
     private readonly ILogger<LocationController> logger;
@@ -48,6 +49,9 @@ public class LocationController : ControllerBase
         var queryDefinition = new QueryDefinition("SELECT * FROM c WHERE c.Type = @type")
                                                  .WithParameter("@type", type);
 
+        logger.LogDebug("CosmosDB query for class '{Type}' in database {Endpoint}, collection '{Collection}'", T, container.Database.Client.Endpoint, container.Id);
+        logger.LogTrace("Query: {Query}", queryDefinition.QueryText);
+
         var iterator = container.GetItemQueryIterator<LocationBase>(queryDefinition);
         var result = await iterator.GetItemsAsync();
 
@@ -65,6 +69,9 @@ public class LocationController : ControllerBase
         var type = "Country";
         var queryDefinition = new QueryDefinition("SELECT * FROM c WHERE c.Type = @type")
                                                  .WithParameter("@type", type);
+
+        logger.LogDebug("CosmosDB query for class '{Type}' in database {Endpoint}, collection '{Collection}'", T, container.Database.Client.Endpoint, container.Id);
+        logger.LogTrace("Query: {Query}", queryDefinition.ToString());
 
         var iterator = container.GetItemQueryIterator<LocationBase>(queryDefinition);
         var result = await iterator.GetItemsAsync();
