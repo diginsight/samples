@@ -2148,6 +2148,12 @@
           "Microsoft.Identity.Client": "[4.*, )"
         }
       },
+      "diginsight.components.azure": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Azure.Cosmos": "[3.*, )"
+        }
+      },
       "diginsight.components.configuration": {
         "type": "Project",
         "dependencies": {
@@ -4334,6 +4340,12 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.Identity.Client": "[4.*, )"
+        }
+      },
+      "diginsight.components.azure": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Azure.Cosmos": "[3.*, )"
         }
       },
       "diginsight.components.configuration": {

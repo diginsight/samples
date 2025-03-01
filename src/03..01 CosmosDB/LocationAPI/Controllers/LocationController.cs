@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using LocationAPI;
 using System.Net.Http;
 using Diginsight.Components;
+using Diginsight.Components.Azure;
 
 namespace LocationAPI.Controllers;
 
@@ -52,7 +53,7 @@ public class LocationController : ControllerBase
         logger.LogDebug("CosmosDB query for class '{Type}' in database {Endpoint}, collection '{Collection}'", T, container.Database.Client.Endpoint, container.Id);
         logger.LogTrace("Query: {Query}", queryDefinition.QueryText);
 
-        var iterator = container.GetItemQueryIterator<LocationBase>(queryDefinition);
+        var iterator = container.GetItemQueryIteratorObservable<LocationBase>(queryDefinition);
         var result = await iterator.GetItemsAsync();
 
         activity?.SetOutput(result);
@@ -73,7 +74,7 @@ public class LocationController : ControllerBase
         logger.LogDebug("CosmosDB query for class '{Type}' in database {Endpoint}, collection '{Collection}'", T, container.Database.Client.Endpoint, container.Id);
         logger.LogTrace("Query: {Query}", queryDefinition.ToString());
 
-        var iterator = container.GetItemQueryIterator<LocationBase>(queryDefinition);
+        var iterator = container.GetItemQueryIteratorObservable<LocationBase>(queryDefinition);
         var result = await iterator.GetItemsAsync();
 
         activity?.SetOutput(result);

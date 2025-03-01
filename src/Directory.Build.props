@@ -30,6 +30,18 @@
 		<OpenTelemetryVersion>1.*</OpenTelemetryVersion>
 		<OpenTelemetryBetaVersion>1.5.*-*</OpenTelemetryBetaVersion>
 	</PropertyGroup>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 	<Import Project="$(MSBuildThisFileDirectory)Directory.build.props.user" Condition="Exists('$(MSBuildThisFileDirectory)Directory.build.props.user')" />
 
