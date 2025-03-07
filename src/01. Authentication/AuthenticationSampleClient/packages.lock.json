@@ -148,6 +148,16 @@
           "System.Diagnostics.DiagnosticSource": "6.0.1"
         }
       },
+      "Microsoft.Identity.Client.Extensions.Msal": {
+        "type": "Direct",
+        "requested": "[4.*, )",
+        "resolved": "4.68.0",
+        "contentHash": "lB03qqCW/lmfA7vGsAgaVi/NmGyjywstDt4ucsXMs+QOP0SgpQcPeRyXcWTF7SCqRABEUSHF8b95YZZq/VoZFQ==",
+        "dependencies": {
+          "Microsoft.Identity.Client": "4.68.0",
+          "System.Security.Cryptography.ProtectedData": "4.5.0"
+        }
+      },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[8.*, )",
@@ -653,15 +663,6 @@
         "type": "Transitive",
         "resolved": "9.0.2",
         "contentHash": "puBMtKe/wLuYa7H6docBkLlfec+h8L35DXqsDKKJgW0WY5oCwJ3cBJKcDaZchv6knAyqOMfsl6VUbaR++E5LXA=="
-      },
-      "Microsoft.Identity.Client.Extensions.Msal": {
-        "type": "Transitive",
-        "resolved": "4.67.2",
-        "contentHash": "DKs+Lva6csEUZabw+JkkjtFgVmcXh4pJeQy5KH5XzPOaKNoZhAMYj1qpKd97qYTZKXIFH12bHPk0DA+6krw+Cw==",
-        "dependencies": {
-          "Microsoft.Identity.Client": "4.67.2",
-          "System.Security.Cryptography.ProtectedData": "4.5.0"
-        }
       },
       "Microsoft.IdentityModel.Abstractions": {
         "type": "Transitive",
@@ -1666,6 +1667,16 @@
           "System.Diagnostics.DiagnosticSource": "6.0.1"
         }
       },
+      "Microsoft.Identity.Client.Extensions.Msal": {
+        "type": "Direct",
+        "requested": "[4.*, )",
+        "resolved": "4.68.0",
+        "contentHash": "lB03qqCW/lmfA7vGsAgaVi/NmGyjywstDt4ucsXMs+QOP0SgpQcPeRyXcWTF7SCqRABEUSHF8b95YZZq/VoZFQ==",
+        "dependencies": {
+          "Microsoft.Identity.Client": "4.68.0",
+          "System.Security.Cryptography.ProtectedData": "4.5.0"
+        }
+      },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[8.*, )",
@@ -2160,15 +2171,6 @@
         "type": "Transitive",
         "resolved": "9.0.2",
         "contentHash": "puBMtKe/wLuYa7H6docBkLlfec+h8L35DXqsDKKJgW0WY5oCwJ3cBJKcDaZchv6knAyqOMfsl6VUbaR++E5LXA=="
-      },
-      "Microsoft.Identity.Client.Extensions.Msal": {
-        "type": "Transitive",
-        "resolved": "4.67.2",
-        "contentHash": "DKs+Lva6csEUZabw+JkkjtFgVmcXh4pJeQy5KH5XzPOaKNoZhAMYj1qpKd97qYTZKXIFH12bHPk0DA+6krw+Cw==",
-        "dependencies": {
-          "Microsoft.Identity.Client": "4.67.2",
-          "System.Security.Cryptography.ProtectedData": "4.5.0"
-        }
       },
       "Microsoft.IdentityModel.Abstractions": {
         "type": "Transitive",

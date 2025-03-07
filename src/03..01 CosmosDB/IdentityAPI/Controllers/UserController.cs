@@ -36,7 +36,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("users")]
-    [Authorize( Roles = "access_as_app")]
+    [Authorize(Roles = "access_as_app")]
     public async Task<IEnumerable<User>> GetUsers()
     {
         using var activity = Observability.ActivitySource.StartMethodActivity(logger);
