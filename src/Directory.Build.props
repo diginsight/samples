@@ -11,11 +11,11 @@
     <Product>Diginsight</Product>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/diginsight/telemetry_samples</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/diginsight/samples</PackageProjectUrl>
     
     <DiginsightDiagnosticsVersion>2.0.0.23</DiginsightDiagnosticsVersion>
     <DiginsightCoreVersion>3.4.*</DiginsightCoreVersion>
-    <DiginsightComponentsVersion>0.0.*</DiginsightComponentsVersion>
+    <DiginsightComponentsVersion>0.8.*</DiginsightComponentsVersion>
     <DiginsightSmartcacheVersion>3.3.*</DiginsightSmartcacheVersion>
 		<PackageTags>diginsight;telemetry</PackageTags>
 
