@@ -53,6 +53,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 BlobStorage", "02 BlobSt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 BlobQueues", "03 BlobQueues", "{DFC5F15D-5E75-4FCA-A913-13734BAD36F0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_prompts", "_prompts", "{5BF8023C-8AF9-43D4-B1CE-6212CDEC2AC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableStorageSampleAPI", "03.00 AzureStorage\01 TableStorage\TableStorageSampleAPI.csproj", "{A4995B15-6796-9C7E-4B7E-FF1F73B40B77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +83,10 @@ Global
 		{6D18F345-722C-5E84-168D-919D62A4267E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D18F345-722C-5E84-168D-919D62A4267E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D18F345-722C-5E84-168D-919D62A4267E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4995B15-6796-9C7E-4B7E-FF1F73B40B77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4995B15-6796-9C7E-4B7E-FF1F73B40B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4995B15-6796-9C7E-4B7E-FF1F73B40B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4995B15-6796-9C7E-4B7E-FF1F73B40B77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +101,7 @@ Global
 		{5A3C3ADC-69E5-41C0-BB91-C24959B1911F} = {90BD4A5D-1B66-4D40-9EAA-8F894953694F}
 		{C807A174-1B23-45E5-82ED-9AD620DA4E73} = {90BD4A5D-1B66-4D40-9EAA-8F894953694F}
 		{DFC5F15D-5E75-4FCA-A913-13734BAD36F0} = {90BD4A5D-1B66-4D40-9EAA-8F894953694F}
+		{A4995B15-6796-9C7E-4B7E-FF1F73B40B77} = {5A3C3ADC-69E5-41C0-BB91-C24959B1911F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}
