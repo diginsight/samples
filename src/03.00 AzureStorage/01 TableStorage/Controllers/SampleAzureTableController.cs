@@ -6,6 +6,7 @@ using Diginsight.Diagnostics;
 using Azure.Data.Tables;
 using Azure;
 using System.Text.Json;
+using Diginsight.Components.Azure.Abstractions;
 
 namespace TableStorageSampleAPI.Controllers
 {
@@ -20,23 +21,23 @@ namespace TableStorageSampleAPI.Controllers
     public class SampleAzureTableController : ControllerBase
     {
         private readonly GraphServiceClient graphServiceClient;
-        private readonly TableServiceClient tableServiceClient;
+        private readonly IAzureTableRepository<SampleAzureTableRecord> repository;
         private readonly ILogger<SampleAzureTableController> logger;
-        private const string TableName = "SampleTable";
 
         /// <summary>
         /// Initializes a new instance of the SampleAzureTableController class.
         /// </summary>
         /// <param name="logger">The logger instance for logging operations and errors.</param>
         /// <param name="graphServiceClient">The Microsoft Graph service client for identity operations.</param>
-        /// <param name="tableServiceClient">The Azure Table Storage service client for data operations.</param>
-        public SampleAzureTableController(ILogger<SampleAzureTableController> logger,
+        /// <param name="repository">The strongly-typed Azure Table repository for SampleAzureTableRecord operations.</param>
+        public SampleAzureTableController(
+            ILogger<SampleAzureTableController> logger,
             GraphServiceClient graphServiceClient,
-            TableServiceClient tableServiceClient)
+            IAzureTableRepository<SampleAzureTableRecord> repository)
         {
             this.logger = logger;
             this.graphServiceClient = graphServiceClient;
-            this.tableServiceClient = tableServiceClient;
+            this.repository = repository;
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="200">Returns the list of records.</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SampleAzureTableRecord>>> GetRecords(
+        public async Task<ActionResult<IEnumerable<SampleAzureTableRecord>>> QueryAsync(
             [FromQuery] string? filter = null,
             [FromQuery] int? top = null,
             [FromQuery] string? select = null)
@@ -58,25 +59,8 @@ namespace TableStorageSampleAPI.Controllers
 
             try
             {
-                var tableClient = tableServiceClient.GetTableClient(TableName);
-                await tableClient.CreateIfNotExistsAsync();
-
-                var records = new List<SampleAzureTableRecord>();
-
-                var queryOptions = new QueryOptions();
-                if (!string.IsNullOrEmpty(filter)) { queryOptions.Filter = filter; }
-                if (top.HasValue && top.Value > 0) { queryOptions.Top = top.Value; }
-                if (!string.IsNullOrEmpty(select)) { queryOptions.Select = select.Split(',').Select(s => s.Trim()).ToList(); }
-
-                var asyncPageableRecords = tableClient.QueryAsync<SampleAzureTableRecord>(
-                    filter: queryOptions.Filter,
-                    maxPerPage: queryOptions.Top,
-                    select: queryOptions.Select);
-
-                await foreach (var entity in asyncPageableRecords)
-                {
-                    records.Add(entity);
-                }
+                var selectList = string.IsNullOrEmpty(select) ? null : select.Split(',').Select(s => s.Trim());
+                var records = await repository.QueryAsync(filter, top, selectList);
 
                 activity?.SetOutput(records);
                 return Ok(records);
@@ -99,7 +83,7 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="200">Returns the list of records as JSON objects.</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpGet("json")]
-        public async Task<ActionResult<IEnumerable<object>>> GetRecordsAsJson(
+        public async Task<ActionResult<IEnumerable<object>>> QueryAsJsonAsync(
             [FromQuery] string? filter = null,
             [FromQuery] int? top = null,
             [FromQuery] string? select = null,
@@ -109,42 +93,8 @@ namespace TableStorageSampleAPI.Controllers
 
             try
             {
-                var tableClient = tableServiceClient.GetTableClient(TableName);
-                await tableClient.CreateIfNotExistsAsync();
-
-                var records = new List<object>();
-
-                var queryOptions = new QueryOptions();
-                if (!string.IsNullOrEmpty(filter)) { queryOptions.Filter = filter; }
-                if (top.HasValue && top.Value > 0) { queryOptions.Top = top.Value; }
-                if (!string.IsNullOrEmpty(select)) { queryOptions.Select = select.Split(',').Select(s => s.Trim()).ToList(); }
-
-                var asyncPageableRecords = tableClient.QueryAsync<TableEntity>(
-                    filter: queryOptions.Filter,
-                    maxPerPage: queryOptions.Top,
-                    select: queryOptions.Select);
-
-                await foreach (var entity in asyncPageableRecords)
-                {
-                    // Convert TableEntity to a dictionary with controlled property naming
-                    var record = new Dictionary<string, object?>();
-
-                    foreach (var kvp in entity)
-                    {
-                        string propertyName = namingPolicy switch
-                        {
-                            PropertyNamingPolicy.CamelCase => ToCamelCase(kvp.Key),
-                            PropertyNamingPolicy.KebabCaseLower => ToKebabCase(kvp.Key),
-                            PropertyNamingPolicy.SnakeCaseLower => ToSnakeCase(kvp.Key),
-                            PropertyNamingPolicy.KebabCaseUpper => ToKebabCase(kvp.Key).ToUpperInvariant(),
-                            PropertyNamingPolicy.SnakeCaseUpper => ToSnakeCase(kvp.Key).ToUpperInvariant(),
-                            _ => kvp.Key // Default to original casing
-                        };
-                        record[propertyName] = kvp.Value;
-                    }
-
-                    records.Add(record);
-                }
+                var selectList = string.IsNullOrEmpty(select) ? null : select.Split(',').Select(s => s.Trim());
+                var records = await repository.QueryAsJsonAsync(filter, top, selectList, namingPolicy);
 
                 activity?.SetOutput(records);
                 return Ok(records);
@@ -166,23 +116,21 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="404">If the record is not found.</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpGet("{partitionKey}/{rowKey}")]
-        public async Task<ActionResult<SampleAzureTableRecord>> GetRecord(string partitionKey, string rowKey)
+        public async Task<ActionResult<SampleAzureTableRecord>> GetAsync(string partitionKey, string rowKey)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { partitionKey, rowKey });
 
             try
             {
-                var tableClient = tableServiceClient.GetTableClient(TableName);
-                await tableClient.CreateIfNotExistsAsync();
+                var record = await repository.GetAsync(partitionKey, rowKey);
+                
+                if (record == null)
+                {
+                    return NotFound();
+                }
 
-                var response = await tableClient.GetEntityAsync<SampleAzureTableRecord>(partitionKey, rowKey);
-
-                activity?.SetOutput(response.Value);
-                return Ok(response.Value);
-            }
-            catch (RequestFailedException ex) when (ex.Status == 404)
-            {
-                return NotFound();
+                activity?.SetOutput(record);
+                return Ok(record);
             }
             catch (Exception ex)
             {
@@ -200,35 +148,16 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="201">Returns the newly created record.</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpPost]
-        public async Task<ActionResult<SampleAzureTableRecord>> CreateRecord(SampleAzureTableRecord record)
+        public async Task<ActionResult<SampleAzureTableRecord>> CreateAsync(SampleAzureTableRecord record)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { record });
 
             try
             {
-                var tableClient = tableServiceClient.GetTableClient(TableName);
-                await tableClient.CreateIfNotExistsAsync();
+                var createdRecord = await repository.CreateAsync(record);
 
-                // Set timestamps
-                record.CreatedAt = DateTime.UtcNow;
-                record.UpdatedAt = null;
-
-                // Generate RowKey if not provided
-                if (string.IsNullOrEmpty(record.RowKey))
-                {
-                    record.RowKey = Guid.NewGuid().ToString();
-                }
-
-                // Set default partition key if not provided
-                if (string.IsNullOrEmpty(record.PartitionKey))
-                {
-                    record.PartitionKey = "default";
-                }
-
-                await tableClient.AddEntityAsync(record);
-
-                activity?.SetOutput(record);
-                return CreatedAtAction(nameof(GetRecord), new { partitionKey = record.PartitionKey, rowKey = record.RowKey }, record);
+                activity?.SetOutput(createdRecord);
+                return CreatedAtAction(nameof(GetAsync), new { partitionKey = createdRecord.PartitionKey, rowKey = createdRecord.RowKey }, createdRecord);
             }
             catch (Exception ex)
             {
@@ -247,75 +176,16 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="409">If an entity with the same PartitionKey and RowKey already exists.</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpPost("dynamic")]
-        public async Task<ActionResult<object>> CreateDynamicRecord([FromBody] Dictionary<string, object> entityData)
+        public async Task<ActionResult<object>> CreateDynamicAsync([FromBody] Dictionary<string, object> entityData)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { entityData });
 
             try
             {
-                var tableClient = tableServiceClient.GetTableClient(TableName);
-                await tableClient.CreateIfNotExistsAsync();
-
-                // Create a new TableEntity
-                var entity = new TableEntity();
-
-                // Set default values for required properties
-                string partitionKey = "default";
-                string rowKey = Guid.NewGuid().ToString();
-
-                // Process the input data
-                foreach (var kvp in entityData)
-                {
-                    var key = kvp.Key;
-                    var value = kvp.Value;
-
-                    // Handle special properties
-                    switch (key.ToLowerInvariant())
-                    {
-                        case "partitionkey":
-                            partitionKey = value?.ToString() ?? "default";
-                            break;
-                        case "rowkey":
-                            rowKey = value?.ToString() ?? Guid.NewGuid().ToString();
-                            break;
-                        case "timestamp":
-                        case "etag":
-                            // Skip these as they're managed by Azure Table Storage
-                            continue;
-                        default:
-                            // Add all other properties to the entity
-                            entity[key] = value;
-                            break;
-                    }
-                }
-
-                // Set the partition key and row key
-                entity.PartitionKey = partitionKey;
-                entity.RowKey = rowKey;
-
-                // Add standard tracking properties if not already present
-                if (!entity.ContainsKey("CreatedAt"))
-                {
-                    entity["CreatedAt"] = DateTime.UtcNow;
-                }
-                if (!entity.ContainsKey("UpdatedAt"))
-                {
-                    entity["UpdatedAt"] = null;
-                }
-
-                // Insert the entity
-                await tableClient.AddEntityAsync(entity);
-
-                // Create response object with proper naming policy
-                var responseEntity = new Dictionary<string, object?>();
-                foreach (var kvp in entity)
-                {
-                    string propertyName = ToCamelCase(kvp.Key);
-                    responseEntity[propertyName] = kvp.Value;
-                }
+                var responseEntity = await repository.CreateDynamicAsync(entityData);
 
                 activity?.SetOutput(responseEntity);
-                return Created($"/{entity.PartitionKey}/{entity.RowKey}", responseEntity);
+                return Created($"/{responseEntity.GetValueOrDefault("partitionKey")}/{responseEntity.GetValueOrDefault("rowKey")}", responseEntity);
             }
             catch (RequestFailedException ex) when (ex.Status == 409)
             {
@@ -340,7 +210,7 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="409">If an entity with the same PartitionKey and RowKey already exists.</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpPost("json")]
-        public async Task<ActionResult<object>> CreateRecordAsJson(
+        public async Task<ActionResult<object>> CreateAsJsonAsync(
             [FromBody] string jsonString,
             [FromQuery] PropertyNamingPolicy? namingPolicy = PropertyNamingPolicy.CamelCase)
         {
@@ -348,106 +218,15 @@ namespace TableStorageSampleAPI.Controllers
 
             try
             {
-                // Validate and parse the JSON string
-                if (string.IsNullOrWhiteSpace(jsonString))
-                {
-                    return BadRequest("JSON string cannot be null or empty");
-                }
+                var responseEntity = await repository.CreateAsJsonAsync(jsonString, namingPolicy);
 
-                JsonDocument jsonDocument;
-                try
-                {
-                    jsonDocument = JsonDocument.Parse(jsonString);
-                }
-                catch (JsonException ex)
-                {
-                    logger.LogWarning(ex, "Invalid JSON format provided");
-                    return BadRequest($"Invalid JSON format: {ex.Message}");
-                }
-
-                using (jsonDocument)
-                {
-                    if (jsonDocument.RootElement.ValueKind != JsonValueKind.Object)
-                    {
-                        return BadRequest("JSON must be an object");
-                    }
-
-                    var tableClient = tableServiceClient.GetTableClient(TableName);
-                    await tableClient.CreateIfNotExistsAsync();
-
-                    // Create a new TableEntity
-                    var entity = new TableEntity();
-
-                    // Set default values for required properties
-                    string partitionKey = "default";
-                    string rowKey = Guid.NewGuid().ToString();
-
-                    // Process the JSON properties
-                    foreach (var property in jsonDocument.RootElement.EnumerateObject())
-                    {
-                        var key = property.Name;
-                        var value = ExtractJsonValue(property.Value);
-
-                        // Normalize key for comparison (handle both camelCase and PascalCase)
-                        var normalizedKey = key.ToLowerInvariant();
-
-                        // Handle special properties
-                        switch (normalizedKey)
-                        {
-                            case "partitionkey":
-                                partitionKey = value?.ToString() ?? "default";
-                                break;
-                            case "rowkey":
-                                rowKey = value?.ToString() ?? Guid.NewGuid().ToString();
-                                break;
-                            case "timestamp":
-                            case "etag":
-                                // Skip these as they're managed by Azure Table Storage
-                                continue;
-                            default:
-                                // Convert key to PascalCase for storage (Azure Table Storage standard)
-                                string storageKey = ToPascalCase(key);
-                                entity[storageKey] = value;
-                                break;
-                        }
-                    }
-
-                    // Set the partition key and row key
-                    entity.PartitionKey = partitionKey;
-                    entity.RowKey = rowKey;
-
-                    // Add standard tracking properties if not already present
-                    if (!entity.ContainsKey("CreatedAt"))
-                    {
-                        entity["CreatedAt"] = DateTime.UtcNow;
-                    }
-                    if (!entity.ContainsKey("UpdatedAt"))
-                    {
-                        entity["UpdatedAt"] = null;
-                    }
-
-                    // Insert the entity
-                    await tableClient.AddEntityAsync(entity);
-
-                    // Create response object with controlled property naming
-                    var responseEntity = new Dictionary<string, object?>();
-                    foreach (var kvp in entity)
-                    {
-                        string propertyName = namingPolicy switch
-                        {
-                            PropertyNamingPolicy.CamelCase => ToCamelCase(kvp.Key),
-                            PropertyNamingPolicy.KebabCaseLower => ToKebabCase(kvp.Key),
-                            PropertyNamingPolicy.SnakeCaseLower => ToSnakeCase(kvp.Key),
-                            PropertyNamingPolicy.KebabCaseUpper => ToKebabCase(kvp.Key).ToUpperInvariant(),
-                            PropertyNamingPolicy.SnakeCaseUpper => ToSnakeCase(kvp.Key).ToUpperInvariant(),
-                            _ => kvp.Key // Default to original casing
-                        };
-                        responseEntity[propertyName] = kvp.Value;
-                    }
-
-                    activity?.SetOutput(responseEntity);
-                    return Created($"/{entity.PartitionKey}/{entity.RowKey}", responseEntity);
-                }
+                activity?.SetOutput(responseEntity);
+                return Created($"/{responseEntity.GetValueOrDefault("partitionKey")}/{responseEntity.GetValueOrDefault("rowKey")}", responseEntity);
+            }
+            catch (ArgumentException ex)
+            {
+                logger.LogWarning(ex, "Invalid request data provided");
+                return BadRequest(ex.Message);
             }
             catch (RequestFailedException ex) when (ex.Status == 409)
             {
@@ -456,6 +235,76 @@ namespace TableStorageSampleAPI.Controllers
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error creating JSON record in Azure Table Storage");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        /// <summary>
+        /// Creates multiple records in Azure Table Storage using strongly-typed entities in a single transaction.
+        /// All entities must belong to the same partition for the batch operation to succeed.
+        /// </summary>
+        /// <param name="records">The collection of SampleAzureTableRecord entities to create.</param>
+        /// <returns>The created records with generated keys and timestamps.</returns>
+        /// <response code="201">Returns the newly created records.</response>
+        /// <response code="400">If the entities belong to different partitions or are invalid.</response>
+        /// <response code="500">If an internal server error occurs.</response>
+        [HttpPost("batch")]
+        public async Task<ActionResult<IEnumerable<SampleAzureTableRecord>>> CreateBatchAsync([FromBody] IEnumerable<SampleAzureTableRecord> records)
+        {
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { records });
+
+            try
+            {
+                var createdRecords = await repository.CreateBatchAsync(records);
+
+                activity?.SetOutput(createdRecords);
+                return Created("batch", createdRecords);
+            }
+            catch (ArgumentException ex)
+            {
+                logger.LogWarning(ex, "Invalid batch request data provided");
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error creating batch records in Azure Table Storage");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        /// <summary>
+        /// Creates multiple records in Azure Table Storage from a JSON array string in a single transaction.
+        /// All entities must belong to the same partition for the batch operation to succeed.
+        /// Provides advanced JSON parsing, validation, and flexible response formatting.
+        /// </summary>
+        /// <param name="jsonString">The JSON array string containing the entity data to create.</param>
+        /// <param name="namingPolicy">Optional property naming policy for response formatting (default: CamelCase).</param>
+        /// <returns>The created entities as dynamic objects with property names formatted according to the specified naming policy.</returns>
+        /// <response code="201">Returns the newly created records.</response>
+        /// <response code="400">If the JSON string is invalid, not an array, or entities belong to different partitions.</response>
+        /// <response code="500">If an internal server error occurs.</response>
+        [HttpPost("batch/json")]
+        public async Task<ActionResult<IEnumerable<object>>> CreateAsJsonBatchAsync(
+            [FromBody] string jsonString,
+            [FromQuery] PropertyNamingPolicy? namingPolicy = PropertyNamingPolicy.CamelCase)
+        {
+            using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { jsonString, namingPolicy });
+
+            try
+            {
+                var responseEntities = await repository.CreateAsJsonBatchAsync(jsonString, namingPolicy);
+
+                activity?.SetOutput(responseEntities);
+                return Created("batch/json", responseEntities);
+            }
+            catch (ArgumentException ex)
+            {
+                logger.LogWarning(ex, "Invalid batch JSON request data provided");
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error creating JSON batch records in Azure Table Storage");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -472,25 +321,16 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="404">If the record to update is not found.</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpPut("{partitionKey}/{rowKey}")]
-        public async Task<IActionResult> UpdateRecord(string partitionKey, string rowKey, SampleAzureTableRecord record)
+        public async Task<IActionResult> UpdateAsync(string partitionKey, string rowKey, SampleAzureTableRecord record)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { partitionKey, rowKey, record });
 
             try
             {
-                var tableClient = tableServiceClient.GetTableClient(TableName);
-                await tableClient.CreateIfNotExistsAsync();
-
-                // Ensure the partition key and row key match the URL
-                record.PartitionKey = partitionKey;
-                record.RowKey = rowKey;
-                record.UpdatedAt = DateTime.UtcNow;
-
-                await tableClient.UpdateEntityAsync(record, ETag.All);
-
+                await repository.UpdateAsync(partitionKey, rowKey, record);
                 return NoContent();
             }
-            catch (RequestFailedException ex) when (ex.Status == 404)
+            catch (InvalidOperationException ex) when (ex.Message.Contains("not found"))
             {
                 return NotFound();
             }
@@ -514,75 +354,16 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="412">If the record has been modified by another process (concurrency conflict).</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpPut("{partitionKey}/{rowKey}/dynamic")]
-        public async Task<IActionResult> UpdateDynamicRecord(string partitionKey, string rowKey, [FromBody] Dictionary<string, object> entityData)
+        public async Task<IActionResult> UpdateDynamicAsync(string partitionKey, string rowKey, [FromBody] Dictionary<string, object> entityData)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { partitionKey, rowKey, entityData });
 
             try
             {
-                var tableClient = tableServiceClient.GetTableClient(TableName);
-                await tableClient.CreateIfNotExistsAsync();
-
-                // First, try to get the existing entity to preserve its ETag for optimistic concurrency
-                TableEntity existingEntity;
-                try
-                {
-                    var response = await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
-                    existingEntity = response.Value;
-                }
-                catch (RequestFailedException ex) when (ex.Status == 404)
-                {
-                    return NotFound();
-                }
-
-                // Create updated entity based on existing entity
-                var updatedEntity = new TableEntity(partitionKey, rowKey)
-                {
-                    ETag = existingEntity.ETag // Preserve ETag for optimistic concurrency
-                };
-
-                // Copy all existing properties first
-                foreach (var kvp in existingEntity)
-                {
-                    if (kvp.Key != "PartitionKey" && kvp.Key != "RowKey" && kvp.Key != "Timestamp" && kvp.Key != "ETag")
-                    {
-                        updatedEntity[kvp.Key] = kvp.Value;
-                    }
-                }
-
-                // Update with new data from request
-                foreach (var kvp in entityData)
-                {
-                    var key = kvp.Key;
-                    var value = kvp.Value;
-
-                    // Handle special properties
-                    switch (key.ToLowerInvariant())
-                    {
-                        case "partitionkey":
-                        case "rowkey":
-                            // Ignore these - they come from the URL
-                            continue;
-                        case "timestamp":
-                        case "etag":
-                            // Skip these as they're managed by Azure Table Storage
-                            continue;
-                        default:
-                            // Update the property
-                            updatedEntity[key] = value;
-                            break;
-                    }
-                }
-
-                // Update the UpdatedAt timestamp
-                updatedEntity["UpdatedAt"] = DateTime.UtcNow;
-
-                // Update the entity with optimistic concurrency
-                await tableClient.UpdateEntityAsync(updatedEntity, existingEntity.ETag);
-
+                await repository.UpdateDynamicAsync(partitionKey, rowKey, entityData);
                 return NoContent();
             }
-            catch (RequestFailedException ex) when (ex.Status == 404)
+            catch (InvalidOperationException ex) when (ex.Message.Contains("not found"))
             {
                 return NotFound();
             }
@@ -612,7 +393,7 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="412">If the record has been modified by another process (concurrency conflict).</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpPut("{partitionKey}/{rowKey}/json")]
-        public async Task<IActionResult> UpdateRecordAsJson(
+        public async Task<IActionResult> UpdateAsJsonAsync(
             string partitionKey, 
             string rowKey, 
             [FromBody] string jsonString,
@@ -622,98 +403,15 @@ namespace TableStorageSampleAPI.Controllers
 
             try
             {
-                // Validate and parse the JSON string
-                if (string.IsNullOrWhiteSpace(jsonString))
-                {
-                    return BadRequest("JSON string cannot be null or empty");
-                }
-
-                JsonDocument jsonDocument;
-                try
-                {
-                    jsonDocument = JsonDocument.Parse(jsonString);
-                }
-                catch (JsonException ex)
-                {
-                    logger.LogWarning(ex, "Invalid JSON format provided");
-                    return BadRequest($"Invalid JSON format: {ex.Message}");
-                }
-
-                using (jsonDocument)
-                {
-                    if (jsonDocument.RootElement.ValueKind != JsonValueKind.Object)
-                    {
-                        return BadRequest("JSON must be an object");
-                    }
-
-                    var tableClient = tableServiceClient.GetTableClient(TableName);
-                    await tableClient.CreateIfNotExistsAsync();
-
-                    // First, try to get the existing entity to preserve its ETag for optimistic concurrency
-                    TableEntity existingEntity;
-                    try
-                    {
-                        var response = await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
-                        existingEntity = response.Value;
-                    }
-                    catch (RequestFailedException ex) when (ex.Status == 404)
-                    {
-                        return NotFound();
-                    }
-
-                    // Create updated entity based on existing entity
-                    var updatedEntity = new TableEntity(partitionKey, rowKey)
-                    {
-                        ETag = existingEntity.ETag // Preserve ETag for optimistic concurrency
-                    };
-
-                    // Copy all existing properties first
-                    foreach (var kvp in existingEntity)
-                    {
-                        if (kvp.Key != "PartitionKey" && kvp.Key != "RowKey" && kvp.Key != "Timestamp" && kvp.Key != "ETag")
-                        {
-                            updatedEntity[kvp.Key] = kvp.Value;
-                        }
-                    }
-
-                    // Process the JSON properties and update the entity
-                    foreach (var property in jsonDocument.RootElement.EnumerateObject())
-                    {
-                        var key = property.Name;
-                        var value = ExtractJsonValue(property.Value);
-
-                        // Normalize key for comparison (handle both camelCase and PascalCase)
-                        var normalizedKey = key.ToLowerInvariant();
-
-                        // Handle special properties
-                        switch (normalizedKey)
-                        {
-                            case "partitionkey":
-                            case "rowkey":
-                                // Ignore these - they come from the URL
-                                continue;
-                            case "timestamp":
-                            case "etag":
-                                // Skip these as they're managed by Azure Table Storage
-                                continue;
-                            default:
-                                // Convert key to PascalCase for storage (Azure Table Storage standard)
-                                string storageKey = ToPascalCase(key);
-                                updatedEntity[storageKey] = value;
-                                break;
-                        }
-                    }
-
-                    // Update the UpdatedAt timestamp
-                    updatedEntity["UpdatedAt"] = DateTime.UtcNow;
-
-                    // Update the entity with optimistic concurrency
-                    await tableClient.UpdateEntityAsync(updatedEntity, existingEntity.ETag);
-
-                    return NoContent();
-                }
+                await repository.UpdateAsJsonAsync(partitionKey, rowKey, jsonString, namingPolicy);
+                return NoContent();
             }
-            catch (RequestFailedException ex) when (ex.Status == 404)
+            catch (ArgumentException ex)
+            {
+                logger.LogWarning(ex, "Invalid request data provided");
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("not found"))
             {
                 return NotFound();
             }
@@ -738,20 +436,16 @@ namespace TableStorageSampleAPI.Controllers
         /// <response code="404">If the record to delete is not found.</response>
         /// <response code="500">If an internal server error occurs.</response>
         [HttpDelete("{partitionKey}/{rowKey}")]
-        public async Task<IActionResult> DeleteRecord(string partitionKey, string rowKey)
+        public async Task<IActionResult> DeleteAsync(string partitionKey, string rowKey)
         {
             using var activity = Observability.ActivitySource.StartMethodActivity(logger, new { partitionKey, rowKey });
 
             try
             {
-                var tableClient = tableServiceClient.GetTableClient(TableName);
-                await tableClient.CreateIfNotExistsAsync();
-
-                await tableClient.DeleteEntityAsync(partitionKey, rowKey);
-
+                await repository.DeleteAsync(partitionKey, rowKey);
                 return NoContent();
             }
-            catch (RequestFailedException ex) when (ex.Status == 404)
+            catch (InvalidOperationException ex) when (ex.Message.Contains("not found"))
             {
                 return NotFound();
             }
@@ -760,184 +454,6 @@ namespace TableStorageSampleAPI.Controllers
                 logger.LogError(ex, "Error deleting record from Azure Table Storage");
                 return StatusCode(500, "Internal server error");
             }
-        }
-
-        /// <summary>
-        /// Converts a string from PascalCase to camelCase format.
-        /// </summary>
-        /// <param name="input">The input string to convert.</param>
-        /// <returns>The string converted to camelCase format.</returns>
-        /// <example>
-        /// ToCamelCase("UserName") returns "userName"
-        /// ToCamelCase("firstName") returns "firstName" (unchanged)
-        /// </example>
-        private static string ToCamelCase(string input)
-        {
-            if (string.IsNullOrEmpty(input) || char.IsLower(input[0]))
-                return input;
-
-            return char.ToLowerInvariant(input[0]) + input[1..];
-        }
-
-        /// <summary>
-        /// Converts a string from camelCase to PascalCase format.
-        /// </summary>
-        /// <param name="input">The input string to convert.</param>
-        /// <returns>The string converted to PascalCase format.</returns>
-        /// <example>
-        /// ToPascalCase("userName") returns "UserName"
-        /// ToPascalCase("FirstName") returns "FirstName" (unchanged)
-        /// </example>
-        private static string ToPascalCase(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return input;
-
-            if (char.IsUpper(input[0]))
-                return input;
-
-            return char.ToUpperInvariant(input[0]) + input[1..];
-        }
-
-        /// <summary>
-        /// Converts a string from PascalCase/camelCase to kebab-case format (lowercase with hyphens).
-        /// </summary>
-        /// <param name="input">The input string to convert.</param>
-        /// <returns>The string converted to kebab-case format.</returns>
-        /// <example>
-        /// ToKebabCase("UserName") returns "user-name"
-        /// ToKebabCase("firstName") returns "first-name"
-        /// </example>
-        private static string ToKebabCase(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return input;
-
-            return string.Concat(input.Select((x, i) => i > 0 && char.IsUpper(x) ? "-" + char.ToLowerInvariant(x) : char.ToLowerInvariant(x).ToString()));
-        }
-
-        /// <summary>
-        /// Converts a string from PascalCase/camelCase to snake_case format (lowercase with underscores).
-        /// </summary>
-        /// <param name="input">The input string to convert.</param>
-        /// <returns>The string converted to snake_case format.</returns>
-        /// <example>
-        /// ToSnakeCase("UserName") returns "user_name"
-        /// ToSnakeCase("firstName") returns "first_name"
-        /// </example>
-        private static string ToSnakeCase(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return input;
-
-            return string.Concat(input.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + char.ToLowerInvariant(x) : char.ToLowerInvariant(x).ToString()));
-        }
-
-        /// <summary>
-        /// Recursively extracts and converts JSON element values to appropriate .NET types.
-        /// Handles all JSON value types including nested objects and arrays.
-        /// </summary>
-        /// <param name="element">The JsonElement to extract the value from.</param>
-        /// <returns>The extracted value as the appropriate .NET type (string, number, bool, null, array, or dictionary).</returns>
-        /// <remarks>
-        /// Numbers are intelligently parsed as int, long, double, or decimal based on their content.
-        /// Objects are converted to Dictionary&lt;string, object?&gt; and arrays to object[].
-        /// </remarks>
-        private static object? ExtractJsonValue(JsonElement element)
-        {
-            return element.ValueKind switch
-            {
-                JsonValueKind.String => element.GetString(),
-                JsonValueKind.Number => element.TryGetInt32(out int intValue) ? intValue :
-                                       element.TryGetInt64(out long longValue) ? longValue :
-                                       element.TryGetDouble(out double doubleValue) ? doubleValue :
-                                       (object)element.GetDecimal(),
-                JsonValueKind.True => true,
-                JsonValueKind.False => false,
-                JsonValueKind.Null => null,
-                JsonValueKind.Array => element.EnumerateArray().Select(ExtractJsonValue).ToArray(),
-                JsonValueKind.Object => element.EnumerateObject().ToDictionary(p => p.Name, p => ExtractJsonValue(p.Value)),
-                _ => element.ToString()
-            };
-        }
-
-        /// <summary>
-        /// Converts a PropertyNamingPolicy enum value to the corresponding System.Text.Json JsonNamingPolicy.
-        /// </summary>
-        /// <param name="policy">The PropertyNamingPolicy enum value to convert.</param>
-        /// <returns>The corresponding JsonNamingPolicy, or null if no mapping exists.</returns>
-        /// <remarks>
-        /// This method is currently unused but provides a mapping for potential future JSON serialization needs.
-        /// </remarks>
-        private static JsonNamingPolicy? GetJsonNamingPolicy(PropertyNamingPolicy policy)
-        {
-            return policy switch
-            {
-                PropertyNamingPolicy.CamelCase => JsonNamingPolicy.CamelCase,
-                PropertyNamingPolicy.KebabCaseLower => JsonNamingPolicy.KebabCaseLower,
-                PropertyNamingPolicy.KebabCaseUpper => JsonNamingPolicy.KebabCaseUpper,
-                PropertyNamingPolicy.SnakeCaseLower => JsonNamingPolicy.SnakeCaseLower,
-                PropertyNamingPolicy.SnakeCaseUpper => JsonNamingPolicy.SnakeCaseUpper,
-                _ => null
-            };
-        }
-
-        /// <summary>
-        /// Helper class for encapsulating query options used in Azure Table Storage operations.
-        /// </summary>
-        private class QueryOptions
-        {
-            /// <summary>
-            /// Gets or sets the OData filter expression for filtering query results.
-            /// </summary>
-            public string? Filter { get; set; }
-            
-            /// <summary>
-            /// Gets or sets the maximum number of entities to return in the query.
-            /// </summary>
-            public int? Top { get; set; }
-            
-            /// <summary>
-            /// Gets or sets the collection of property names to select in the query projection.
-            /// </summary>
-            public IEnumerable<string>? Select { get; set; }
-        }
-
-        /// <summary>
-        /// Enumeration defining the available property naming policies for response formatting.
-        /// Used to control how property names are formatted in API responses.
-        /// </summary>
-        public enum PropertyNamingPolicy
-        {
-            /// <summary>
-            /// Uses the original property names without any transformation.
-            /// </summary>
-            Original,
-            
-            /// <summary>
-            /// Converts property names to camelCase format (e.g., "firstName").
-            /// </summary>
-            CamelCase,
-            
-            /// <summary>
-            /// Converts property names to lowercase kebab-case format (e.g., "first-name").
-            /// </summary>
-            KebabCaseLower,
-            
-            /// <summary>
-            /// Converts property names to uppercase kebab-case format (e.g., "FIRST-NAME").
-            /// </summary>
-            KebabCaseUpper,
-            
-            /// <summary>
-            /// Converts property names to lowercase snake_case format (e.g., "first_name").
-            /// </summary>
-            SnakeCaseLower,
-            
-            /// <summary>
-            /// Converts property names to uppercase snake_case format (e.g., "FIRST_NAME").
-            /// </summary>
-            SnakeCaseUpper
         }
     }
 }

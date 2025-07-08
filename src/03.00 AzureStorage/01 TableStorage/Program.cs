@@ -10,6 +10,8 @@ using Microsoft.Identity.Web.Resource;
 using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
 using Azure.Data.Tables;
 using System.Text.Json;
+//using TableStorageSampleAPI.Repositories;
+using Diginsight.Components.Azure.Extensions;
 
 namespace TableStorageSampleAPI
 {
@@ -57,6 +59,19 @@ namespace TableStorageSampleAPI
                     return new TableServiceClient(connectionString);
                 });
                 logger.LogDebug("services.AddSingleton<TableServiceClient>();");
+
+                // Add Repository services - using generic repository with extension method
+                builder.Services.AddAzureTableRepository<SampleAzureTableRecord>("SampleTable");
+                logger.LogDebug("services.AddAzureTableRepository<SampleAzureTableRecord>(\"SampleTable\");");
+
+                // Example: Register repositories for other entity types using the extension method
+                // builder.Services.AddAzureTableRepository<ProductRecord>("ProductsTable");
+                // builder.Services.AddAzureTableRepository<UserProfileRecord>("UserProfilesTable");
+                
+                // Alternative: Register multiple repositories at once
+                // builder.Services.AddAzureTableRepositories(
+                //     new[] { typeof(SampleAzureTableRecord), typeof(ProductRecord), typeof(UserProfileRecord) },
+                //     "{0}Table"); // Pattern: EntityNameTable
 
                 builder.Services.AddControllers()
                     .AddJsonOptions(options =>

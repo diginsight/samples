@@ -150,6 +150,7 @@ namespace AuthenticationSampleClient
                                                                 DatePattern = @".yyyyMMdd.\l\o\g",
                                                                 MaxSizeRollBackups = 1000,
                                                                 MaximumFileSize = "100MB",
+                                                                Encoding = System.Text.Encoding.UTF8,
                                                                 LockingModel = new FileAppender.MinimalLock(),
                                                                 Layout = new DiginsightLayout()
                                                                 {
