@@ -1,8 +1,9 @@
-﻿using Cocona;
+using Cocona;
 using Cocona.Builder;
 using CosmosdbConsole;
 using Diginsight;
 using Diginsight.Diagnostics;
+using Diginsight.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -17,8 +18,8 @@ internal class Program
     {
         using var observabilityManager = new ObservabilityManager();
         ILogger logger = observabilityManager.LoggerFactory.CreateLogger(typeof(Program));
-        Observability.LoggerFactory = observabilityManager.LoggerFactory;
-
+        ObservabilityRegistry.RegisterLoggerFactory(observabilityManager.LoggerFactory);
+        
         AppContext.SetSwitch("Azure.Experimental.EnableActivitySource", true);
 
         CoconaApp app = default!;
@@ -41,9 +42,9 @@ internal class Program
 
 
             Executor executor = app.Services.GetRequiredService<Executor>();
-            app.AddCommand("loadjson", executor.StreamDocumentsJsonAsync);
             app.AddCommand("query", executor.QueryAsync);
             app.AddCommand("uploadjson", executor.UploadDocumentsJsonAsync);
+            app.AddCommand("loadjson", executor.StreamDocumentsJsonAsync);
             app.AddCommand("deletefromjson", executor.DeleteDocumentsFromJsonAsync);
         }
 

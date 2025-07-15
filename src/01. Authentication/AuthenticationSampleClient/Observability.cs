@@ -1,4 +1,6 @@
-﻿using System;
+using Diginsight.Diagnostics;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,5 +13,6 @@ namespace AuthenticationSampleClient;
 internal static class Observability
 {
     public static readonly ActivitySource ActivitySource = new(Assembly.GetExecutingAssembly().GetName().Name!);
+    public static ILoggerFactory LoggerFactory { get; set; } = null!;
+    static Observability() => ObservabilityRegistry.RegisterComponent(factory => LoggerFactory = factory);
 }
-

@@ -1,4 +1,4 @@
-﻿using Diginsight.Options;
+using Diginsight.Options;
 
 namespace AuthenticationSampleApi;
 

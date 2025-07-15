@@ -1,0 +1,429 @@
+# ?? Project-Step01-EnsureUTF8wGitAttributesEditorConfig
+
+## ?? **Prompt Overview**
+
+This prompt validates and ensures proper UTF-8 encoding preservation across a Git repository by implementing comprehensive **Git configuration**, **.gitattributes**, and **.editorconfig** files. It prevents Unicode character corruption while maintaining Windows-compatible line endings (CRLF) and ensuring consistent encoding across development environments.
+
+## ?? **Prompt Goal**
+
+### **Core Objectives:**
+- **?? Preserve Unicode Characters:** Prevent corruption of Unicode symbols (??, ?, ??, ?, ??, ???) in source code
+- **??? Windows Compatibility:** Maintain CRLF line endings for Windows development environments
+- **?? Cross-Platform Safety:** Ensure proper handling for team members on different operating systems
+- **?? IDE Consistency:** Configure editors to use UTF-8 encoding by default
+- **??? Future-Proof:** Establish configuration that automatically handles new files correctly
+
+### **Implementation Targets:**
+
+**? Configure for ALL projects:**
+- Multi-target projects (.NET 6, .NET 7, .NET 8, .NET 9, .NET Standard 2.0, .NET Standard 2.1)
+- C# source files (*.cs)
+- Project files (*.csproj, *.sln, *.props, *.targets)
+- Configuration files (*.json, *.xml, *.config)
+- Documentation files (*.md, *.txt)
+
+**? Special handling for:**
+- Binary files (images, executables, libraries)
+- Shell scripts (Unix LF line endings)
+- Cross-platform files requiring specific line endings
+
+## ?? **Expected Output**
+
+### **1. Git Configuration Commands:**
+```bash
+git config core.autocrlf false
+git config core.safecrlf warn
+```
+
+### **2. .gitattributes File:**
+```gitattributes
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Explicitly define line endings for specific file types
+*.cs text eol=crlf
+*.csproj text eol=crlf
+*.sln text eol=crlf
+*.props text eol=crlf
+*.targets text eol=crlf
+*.json text eol=crlf
+*.xml text eol=crlf
+*.config text eol=crlf
+*.md text eol=crlf
+*.txt text eol=crlf
+*.yml text eol=crlf
+*.yaml text eol=crlf
+
+# Ensure shell scripts use LF (for cross-platform compatibility)
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Ensure these files are never converted
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
+# Ensure PowerShell files use CRLF (Windows standard)
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+
+# Batch files must use CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+```
+
+### **3. .editorconfig File:**
+```editorconfig
+root = true
+
+# All files
+[*]
+indent_style = space
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Code files
+[*.{cs,csx,vb,vbx}]
+indent_size = 4
+end_of_line = crlf
+
+# XML project files
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+indent_size = 2
+end_of_line = crlf
+
+# XML build files
+[*.{xml,config,props,targets,nuspec,resx,ruleset,vsixmanifest,vsct}]
+indent_size = 2
+end_of_line = crlf
+
+# JSON files
+[*.{json,json5,webmanifest}]
+indent_size = 2
+end_of_line = crlf
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+end_of_line = crlf
+
+# Markdown
+[*.md]
+end_of_line = crlf
+trim_trailing_whitespace = false
+
+# Web Files
+[*.{htm,html,js,jsm,ts,tsx,css,sass,scss,less,svg,vue}]
+indent_size = 2
+end_of_line = crlf
+
+# Batch files
+[*.{cmd,bat}]
+end_of_line = crlf
+
+# Bash files
+[*.sh]
+end_of_line = lf
+
+# PowerShell files
+[*.{ps1,psm1,psd1}]
+end_of_line = crlf
+```
+
+## ?? **Implementation Guidelines**
+
+### **Git Configuration Explanation:**
+
+**1. `core.autocrlf = false`:**
+- **Purpose:** Disables automatic line ending conversion that can corrupt Unicode characters
+- **Why:** Git's line ending conversion can misinterpret multi-byte Unicode sequences
+- **Result:** Prevents Unicode icons from being replaced with "??" characters
+
+**2. `core.safecrlf = warn`:**
+- **Purpose:** Warns about potential line ending inconsistencies
+- **Why:** Provides visibility into line ending issues without blocking operations
+- **Result:** Early detection of encoding problems
+
+### **.gitattributes Configuration:**
+
+**Text File Handling:**
+```gitattributes
+* text=auto                    # Git auto-detects text files
+*.cs text eol=crlf            # Force CRLF for C# files
+*.json text eol=crlf          # Force CRLF for JSON files
+```
+
+**Binary File Protection:**
+```gitattributes
+*.png binary                  # Prevent any conversion
+*.dll binary                  # Keep as-is
+```
+
+**Cross-Platform Compatibility:**
+```gitattributes
+*.sh text eol=lf             # Unix shell scripts need LF
+*.bat text eol=crlf          # Windows batch files need CRLF
+```
+
+### **.editorconfig Standards:**
+
+**Global Settings:**
+```editorconfig
+[*]
+charset = utf-8              # Force UTF-8 for all files
+trim_trailing_whitespace = true
+insert_final_newline = true
+```
+
+**Language-Specific:**
+```editorconfig
+[*.cs]
+indent_size = 4              # C# standard
+end_of_line = crlf           # Windows compatibility
+
+[*.json]
+indent_size = 2              # JSON standard
+end_of_line = crlf           # Consistency
+```
+
+## ?? **Implementation Steps**
+
+### **Step 1: Validate Current State**
+1. **Check Git Configuration:**
+   ```bash
+   git config --get core.autocrlf
+   git config --get core.safecrlf
+   ```
+
+2. **Check for Existing Files:**
+   ```bash
+   ls -la .gitattributes .editorconfig
+   ```
+
+3. **Scan for Unicode Characters:**
+   ```bash
+   grep -r "??\|?\|??\|?\|??\|???" --include="*.cs" .
+   ```
+
+### **Step 2: Configure Git Settings**
+1. **Set Repository Configuration:**
+   ```bash
+   git config core.autocrlf false
+   git config core.safecrlf warn
+   ```
+
+2. **Verify Configuration:**
+   ```bash
+   git config --list | grep -E "(autocrlf|safecrlf)"
+   ```
+
+### **Step 3: Create Configuration Files**
+1. **Create .gitattributes in repository root**
+2. **Create .editorconfig in repository root**
+3. **Validate file encoding is UTF-8**
+
+### **Step 4: Test and Commit**
+1. **Stage Configuration Files:**
+   ```bash
+   git add .gitattributes .editorconfig
+   ```
+
+2. **Commit Changes:**
+   ```bash
+   git commit -m "Configure Git for Unicode preservation and Windows line endings
+
+   - Set core.autocrlf=false to prevent Unicode corruption
+   - Configure CRLF line endings for Windows-specific files
+   - Ensure UTF-8 encoding is preserved for all text files
+   - This prevents Unicode icons from being corrupted during Git operations"
+   ```
+
+3. **Verify Unicode Preservation:**
+   ```bash
+   git show HEAD --name-only
+   grep -r "??" --include="*.cs" . | head -n 5
+   ```
+
+## ??? **Common Scenarios**
+
+### **Scenario 1: New Repository Setup**
+```bash
+# Initial setup
+git init
+git config core.autocrlf false
+git config core.safecrlf warn
+
+# Create configuration files
+echo "# .gitattributes content here" > .gitattributes
+echo "# .editorconfig content here" > .editorconfig
+
+# Commit configuration
+git add .gitattributes .editorconfig
+git commit -m "Initial Git and editor configuration for UTF-8 preservation"
+```
+
+### **Scenario 2: Existing Repository with Unicode Issues**
+```bash
+# Fix Git configuration
+git config core.autocrlf false
+git config core.safecrlf warn
+
+# Add configuration files
+# (Create .gitattributes and .editorconfig as shown above)
+
+# Renormalize repository (if needed)
+git add --renormalize .
+git commit -m "Fix encoding configuration and renormalize files"
+```
+
+### **Scenario 3: Team Environment Setup**
+```bash
+# Global Git configuration for all team members
+git config --global core.autocrlf false
+git config --global core.safecrlf warn
+
+# Ensure IDE settings
+# Visual Studio: Tools > Options > Environment > Documents > "Save as UTF-8"
+# VS Code: "files.encoding": "utf8" in settings.json
+```
+
+## ?? **Validation Checks**
+
+### **Configuration Validation:**
+```bash
+# Check Git settings
+git config --get core.autocrlf    # Should return: false
+git config --get core.safecrlf     # Should return: warn
+
+# Check file existence
+test -f .gitattributes && echo "? .gitattributes exists" || echo "? .gitattributes missing"
+test -f .editorconfig && echo "? .editorconfig exists" || echo "? .editorconfig missing"
+
+# Check file encoding
+file -bi .gitattributes .editorconfig  # Should show: charset=utf-8
+```
+
+### **Unicode Character Validation:**
+```bash
+# Find files with Unicode characters
+grep -r "??\|?\|??\|?\|??\|???" --include="*.cs" . | head -n 10
+
+# Check for corrupted characters
+grep -r "?" --include="*.cs" . | grep -E "(logger\.Log|Console\.Write)" | head -n 5
+```
+
+### **Line Ending Validation:**
+```bash
+# Check for consistent line endings in C# files
+find . -name "*.cs" -exec file {} \; | grep -v CRLF | head -n 5
+
+# Check for mixed line endings
+git ls-files | xargs file | grep "with CR"
+```
+
+## ?? **Common Pitfalls to Avoid**
+
+### **? Don't Set core.autocrlf=true**
+```bash
+# ? This causes Unicode corruption
+git config core.autocrlf true
+
+# ? Use this instead
+git config core.autocrlf false
+```
+
+### **? Don't Ignore Binary Files**
+```gitattributes
+# ? Missing binary designation
+*.dll
+*.png
+
+# ? Properly mark as binary
+*.dll binary
+*.png binary
+```
+
+### **? Don't Mix Line Ending Strategies**
+```gitattributes
+# ? Inconsistent approach
+* text=auto
+*.cs text eol=lf    # Don't mix LF with Windows development
+
+# ? Consistent Windows approach
+* text=auto
+*.cs text eol=crlf
+```
+
+### **? Don't Forget EditorConfig Charset**
+```editorconfig
+# ? Missing charset specification
+[*]
+indent_style = space
+
+# ? Always specify UTF-8
+[*]
+charset = utf-8
+indent_style = space
+```
+
+## ? **Checklist**
+
+### **Git Configuration:**
+- [ ] **Core Settings:** `core.autocrlf = false` configured
+- [ ] **Safety Settings:** `core.safecrlf = warn` configured
+- [ ] **Verification:** Git configuration validated with `git config --list`
+
+### **File Configuration:**
+- [ ] **GitAttributes:** `.gitattributes` file created in repository root
+- [ ] **EditorConfig:** `.editorconfig` file created in repository root
+- [ ] **File Encoding:** Both files saved as UTF-8
+- [ ] **File Permissions:** Configuration files committed to repository
+
+### **Content Validation:**
+- [ ] **Text Files:** All development files (.cs, .csproj, .json) configured for CRLF
+- [ ] **Binary Files:** All binary extensions marked as binary
+- [ ] **Cross-Platform:** Shell scripts (.sh) configured for LF
+- [ ] **Windows Files:** Batch files (.bat, .cmd) configured for CRLF
+
+### **Unicode Preservation:**
+- [ ] **Character Test:** Unicode characters (??, ?, ??, ?, ??, ???) display correctly
+- [ ] **No Corruption:** No "??" characters in place of Unicode symbols
+- [ ] **Editor Support:** IDE configured to use UTF-8 encoding
+- [ ] **Team Setup:** Documentation provided for team member setup
+
+### **Project Compatibility:**
+- [ ] **Multi-Target:** Configuration works for .NET 6, 7, 8, 9, Standard 2.0, 2.1
+- [ ] **Build Success:** All projects compile without encoding errors
+- [ ] **No Regression:** Existing functionality unaffected
+- [ ] **Future-Proof:** New files automatically follow correct encoding
+
+## ?? **Success Criteria**
+
+? **Complete Success:**
+- Unicode characters preserved across all Git operations
+- CRLF line endings maintained for Windows compatibility
+- UTF-8 encoding enforced for all text files
+- Configuration committed and documented for team use
+- All multi-target projects (.NET 6-9, .NET Standard) function correctly
+
+? **Technical Success:**
+- Git configuration prevents Unicode corruption
+- .gitattributes handles line endings appropriately
+- .editorconfig ensures consistent encoding across IDEs
+- Binary files protected from unwanted conversion
+
+? **Team Success:**
+- Documentation provided for team member onboarding
+- Consistent development environment across all machines
+- Future Unicode characters automatically preserved
+- No performance impact on development workflow
+
+This prompt ensures comprehensive, reliable UTF-8 encoding preservation while maintaining Windows development compatibility across the entire Diginsight repository ecosystem.

@@ -1,0 +1,40 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Explicitly define line endings for specific file types
+*.cs text eol=crlf
+*.csproj text eol=crlf
+*.sln text eol=crlf
+*.props text eol=crlf
+*.targets text eol=crlf
+*.json text eol=crlf
+*.xml text eol=crlf
+*.config text eol=crlf
+*.md text eol=crlf
+*.txt text eol=crlf
+*.yml text eol=crlf
+*.yaml text eol=crlf
+
+# Ensure shell scripts use LF (for cross-platform compatibility)
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Ensure these files are never converted
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
+# Ensure PowerShell files use CRLF (Windows standard)
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+
+# Batch files must use CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf

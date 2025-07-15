@@ -1,5 +1,6 @@
 ﻿using Cocona;
 using Diginsight.Diagnostics;
+using Diginsight.Components.Azure;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -64,7 +65,7 @@ internal sealed class Executor : IDisposable
         [Option] int skip = 0
     )
     {
-        using Activity? activity = Observability.ActivitySource.StartMethodActivity(logger, () => new { query, file, top, skip });
+        using Activity? activity = Observability.ActivitySource.StartMethodActivity(logger, () => new { query, database, collection, file, transformFile, top, skip });
 
         try
         {
@@ -76,10 +77,9 @@ internal sealed class Executor : IDisposable
 
             var topClause = top > 0 ? $" OFFSET {skip} LIMIT {top}" : string.Empty;
             string modifiedQuery = $"{query}{topClause}";
-            logger.LogDebug("modifiedQuery: {modifiedQuery}", modifiedQuery);
 
             var requestOptions = new QueryRequestOptions { MaxItemCount = top, QueryTextMode = QueryTextMode.None };
-            var iterator = container.GetItemQueryStreamIterator(modifiedQuery, requestOptions: requestOptions);
+            var iterator = container.GetItemQueryStreamIteratorObservable(modifiedQuery, requestOptions: requestOptions);
 
             StreamWriter? streamWriter = null;
             if (file is not null)
@@ -107,7 +107,7 @@ internal sealed class Executor : IDisposable
         catch (Exception ex) { logger.LogError(ex, $"'{ex.GetType().Name}': {ex.Message}", ex); }
     }
 
-    public async Task StreamDocumentsJsonAsync(
+    public async Task<int> StreamDocumentsJsonAsync(
         [FromService] CoconaAppContext appContext,
         [Option('f')] string? filePath,
         [Option('x')] string? transformFile,
@@ -116,8 +116,10 @@ internal sealed class Executor : IDisposable
         [Option] int skip = 0
     )
     {
-        using Activity? activity = Observability.ActivitySource.StartMethodActivity(logger, () => new { filePath });
+        using Activity? activity = Observability.ActivitySource.StartMethodActivity(logger, () => new { filePath, transformFile, skipFields, top, skip });
 
+        int documentCount = 0;
+        
         try
         {
             using (var streamReader = new StreamReader(filePath))
@@ -137,7 +139,6 @@ internal sealed class Executor : IDisposable
                     }
                 }
 
-                int documentCount = 0;
                 var skipFieldsArray = skipFields?.Split(',')?.Select(static x => x.Trim())?.ToArray();
                 logger.LogDebug($"Read documents within the 'Documents' array");
                 while (await jsonReader.ReadAsync() && jsonReader.TokenType != JsonToken.EndArray)
@@ -150,7 +151,6 @@ internal sealed class Executor : IDisposable
                         //var documentString = document.ToString();
                         //documentString = transform(documentString);
 
-
                         documentCount++;
                     }
                 }
@@ -158,9 +158,11 @@ internal sealed class Executor : IDisposable
         }
         catch (Exception ex) { logger.LogError(ex, $"'{ex.GetType().Name}': {ex.Message}", ex); }
 
+        activity?.SetOutput(documentCount);
+        return documentCount;
     }
 
-    public async Task UploadDocumentsJsonAsync(
+    public async Task<int> UploadDocumentsJsonAsync(
         [FromService] CoconaAppContext appContext,
         [Option('f')] string filePath,
         [Option('c')] string connectionString,
@@ -173,6 +175,8 @@ internal sealed class Executor : IDisposable
     {
         using Activity? activity = Observability.ActivitySource.StartMethodActivity(logger, () => new { filePath, database, collection, skipFields, top, skip });
 
+        int documentCount = 0;
+
         try
         {
             string accountEndpoint = connectionString.Split(';').Select(static x => x.Split('=', 2)).First(static x => x[0].Equals("AccountEndpoint", StringComparison.OrdinalIgnoreCase))[1];
@@ -198,7 +202,6 @@ internal sealed class Executor : IDisposable
                     }
                 }
 
-                int documentCount = 0;
                 var skipFieldsArray = skipFields?.Split(',')?.Select(static x => x.Trim())?.ToArray();
                 logger.LogDebug($"Read documents within the 'Documents' array");
                 while (await jsonReader.ReadAsync() && jsonReader.TokenType != JsonToken.EndArray)
@@ -208,8 +211,8 @@ internal sealed class Executor : IDisposable
                         var document = await JObject.LoadAsync(jsonReader);
                         var id = NormalizeDocument(document, skipFieldsArray);
 
-                        var response = await container.UpsertItemAsync(document); 
-                        id = GetDocumentId(document); logger.LogDebug($"container.UpsertItemAsync(document {{{id}}});");
+                        var response = await container.UpsertItemObservableAsync(document); 
+                        id = GetDocumentId(document); logger.LogDebug($"container.UpsertItemObservableAsync(document {{{id}}});");
 
                         documentCount++;
                     }
@@ -218,9 +221,12 @@ internal sealed class Executor : IDisposable
 
         }
         catch (Exception ex) { logger.LogError(ex, $"'{ex.GetType().Name}': {ex.Message}", ex); }
+
+        activity?.SetOutput(documentCount);
+        return documentCount;
     }
 
-    public async Task DeleteDocumentsFromJsonAsync(
+    public async Task<int> DeleteDocumentsFromJsonAsync(
        [FromService] CoconaAppContext appContext,
        [Option('f')] string filePath,
        [Option('c')] string connectionString,
@@ -232,6 +238,8 @@ internal sealed class Executor : IDisposable
     {
         using Activity? activity = Observability.ActivitySource.StartMethodActivity(logger, () => new { filePath, database, collection, top, skip });
 
+        int documentCount = 0;
+
         try
         {
             string accountEndpoint = connectionString.Split(';').Select(static x => x.Split('=', 2)).First(static x => x[0].Equals("AccountEndpoint", StringComparison.OrdinalIgnoreCase))[1];
@@ -257,7 +265,6 @@ internal sealed class Executor : IDisposable
                     }
                 }
 
-                int documentCount = 0;
                 logger.LogDebug($"Read documents within the 'Documents' array");
                 while (await jsonReader.ReadAsync() && jsonReader.TokenType != JsonToken.EndArray)
                 {
@@ -266,7 +273,7 @@ internal sealed class Executor : IDisposable
                         var document = await JObject.LoadAsync(jsonReader);
                         var id = GetDocumentId(document);
 
-                        await container.DeleteItemStreamAsync(id, PartitionKey.None); logger.LogDebug($"container.DeleteItemStreamAsync({id}, PartitionKey.None);");
+                        await container.DeleteItemStreamObservableAsync(id, PartitionKey.None); logger.LogDebug($"container.DeleteItemStreamObservableAsync({id}, PartitionKey.None);");
                         //await container.ReadItemStreamAsync(id); logger.LogDebug($"container.UpsertItemAsync(document);");
                         documentCount++;
                     }
@@ -275,6 +282,9 @@ internal sealed class Executor : IDisposable
 
         }
         catch (Exception ex) { logger.LogError(ex, $"'{ex.GetType().Name}': {ex.Message}", ex); }
+
+        activity?.SetOutput(documentCount);
+        return documentCount;
     }
 
     private string NormalizeDocument(JObject document, string[] skipFields)
