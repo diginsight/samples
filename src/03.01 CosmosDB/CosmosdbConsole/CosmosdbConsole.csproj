@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Core\Diginsight.Core.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
-    <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Diagnostics.Log4Net\Diginsight.Diagnostics.Log4Net.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
     <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Diagnostics\Diginsight.Diagnostics.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
+    <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Diagnostics.Log4Net\Diginsight.Diagnostics.Log4Net.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
     <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Diagnostics.AspNetCore.OpenTelemetry\Diginsight.Diagnostics.AspNetCore.OpenTelemetry.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
     <ProjectReference Include="$(DiginsightCoreSolutionDirectory)Diginsight.Stringify\Diginsight.Stringify.csproj" Condition="'$(DiginsightCoreDirectImport)' == 'true'" />
     <PackageReference Include="Diginsight.Core" Version="$(DiginsightCoreVersion)" Condition="'$(DiginsightCoreDirectImport)' != 'true'" />
@@ -21,8 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\components\src\Diginsight.Components\Diginsight.Components.csproj" />
-    <ProjectReference Include="..\..\..\..\components\src\Diginsight.Components.Azure\Diginsight.Components.Azure.csproj" />
+    <ProjectReference Include="$(DiginsightComponentsSolutionDirectory)Diginsight.Components\Diginsight.Components.csproj" Condition="'$(DiginsightComponentsDirectImport)' == 'true'" />
+    <ProjectReference Include="$(DiginsightComponentsSolutionDirectory)Diginsight.Components.Azure\Diginsight.Components.Azure.csproj" Condition="'$(DiginsightComponentsDirectImport)' == 'true'" />
+    <PackageReference Include="Diginsight.Components" Version="$(DiginsightComponentsVersion)" Condition="'$(DiginsightComponentsDirectImport)' != 'true'" />
+    <PackageReference Include="Diginsight.Components.Azure" Version="$(DiginsightComponentsVersion)" Condition="'$(DiginsightComponentsDirectImport)' != 'true'" />
   </ItemGroup>
 
   <ItemGroup>
