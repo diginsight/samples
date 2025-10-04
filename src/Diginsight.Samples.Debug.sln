@@ -97,6 +97,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diginsight.Components.Azure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosdbConsole", "03.01 CosmosDB\CosmosdbConsole\CosmosdbConsole.csproj", "{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleServerApi", "01. Authentication\AuthenticationSampleServerApi\AuthenticationSampleServerApi.csproj", "{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -211,6 +213,10 @@ Global
 		{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,6 +252,7 @@ Global
 		{6D18F345-722C-5E84-168D-919D62A4267E} = {930E4002-32B1-4A50-B48A-93E13BED5289}
 		{9A6E81FB-DC11-6258-40E3-6CDE6B1E978F} = {67A07738-078E-4297-9F4B-068CFA18C6B6}
 		{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB} = {930E4002-32B1-4A50-B48A-93E13BED5289}
+		{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142} = {4ED846D8-FA3A-4781-9CD6-8D8D0B6F22CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}

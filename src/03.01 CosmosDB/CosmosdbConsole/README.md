@@ -2,7 +2,7 @@
 
 ## Overview
 
-CosmosdbConsole is a .NET 8.0 command-line utility that demonstrates advanced interaction with Azure Cosmos DB. Built with the Diginsight observability framework, this console application provides a comprehensive set of tools for managing Cosmos DB documents, including bulk operations, querying, and data transformations.
+CosmosdbConsole is a .NET 8.0 command-line utility that demonstrates advanced interaction with Azure Cosmos DB.<br>Built with the __diginsight observability__ framework, this console application provides a comprehensive set of tools for managing Cosmos DB documents, including bulk operations, querying, and data transformations.
 
 ## Features
 
