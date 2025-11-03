@@ -99,6 +99,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosdbConsole", "03.01 Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationSampleServerApi", "01. Authentication\AuthenticationSampleServerApi\AuthenticationSampleServerApi.csproj", "{E3D1DB80-AF7D-28AC-688B-1C7BDAE85142}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.10 AzureWebjob", "03.10 AzureWebjob", "{F846AF81-F94A-4D15-B844-C619F38B1F4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
