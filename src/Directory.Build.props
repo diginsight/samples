@@ -14,8 +14,8 @@
 
     <MicrosoftIdentityWebVersion>3.9.4</MicrosoftIdentityWebVersion>
     <DiginsightDiagnosticsVersion>2.0.0.23</DiginsightDiagnosticsVersion>
-    <DiginsightCoreVersion>3.4.*</DiginsightCoreVersion>
-    <DiginsightSmartcacheVersion>3.4.*</DiginsightSmartcacheVersion>
+    <DiginsightCoreVersion>3.7.*</DiginsightCoreVersion>
+    <DiginsightSmartcacheVersion>3.7.*</DiginsightSmartcacheVersion>
     <DiginsightComponentsVersion>1.*</DiginsightComponentsVersion>
     <PackageTags>diginsight;telemetry</PackageTags>
 

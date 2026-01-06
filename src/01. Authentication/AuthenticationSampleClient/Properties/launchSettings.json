@@ -6,7 +6,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ENVIRONMENT": "Development",
         "AppsettingsEnvironmentName": "Testms",
-        "ExternalConfigurationFolder": "..\\..\\..\\..\\components.internal"
+        "ExternalConfigurationFolder": "..\\..\\..\\..\\samples.internal"
       }
     }
   }

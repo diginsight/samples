@@ -14,8 +14,8 @@ public class Program
     public static void Main(string[] args)
     {
         using var observabilityManager = new ObservabilityManager();
-        ILoggerFactory loggerFactory = Observability.LoggerFactory = observabilityManager.LoggerFactory;
-        ObservabilityRegistry.RegisterLoggerFactory(observabilityManager.LoggerFactory);
+        ILoggerFactory loggerFactory = LoggerFactoryStaticAccessor.LoggerFactory = observabilityManager.LoggerFactory;
+        //ObservabilityRegistry.RegisterLoggerFactory(observabilityManager.LoggerFactory);
         ILogger logger = loggerFactory.CreateLogger(typeof(Program));
 
         WebApplication app = default!;

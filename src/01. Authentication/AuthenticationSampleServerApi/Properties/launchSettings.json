@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "Testms": {
@@ -10,7 +10,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "AppsettingsEnvironmentName": "Testms",
-        "ExternalConfigurationFolder": "..\\..\\..\\..\\components.internal"
+        "ExternalConfigurationFolder": "..\\..\\..\\..\\samples.internal"
       }
     }
   }

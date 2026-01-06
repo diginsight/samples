@@ -1,4 +1,4 @@
-﻿using Diginsight;
+using Diginsight;
 using Diginsight.Diagnostics;
 using Diginsight.Diagnostics.Log4Net;
 using log4net.Appender;
@@ -67,7 +67,7 @@ public static partial class ObservabilityExtensions
                          static _ => log4net.Core.Level.All);
                      }
                  });
-        services.TryAddSingleton<IActivityLoggingSampler, NameBasedActivityLoggingSampler>();
+        services.TryAddSingleton<IActivityLoggingFilter, OptionsBasedActivityLoggingFilter>();
 
         return services;
     }
