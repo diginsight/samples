@@ -1,0 +1,44 @@
+{
+  "profiles": {
+    "Page2Clipboard": {
+      "commandName": "Project",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/training/modules/introduction-to-devops/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/plan-agile-github-projects-azure-boards/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/manage-git-branches-workflows/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/collaborate-pull-requests-azure-repos/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/explore-git-hooks/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/plan-fostering-inner-source/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/manage-git-repositories/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/identify-technical-debt/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/explore-azure-pipelines/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/manage-azure-pipeline-agents-pools/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/describe-pipelines-concurrency/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/implement-pipeline-strategy/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/integrate-azure-pipelines/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/introduction-to-github-actions/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/learn-continuous-integration-github-actions/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/design-container-build-strategy/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/create-release-pipeline-devops/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/explore-release-strategy-recommendations/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/configure-provision-environments/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/manage-modularize-tasks-templates/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/automate-inspection-health/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/introduction-to-deployment-patterns/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/implement-blue-green-deployment-feature-toggles/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/implement-canary-releases-dark-launching/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/implement-test-progressive-exposure-deployment/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/integrate-identity-management-systems/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/manage-application-configuration-data/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/explore-infrastructure-code-configuration-management/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/create-azure-resources-using-azure-resource-manager-templates/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/create-azure-resources-by-using-azure-cli/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/explore-azure-automation-devops/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/implement-desired-state-configuration-dsc/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/implement-bicep/\" ",
+      "commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/implement-bicep/\" ",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.34916.146
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11415.280 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D97AD3A-A8AC-47AB-B9BA-FF0CDB665F28}"
 	ProjectSection(SolutionItems) = preProject
@@ -59,6 +59,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableStorageSampleAPI", "03
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosdbConsole", "03.01 CosmosDB\CosmosdbConsole\CosmosdbConsole.csproj", "{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "20. Validation", "20. Validation", "{D6DD9CF2-521B-45A2-A0C5-C892E17F442B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Page2Clipboard", "20.01 Validation\Page2Clipboard\Page2Clipboard.csproj", "{871900A0-B452-49F5-94DD-B035BF30135F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +97,10 @@ Global
 		{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{871900A0-B452-49F5-94DD-B035BF30135F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{871900A0-B452-49F5-94DD-B035BF30135F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{871900A0-B452-49F5-94DD-B035BF30135F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{871900A0-B452-49F5-94DD-B035BF30135F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +117,7 @@ Global
 		{DFC5F15D-5E75-4FCA-A913-13734BAD36F0} = {90BD4A5D-1B66-4D40-9EAA-8F894953694F}
 		{A4995B15-6796-9C7E-4B7E-FF1F73B40B77} = {5A3C3ADC-69E5-41C0-BB91-C24959B1911F}
 		{44D4B8EA-4BB1-0022-49F8-0D1CFCA872AB} = {3F391121-DA22-4635-A2D2-294D24F28A3A}
+		{871900A0-B452-49F5-94DD-B035BF30135F} = {D6DD9CF2-521B-45A2-A0C5-C892E17F442B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {858CD56C-FC27-4CE7-B31A-EB825F742423}
