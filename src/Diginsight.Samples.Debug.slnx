@@ -1,0 +1,56 @@
+<Solution>
+  <Folder Name="/01. Authentication/">
+    <Project Path="01. Authentication/AuthenticationSampleApi/AuthenticationSampleApi.csproj" />
+    <Project Path="01. Authentication/AuthenticationSampleClient/AuthenticationSampleClient.csproj" />
+    <Project Path="01. Authentication/AuthenticationSampleServerApi/AuthenticationSampleServerApi.csproj" />
+  </Folder>
+  <Folder Name="/02. OpenAPI/" />
+  <Folder Name="/03..00 Azure/" />
+  <Folder Name="/03.00 AzureStorage/" />
+  <Folder Name="/03.00 AzureStorage/01 TableStorage/">
+    <Project Path="03.00 AzureStorage/01 TableStorage/TableStorageSampleAPI.csproj" />
+  </Folder>
+  <Folder Name="/03.00 AzureStorage/02 BlobStorage/" />
+  <Folder Name="/03.00 AzureStorage/03 BlobQueues/" />
+  <Folder Name="/03.01 CosmosDB/">
+    <Project Path="03.01 CosmosDB/CosmosdbConsole/CosmosdbConsole.csproj" />
+    <Project Path="03.01 CosmosDB/IdentityAPI/IdentityAPI.csproj" />
+    <Project Path="03.01 CosmosDB/LocationAPI/LocationAPI.csproj" />
+  </Folder>
+  <Folder Name="/03.02 AzureSql/" />
+  <Folder Name="/03.03 DataExplorer/" />
+  <Folder Name="/03.05 ServiceBus/" />
+  <Folder Name="/03.06 EventHub/" />
+  <Folder Name="/03.07 IotHub/" />
+  <Folder Name="/03.09 AzureFunctions/" />
+  <Folder Name="/03.10 AzureWebjob/" />
+  <Folder Name="/10. AI/" />
+  <Folder Name="/11. OpenAI/" />
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+  </Folder>
+  <Folder Name="/_ext/">
+    <Project Path="../../components/src/Diginsight.Components.Abstractions/Diginsight.Components.Abstractions.csproj" />
+    <Project Path="../../components/src/Diginsight.Components.Azure.Abstractions/Diginsight.Components.Azure.Abstractions.csproj" />
+    <Project Path="../../components/src/Diginsight.Components.Azure/Diginsight.Components.Azure.csproj" />
+    <Project Path="../../components/src/Diginsight.Components.Configuration/Diginsight.Components.Configuration.csproj" />
+    <Project Path="../../components/src/Diginsight.Components.Presentation.Abstractions/Diginsight.Components.Presentation.Abstractions.csproj" />
+    <Project Path="../../components/src/Diginsight.Components.Presentation/Diginsight.Components.Presentation.csproj" />
+    <Project Path="../../components/src/Diginsight.Components/Diginsight.Components.csproj" />
+    <Project Path="../../smartcache/src/Diginsight.SmartCache.Externalization.AspNetCore/Diginsight.SmartCache.Externalization.AspNetCore.csproj" />
+    <Project Path="../../smartcache/src/Diginsight.SmartCache.Externalization.Http/Diginsight.SmartCache.Externalization.Http.csproj" />
+    <Project Path="../../smartcache/src/Diginsight.SmartCache.Externalization.Kubernetes/Diginsight.SmartCache.Externalization.Kubernetes.csproj" />
+    <Project Path="../../smartcache/src/Diginsight.SmartCache.Externalization.Redis/Diginsight.SmartCache.Externalization.Redis.csproj" />
+    <Project Path="../../smartcache/src/Diginsight.SmartCache.Externalization.ServiceBus/Diginsight.SmartCache.Externalization.ServiceBus.csproj" />
+    <Project Path="../../smartcache/src/Diginsight.SmartCache/Diginsight.SmartCache.csproj" />
+    <Project Path="../../telemetry/src/Diginsight.AspNetCore/Diginsight.AspNetCore.csproj" />
+    <Project Path="../../telemetry/src/Diginsight.Core/Diginsight.Core.csproj" />
+    <Project Path="../../telemetry/src/Diginsight.Diagnostics.AspNetCore.OpenTelemetry/Diginsight.Diagnostics.AspNetCore.OpenTelemetry.csproj" />
+    <Project Path="../../telemetry/src/Diginsight.Diagnostics.AspNetCore/Diginsight.Diagnostics.AspNetCore.csproj" />
+    <Project Path="../../telemetry/src/Diginsight.Diagnostics.Log4Net/Diginsight.Diagnostics.Log4Net.csproj" />
+    <Project Path="../../telemetry/src/Diginsight.Diagnostics.OpenTelemetry/Diginsight.Diagnostics.OpenTelemetry.csproj" />
+    <Project Path="../../telemetry/src/Diginsight.Diagnostics/Diginsight.Diagnostics.csproj" />
+    <Project Path="../../telemetry/src/Diginsight.Polyfills/Diginsight.Polyfills.csproj" />
+  </Folder>
+</Solution>
