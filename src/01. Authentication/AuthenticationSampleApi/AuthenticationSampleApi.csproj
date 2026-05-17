@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
@@ -68,7 +68,7 @@
 
     <PackageReference Include="RestSharp" Version="112.*" />
 
-    <PackageReference Include="Scrutor" Version="6.*" />
+    <PackageReference Include="Scrutor" Version="7.*" />
 
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.*" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.*" />
