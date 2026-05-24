@@ -30,6 +30,28 @@
         "AppsettingsEnvironmentName": "Testms",
         "ExternalConfigurationFolder": "..\\..\\..\\..\\samples.internal"
       }
+    },
+    "https - testmc": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7056",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppsettingsEnvironmentName": "Testmc",
+        "ExternalConfigurationFolder": "..\\..\\..\\..\\samples.internal"
+      }
+    },
+    "IIS Express - testmc": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppsettingsEnvironmentName": "Testmc",
+        "ExternalConfigurationFolder": "..\\..\\..\\..\\samples.internal"
+      }
     }
   }
 }
