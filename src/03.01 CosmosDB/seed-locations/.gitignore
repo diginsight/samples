@@ -1,0 +1,8 @@
+# Local working dirs -- never commit downloaded data or built JSONs
+raw/
+data/
+out/
+
+# Local overrides / runtime artefacts (real config lives in samples.internal)
+scripts/_common.local.ps1
+*.log
