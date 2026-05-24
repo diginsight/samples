@@ -1,8 +1,9 @@
 ﻿#requires -Version 5.1
 <#
 Step 5 -- Build region (admin level 1) documents from GeoNames
-admin1CodesASCII.txt. Filtered to the target ISO-2 set (Europe + Middle East,
-see _common.ps1).
+admin1CodesASCII.txt. Filtered to the target ISO-2 set
+(Europe + Middle East + North America + selected Asia + South America
++ Oceania, see _common.ps1).
 
 File format (TSV, 4 cols):
     1. concatenated codes: "<CC>.<ADM1>"

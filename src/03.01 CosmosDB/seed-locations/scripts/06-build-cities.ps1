@@ -1,7 +1,9 @@
 ﻿#requires -Version 5.1
 <#
 Step 6 -- Build city documents from GeoNames cities15000.txt.
-Filtered to the target ISO-2 set (Europe + Middle East, see _common.ps1).
+Filtered to the target ISO-2 set
+(Europe + Middle East + North America + selected Asia + South America
++ Oceania, see _common.ps1).
 Resolves regionName from the region docs produced by 05-build-regions.ps1
 (if available).
 

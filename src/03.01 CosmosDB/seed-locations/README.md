@@ -2,7 +2,8 @@
 
 Local working folder that seeds the `location` container of a Cosmos DB
 account with public geo data (world countries + regions + cities for
-Europe and the Middle East + sample addresses).
+Europe, the Middle East, North America, India, South America and Oceania
++ sample addresses).
 
 The target subscription / tenant / Cosmos account / RG are **not**
 hard-coded in this repo. They are loaded from the private `samples.internal`

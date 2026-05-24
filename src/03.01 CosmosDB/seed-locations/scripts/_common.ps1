@@ -107,10 +107,40 @@ $script:MiddleEastIso2 = @(
     'AE','BH','EG','IL','IQ','IR','JO','KW','LB','OM','PS','QA','SA','SY','YE'
 )
 
+# ISO-2 codes for North America (GeoNames continent NA): the contiguous
+# countries (Canada, United States, Mexico), Central America, the Caribbean,
+# Greenland and the dependent territories.
+$script:NorthAmericaIso2 = @(
+    'AG','AI','AW','BB','BL','BM','BQ','BS','BZ','CA','CR','CU','CW','DM','DO',
+    'GD','GL','GP','GT','HN','HT','JM','KN','KY','LC','MF','MQ','MS','MX','NI',
+    'PA','PM','PR','SV','SX','TC','TT','US','VC','VG','VI'
+)
+
+# ISO-2 codes for the Asian countries currently in scope. Limited to India
+# for now per the user request; extend this list to broaden coverage.
+$script:AsiaIso2 = @(
+    'IN'
+)
+
+# ISO-2 codes for South America (GeoNames continent SA). Central American
+# countries (BZ, CR, GT, HN, NI, PA, SV) are already in NorthAmericaIso2 per
+# GeoNames classification, so they are NOT duplicated here.
+$script:SouthAmericaIso2 = @(
+    'AR','BO','BR','CL','CO','EC','FK','GF','GY','PE','PY','SR','UY','VE'
+)
+
+# ISO-2 codes for Oceania (GeoNames continent OC): the Australian continent,
+# New Zealand and the Pacific island nations / territories.
+$script:OceaniaIso2 = @(
+    'AS','AU','CK','FJ','FM','GU','KI','MH','MP','NC','NF','NR','NU','NZ',
+    'PF','PG','PN','PW','SB','TK','TO','TV','UM','VU','WF','WS'
+)
+
 # Target ISO-2 set used by 05-build-regions.ps1 and 06-build-cities.ps1.
-# = Europe + Middle East (deduped).
+# = Europe + Middle East + North America + selected Asia + South America
+# + Oceania (deduped).
 $script:TargetIso2 = [System.Collections.Generic.HashSet[string]]::new(
-    [string[]]($script:EuropeIso2 + $script:MiddleEastIso2),
+    [string[]]($script:EuropeIso2 + $script:MiddleEastIso2 + $script:NorthAmericaIso2 + $script:AsiaIso2 + $script:SouthAmericaIso2 + $script:OceaniaIso2),
     [System.StringComparer]::OrdinalIgnoreCase)
 
 # Map mledoze "region" -> continent code
