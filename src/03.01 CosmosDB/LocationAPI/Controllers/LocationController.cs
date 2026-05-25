@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Diginsight.Diagnostics;
 using LocationAPI;
 using Microsoft.AspNetCore.Mvc;
@@ -34,9 +35,50 @@ public class LocationController : ControllerBase
         this.httpClientFactory = httpClientFactory;
 
         this.locationsCosmosDBOptions = serviceProvider.GetRequiredService<IOptionsMonitor<CosmosDbOptions>>().Get("LocationApi:CosmosDb");
-        this.locationsCosmosClient = new CosmosClient(locationsCosmosDBOptions.ConnectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
+        this.locationsCosmosClient = CreateCosmosClient(locationsCosmosDBOptions.ConnectionString, logger); logger.LogDebug("cosmosClient = CreateCosmosClient(connectionString);");
 
         this.identityApiHttpClient = httpClientFactory.CreateClient("IdentityApi");
+    }
+
+    /// <summary>
+    /// Create a CosmosClient supporting both classic AccountKey connection strings
+    /// and AAD-only endpoints. The <paramref name="connectionString"/> may be:
+    ///   - a full "AccountEndpoint=...;AccountKey=...;" connection string, OR
+    ///   - just a https:// endpoint URL (then DefaultAzureCredential is used), OR
+    ///   - "AccountEndpoint=...;" without AccountKey (then DefaultAzureCredential is used).
+    /// </summary>
+    private static CosmosClient CreateCosmosClient(string connectionString, ILogger logger)
+    {
+        var parts = connectionString
+            .Split(';', StringSplitOptions.RemoveEmptyEntries)
+            .Select(static x => x.Split('=', 2))
+            .Where(static x => x.Length == 2)
+            .ToDictionary(static x => x[0].Trim(), static x => x[1].Trim(), StringComparer.OrdinalIgnoreCase);
+
+        string? accountEndpoint = null;
+        if (parts.TryGetValue("AccountEndpoint", out var ep))
+        {
+            accountEndpoint = ep;
+        }
+        else if (Uri.IsWellFormedUriString(connectionString.Trim(), UriKind.Absolute))
+        {
+            accountEndpoint = connectionString.Trim();
+        }
+
+        bool hasKey = parts.ContainsKey("AccountKey");
+
+        if (!hasKey)
+        {
+            if (string.IsNullOrWhiteSpace(accountEndpoint))
+            {
+                throw new ArgumentException("Connection string has no AccountEndpoint and is not a bare endpoint URL.", nameof(connectionString));
+            }
+            logger.LogInformation("Using AAD auth (DefaultAzureCredential) for endpoint {endpoint}", accountEndpoint);
+            return new CosmosClient(accountEndpoint, new DefaultAzureCredential());
+        }
+
+        logger.LogDebug("Using AccountKey auth for endpoint {endpoint}", accountEndpoint);
+        return new CosmosClient(connectionString);
     }
 
     [HttpGet("locations/{type}")]
