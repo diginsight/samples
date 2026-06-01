@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "https": {
+    "https (Testmc)": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

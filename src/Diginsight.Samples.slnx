@@ -1,0 +1,37 @@
+<Solution>
+  <Folder Name="/01. Authentication/">
+    <Project Path="01. Authentication/AuthenticationSampleApi/AuthenticationSampleApi.csproj" />
+    <Project Path="01. Authentication/AuthenticationSampleClient/AuthenticationSampleClient.csproj" />
+    <Project Path="01. Authentication/AuthenticationSampleServerApi/AuthenticationSampleServerApi.csproj" />
+  </Folder>
+  <Folder Name="/02. OpenAPI/" />
+  <Folder Name="/03.00 AzureStorage/" />
+  <Folder Name="/03.00 AzureStorage/01 TableStorage/">
+    <Project Path="03.00 AzureStorage/01 TableStorage/TableStorageSampleAPI.csproj" />
+  </Folder>
+  <Folder Name="/03.00 AzureStorage/02 BlobStorage/" />
+  <Folder Name="/03.00 AzureStorage/03 BlobQueues/" />
+  <Folder Name="/03.01 CosmosDB/">
+    <Project Path="03.01 CosmosDB/CosmosdbConsole/CosmosdbConsole.csproj" />
+    <Project Path="03.01 CosmosDB/IdentityAPI/IdentityAPI.csproj" />
+    <Project Path="03.01 CosmosDB/LocationAPI/LocationAPI.csproj" />
+  </Folder>
+  <Folder Name="/03.02 AzureSql/" />
+  <Folder Name="/03.03 DataExplorer/" />
+  <Folder Name="/03.05 ServiceBus/" />
+  <Folder Name="/03.06 EventHub/" />
+  <Folder Name="/03.07 IotHub/" />
+  <Folder Name="/03.09 AzureFunctions/" />
+  <Folder Name="/10. AI/" />
+  <Folder Name="/10. AI/NewFolder1/" />
+  <Folder Name="/11. OpenAI/" />
+  <Folder Name="/20. Validation/">
+    <Project Path="20.01 Validation/Page2Clipboard/Page2Clipboard.csproj" />
+  </Folder>
+  <Folder Name="/Json2Csv/" />
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+  </Folder>
+  <Folder Name="/_prompts/" />
+</Solution>

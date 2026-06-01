@@ -1,0 +1,10 @@
+# Copy this file to scripts/_common.local.ps1 and fill in your values.
+# scripts/_common.local.ps1 is gitignored and will be sourced automatically
+# by _common.ps1 when present.
+
+$script:SubscriptionId  = '<your-subscription-id-guid>'
+$script:TenantId        = '<your-tenant-id-guid>'
+$script:CosmosAccount   = '<your-cosmos-account-name>'
+$script:CosmosRg        = '<your-resource-group-name>'
+$script:CosmosDatabase  = 'location'
+$script:CosmosContainer = 'location'

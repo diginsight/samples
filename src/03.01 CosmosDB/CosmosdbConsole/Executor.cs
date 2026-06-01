@@ -1,4 +1,5 @@
-﻿using Cocona;
+﻿using Azure.Identity;
+using Cocona;
 using Diginsight.Diagnostics;
 using Diginsight.Components.Azure;
 using Microsoft.Azure.Cosmos;
@@ -21,6 +22,47 @@ internal sealed class Executor : IDisposable
     private readonly string? transformString = """
 
         """;
+
+    /// <summary>
+    /// Create a CosmosClient supporting both classic AccountKey connection strings
+    /// and AAD-only endpoints. The <paramref name="connectionString"/> may be:
+    ///   - a full "AccountEndpoint=...;AccountKey=...;" connection string, OR
+    ///   - just a https:// endpoint URL (then DefaultAzureCredential is used), OR
+    ///   - "AccountEndpoint=...;AuthType=AAD;" / similar (key absent -> AAD).
+    /// </summary>
+    private static CosmosClient CreateCosmosClient(string connectionString, ILogger logger)
+    {
+        var parts = connectionString
+            .Split(';', StringSplitOptions.RemoveEmptyEntries)
+            .Select(static x => x.Split('=', 2))
+            .Where(static x => x.Length == 2)
+            .ToDictionary(static x => x[0].Trim(), static x => x[1].Trim(), StringComparer.OrdinalIgnoreCase);
+
+        string? accountEndpoint = null;
+        if (parts.TryGetValue("AccountEndpoint", out var ep))
+        {
+            accountEndpoint = ep;
+        }
+        else if (Uri.IsWellFormedUriString(connectionString.Trim(), UriKind.Absolute))
+        {
+            accountEndpoint = connectionString.Trim();
+        }
+
+        bool hasKey = parts.ContainsKey("AccountKey");
+
+        if (!hasKey)
+        {
+            if (string.IsNullOrWhiteSpace(accountEndpoint))
+            {
+                throw new ArgumentException("Connection string has no AccountEndpoint and is not a bare endpoint URL.", nameof(connectionString));
+            }
+            logger.LogInformation("Using AAD auth (DefaultAzureCredential) for endpoint {endpoint}", accountEndpoint);
+            return new CosmosClient(accountEndpoint, new DefaultAzureCredential());
+        }
+
+        logger.LogDebug("Using AccountKey auth for endpoint {endpoint}", accountEndpoint);
+        return new CosmosClient(connectionString);
+    }
 
     private string? transform(string? recordJson) { 
         if (recordJson is null) { return null; }
@@ -69,10 +111,7 @@ internal sealed class Executor : IDisposable
 
         try
         {
-            string accountEndpoint = connectionString.Split(';').Select(static x => x.Split('=', 2)).First(static x => x[0].Equals("AccountEndpoint", StringComparison.OrdinalIgnoreCase))[1];
-            logger.LogDebug("accountEndpoint: {accountEndpoint}", accountEndpoint);
-
-            var cosmosClient = new CosmosClient(connectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
+            var cosmosClient = CreateCosmosClient(connectionString, logger);
             var container = cosmosClient.GetContainer(database, collection); logger.LogDebug($"container = cosmosClient.GetContainer({database}, {collection});");
 
             var topClause = top > 0 ? $" OFFSET {skip} LIMIT {top}" : string.Empty;
@@ -179,10 +218,7 @@ internal sealed class Executor : IDisposable
 
         try
         {
-            string accountEndpoint = connectionString.Split(';').Select(static x => x.Split('=', 2)).First(static x => x[0].Equals("AccountEndpoint", StringComparison.OrdinalIgnoreCase))[1];
-            logger.LogDebug("accountEndpoint: {accountEndpoint}", accountEndpoint);
-
-            var cosmosClient = new CosmosClient(connectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
+            var cosmosClient = CreateCosmosClient(connectionString, logger);
             var container = cosmosClient.GetContainer(database, collection); logger.LogDebug($"container = cosmosClient.GetContainer({database}, {collection});");
 
             using (var streamReader = new StreamReader(filePath))
@@ -242,10 +278,7 @@ internal sealed class Executor : IDisposable
 
         try
         {
-            string accountEndpoint = connectionString.Split(';').Select(static x => x.Split('=', 2)).First(static x => x[0].Equals("AccountEndpoint", StringComparison.OrdinalIgnoreCase))[1];
-            logger.LogDebug("accountEndpoint: {accountEndpoint}", accountEndpoint);
-
-            var cosmosClient = new CosmosClient(connectionString); logger.LogDebug("cosmosClient = new CosmosClient(connectionString);");
+            var cosmosClient = CreateCosmosClient(connectionString, logger);
             var container = cosmosClient.GetContainer(database, collection); logger.LogDebug($"container = cosmosClient.GetContainer({database}, {collection});");
 
             using (var streamReader = new StreamReader(filePath))
