@@ -36,8 +36,6 @@ namespace AuthenticationSampleServerApi
 
             using var activity = Observability.ActivitySource.StartMethodActivity(logger); // , new { foo, bar }
         
-        
-        
         }
 
         [HttpGet("getusersimpl", Name = nameof(GetUsersImplAsync))]

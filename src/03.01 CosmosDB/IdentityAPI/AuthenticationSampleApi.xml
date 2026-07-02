@@ -9,5 +9,14 @@
             User context provider that extracts user context from claims.
             </summary>
         </member>
+        <member name="M:IdentityAPI.Controllers.UserController.CreateCosmosClient(System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Create a CosmosClient supporting both classic AccountKey connection strings
+            and AAD-only endpoints. The <paramref name="connectionString"/> may be:
+              - a full "AccountEndpoint=...;AccountKey=...;" connection string, OR
+              - just a https:// endpoint URL (then DefaultAzureCredential is used), OR
+              - "AccountEndpoint=...;" without AccountKey (then DefaultAzureCredential is used).
+            </summary>
+        </member>
     </members>
 </doc>
