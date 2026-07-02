@@ -92,7 +92,7 @@
       //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/use-prebuilt-form-recognizer-models/\" ",
       //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/work-form-recognizer/\" ",
       //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/ai-knowldge-mining/\" ",
-      "commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/ai-knowldge-mining/\" ",
+      "commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/security-monitoring-and-governance/\" ",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
