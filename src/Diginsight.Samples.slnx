@@ -29,6 +29,17 @@
     <Project Path="20.01 Validation/Page2Clipboard/Page2Clipboard.csproj" />
   </Folder>
   <Folder Name="/90.01 AzureBilling/" />
+  <Folder Name="/90.01 AzureBilling/01.01_BlazorSample/">
+    <Project Path="30.01 Web/01.01_BlazorSample/BlazorApp.Api/BlazorApp.Api.csproj" Id="58681353-b518-45de-8b85-59b9d310facc" />
+    <Project Path="30.01 Web/01.01_BlazorSample/BlazorApp.Client/BlazorApp.Client.csproj" Id="3e53aab3-03ac-4b57-ac01-b84efb63f07f" />
+    <Project Path="30.01 Web/01.01_BlazorSample/BlazorApp.Models/BlazorApp.Models.csproj" />
+  </Folder>
+  <Folder Name="/90.01 AzureBilling/01.02_BlazorSample/">
+    <Project Path="30.01 Web/01.02_BlazorSample/BlazorAspireApp/BlazorAspireApp.ApiService/BlazorAspireApp.ApiService.csproj" />
+    <Project Path="30.01 Web/01.02_BlazorSample/BlazorAspireApp/BlazorAspireApp.AppHost/BlazorAspireApp.AppHost.csproj" Id="e7a89578-abaf-4341-9c5c-dad41b3ac3cf" />
+    <Project Path="30.01 Web/01.02_BlazorSample/BlazorAspireApp/BlazorAspireApp.ServiceDefaults/BlazorAspireApp.ServiceDefaults.csproj" />
+    <Project Path="30.01 Web/01.02_BlazorSample/BlazorAspireApp/BlazorAspireApp.Web/BlazorAspireApp.Web.csproj" />
+  </Folder>
   <Folder Name="/Json2Csv/" />
   <Folder Name="/Solution Items/">
     <File Path="Directory.Build.props" />
