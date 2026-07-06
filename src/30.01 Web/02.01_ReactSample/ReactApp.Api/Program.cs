@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
 
-namespace BlazorApp.Api;
+namespace ReactApp.Api;
 
 public class Program
 {
@@ -43,12 +43,12 @@ public class Program
 
             IdentityModelEventSource.ShowPII = true;
 
-            // Allow the Blazor WebAssembly client (BlazorApp.Client) to call the API
+            // Allow the React SPA (ReactApp.Client) served by the Vite dev server to call the API
             string[] allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-                ?? ["https://localhost:7259", "http://localhost:5049"];
+                ?? ["http://localhost:5173", "https://localhost:5173"];
             services.AddCors(options =>
             {
-                options.AddPolicy("BlazorClient", policy =>
+                options.AddPolicy("ReactClient", policy =>
                 {
                     policy
                         .WithOrigins(allowedOrigins)
@@ -81,7 +81,7 @@ public class Program
 
             app.UseRouting();
 
-            app.UseCors("BlazorClient");
+            app.UseCors("ReactClient");
 
             app.UseAuthentication();
             app.UseAuthorization();
