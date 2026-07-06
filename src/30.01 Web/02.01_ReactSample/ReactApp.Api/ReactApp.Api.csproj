@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>b1f2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d</UserSecretsId>
+    <!-- Out-of-process so this app can coexist with the other sample as an IIS virtual application
+         in the shared App Service app pool (only one in-process app is allowed per pool). -->
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
   <ItemGroup>
