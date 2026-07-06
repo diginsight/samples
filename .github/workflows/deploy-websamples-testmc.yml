@@ -19,9 +19,13 @@
 #      AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
 # 4. (Recommended) Create a GitHub Environment named "testmc".
 #
-# Note: this workflow does NOT set identity/Key Vault settings (AzureAd*, AzureKeyVault__Uri,
-# etc.). Those must already be configured on the App Service for sign-in / the protected API
-# to work; without a ClientId the /api endpoints return 500 while the public SPA still loads.
+# Note: the identity/Key Vault configuration (AzureAd*, AzureKeyVault:Uri) lives in the private
+# `samples.internal` repo as appsettings.Testmc.json per app. This workflow checks that repo out
+# and overlays those files into each published app, then sets AppsettingsEnvironmentName=Testmc so
+# the apps load them. A repo/environment secret SAMPLES_INTERNAL_TOKEN (PAT or fine-grained token
+# with read access to diginsight/samples.internal) is required for the checkout.
+# Key Vault access at runtime relies on the App Service identity (DefaultAzureCredential) already
+# being granted access to the referenced vault.
 
 name: Deploy web samples (testmc)
 
@@ -55,6 +59,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ── Private Testmc configuration (appsettings.Testmc.json per app: AzureAd*, AzureKeyVault). ──
+      - name: Checkout samples.internal (Testmc config)
+        uses: actions/checkout@v4
+        with:
+          repository: diginsight/samples.internal
+          token: ${{ secrets.SAMPLES_INTERNAL_TOKEN }}
+          path: samples.internal
+
       - name: Setup .NET ${{ env.DOTNET_VERSION }}
         uses: actions/setup-dotnet@v4
         with:
@@ -83,6 +95,17 @@ jobs:
           mkdir -p publish/reactapp/wwwroot
           cp -r "${{ env.REACT_CLIENT_DIR }}/dist/." publish/reactapp/wwwroot/
 
+      # ── Overlay the Testmc identity/Key Vault config from the private repo into each app. ──
+      - name: Overlay Testmc configuration
+        run: |
+          set -euo pipefail
+          blazorCfg='samples.internal/src/30.01 Web/01.01_BlazorSample/BlazorApp.Api/appsettings.Testmc.json'
+          reactCfg='samples.internal/src/30.01 Web/02.01_ReactSample/ReactApp.Api/appsettings.Testmc.json'
+          test -f "$blazorCfg" || { echo "::error::Missing $blazorCfg"; exit 1; }
+          test -f "$reactCfg"  || { echo "::error::Missing $reactCfg"; exit 1; }
+          cp "$blazorCfg" publish/blazorapp/appsettings.Testmc.json
+          cp "$reactCfg"  publish/reactapp/appsettings.Testmc.json
+
       - name: Zip deployment package
         run: |
           cd publish
@@ -93,9 +116,9 @@ jobs:
       - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       # ── Configure virtual applications (/blazorapp, /reactapp) + clear per-app path base. ──
       - name: Configure App Service (virtual applications + settings)
@@ -114,14 +137,15 @@ jobs:
           JSON
 
           az rest --method PATCH \
-            --uri "https://management.azure.com/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers/Microsoft.Web/sites/${AZURE_WEBAPP_NAME}/config/web?api-version=2023-12-01" \
+            --uri "https://management.azure.com/subscriptions/${{ vars.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers/Microsoft.Web/sites/${AZURE_WEBAPP_NAME}/config/web?api-version=2023-12-01" \
             --headers "Content-Type=application/json" \
             --body @virtualapps.json
 
           # IIS supplies the path base per virtual application, so clear the app-level override.
+          # AppsettingsEnvironmentName=Testmc makes each app load its overlaid appsettings.Testmc.json.
           az webapp config appsettings set \
             -g "${AZURE_RESOURCE_GROUP}" -n "${AZURE_WEBAPP_NAME}" \
-            --settings AppHosting__PathBase="" \
+            --settings AppHosting__PathBase="" AppsettingsEnvironmentName="Testmc" \
             --output none
 
       - name: Deploy package to App Service
