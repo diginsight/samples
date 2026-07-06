@@ -143,6 +143,15 @@
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.1"
         }
       },
+      "Microsoft.AspNetCore.Components.WebAssembly.Server": {
+        "type": "Direct",
+        "requested": "[10.0.9, )",
+        "resolved": "10.0.9",
+        "contentHash": "ZTtYvBILwGxhIiXi1L03ETBBOgMmizStu7dO/YblK6rPTa27wpEgYKp5Z9bUfr+wsFvHIDWd/ZMGb9on41f6yw==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.WebAssembly": "10.0.9"
+        }
+      },
       "Microsoft.AspNetCore.OpenApi": {
         "type": "Direct",
         "requested": "[10.0.9, )",
@@ -372,6 +381,27 @@
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.1"
         }
       },
+      "Microsoft.AspNetCore.Components.WebAssembly": {
+        "type": "Transitive",
+        "resolved": "10.0.9",
+        "contentHash": "tBv68AsZ3r6z2QdV2m3cSSKUCbvEscN8REpHxcUs22vlR6UjTz6IKdInKNREkJ/3G1AQrBKrRTdrfrHVffE8Iw==",
+        "dependencies": {
+          "Microsoft.JSInterop.WebAssembly": "10.0.9"
+        }
+      },
+      "Microsoft.AspNetCore.Components.WebAssembly.Authentication": {
+        "type": "Transitive",
+        "resolved": "10.0.9",
+        "contentHash": "xdphQ/KxFnpjKNtms9kQ0GaUngOLW9pVGIW3uxEC9CKoC7RJKsTvkCG4o+tGVsGNitQVKkmX0oKXgvF9LRFSvw=="
+      },
+      "Microsoft.Authentication.WebAssembly.Msal": {
+        "type": "Transitive",
+        "resolved": "10.0.9",
+        "contentHash": "osPNxzxU6l8twqVZmCULZpqRYLP0M2Sc413/fiTOQlA5u9hBSj3/Rnfwyw7np9k4d3L6IGBbH79X7D/Jjo6cgA==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "10.0.9"
+        }
+      },
       "Microsoft.Azure.Cosmos": {
         "type": "Transitive",
         "resolved": "3.60.0",
@@ -552,6 +582,11 @@
           "System.IdentityModel.Tokens.Jwt": "8.12.1"
         }
       },
+      "Microsoft.JSInterop.WebAssembly": {
+        "type": "Transitive",
+        "resolved": "10.0.9",
+        "contentHash": "4G0A7GuQrtCAes8PuJPTDUcy+lCrxHWjr8ZlkDOa4h8a2Txj1XdhbXKLnld2vMY5EyZNC5jZXxa1xTD/AOCUlw=="
+      },
       "Microsoft.OpenApi": {
         "type": "Transitive",
         "resolved": "2.0.0",
@@ -695,6 +730,14 @@
         "contentHash": "IXoJOXIqc39AIe+CIR7koBtRGMiCt/LPM3lI+PELtDIy9XdyeSrwXFdWV9dzJ2Awl0paLWUaknLxFQ5HpHZUog==",
         "dependencies": {
           "System.Drawing.Common": "6.0.0"
+        }
+      },
+      "blazorapp.client": {
+        "type": "Project",
+        "dependencies": {
+          "BlazorApp.Models": "[1.0.0, )",
+          "Microsoft.AspNetCore.Components.WebAssembly": "[10.0.9, )",
+          "Microsoft.Authentication.WebAssembly.Msal": "[10.0.9, )"
         }
       },
       "blazorapp.models": {

@@ -68,6 +68,14 @@ public class Program
             app = builder.Build();
             logger.LogDebug("Host built");
 
+            // Host the SPA + API under a configurable virtual path (e.g. "/blazorapp") so both are
+            // served from a single origin, mirroring the single App Service deployment.
+            string pathBase = (configuration["AppHosting:PathBase"] ?? string.Empty).Trim().Trim('/');
+            if (!string.IsNullOrEmpty(pathBase))
+            {
+                app.UsePathBase("/" + pathBase);
+            }
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -78,6 +86,47 @@ public class Program
             }
 
             app.UseHttpsRedirection();
+
+            // Serve the Blazor WebAssembly client (BlazorApp.Client) hosted by this API.
+            app.UseBlazorFrameworkFiles();
+            app.UseStaticFiles();
+
+            // Serve the SPA shell (index.html) for client-side routes before authentication so the
+            // public client can load; the /api endpoints below stay protected. Its <base href> is
+            // rewritten to the configured virtual path so the WebAssembly client boots under "/{pathBase}".
+            app.Use(async (context, next) =>
+            {
+                var path = context.Request.Path;
+                if (!HttpMethods.IsGet(context.Request.Method)
+                    || path.StartsWithSegments("/api")
+                    || Path.HasExtension(path.Value))
+                {
+                    await next();
+                    return;
+                }
+
+                var indexFile = environment.WebRootFileProvider.GetFileInfo("index.html");
+                if (!indexFile.Exists)
+                {
+                    await next();
+                    return;
+                }
+
+                string html;
+                await using (var stream = indexFile.CreateReadStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    html = await reader.ReadToEndAsync();
+                }
+
+                string basePath = context.Request.PathBase.HasValue
+                    ? context.Request.PathBase.Value!.TrimEnd('/') + "/"
+                    : "/";
+                html = html.Replace("<base href=\"/\" />", $"<base href=\"{basePath}\" />");
+
+                context.Response.ContentType = "text/html; charset=utf-8";
+                await context.Response.WriteAsync(html);
+            });
 
             app.UseRouting();
 

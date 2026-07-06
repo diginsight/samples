@@ -1,5 +1,6 @@
 import { type AccountInfo, type Configuration, LogLevel } from "@azure/msal-browser";
 import type { ClientAuthConfig } from "../api/types";
+import { basePath } from "../api/clientConfigApi";
 
 // Placeholder client id used when the API did not advertise an app registration
 // (e.g. running the plain Development profile without the Testmc configuration).
@@ -21,7 +22,7 @@ export function getApiScopes(): string[] {
  * Builds the MSAL configuration from the values served by the API.
  */
 export function buildMsalConfig(cfg: ClientAuthConfig | null): Configuration {
-  const redirectUri = window.location.origin;
+  const redirectUri = window.location.origin + basePath;
   return {
     auth: {
       clientId: cfg?.clientId || NOT_CONFIGURED_CLIENT_ID,

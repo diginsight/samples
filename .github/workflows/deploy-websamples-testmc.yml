@@ -1,0 +1,144 @@
+# Deploys both web samples to the shared Windows App Service for the testmc environment.
+#
+#   https://samples-testmc-app-itn-01.azurewebsites.net/blazorapp   (01.01_BlazorSample)
+#   https://samples-testmc-app-itn-01.azurewebsites.net/reactapp    (02.01_ReactSample)
+#
+# Each sample is a self-hosted ASP.NET Core app (the *.Api project serves its SPA + API).
+# They are hosted side-by-side as IIS *virtual applications* under one App Service, so each
+# runs in its own worker process and IIS supplies the path base (/blazorapp, /reactapp).
+# Because App Service application settings are shared across virtual applications, the
+# per-app AppHosting:PathBase is cleared (AppHosting__PathBase="") and the path base comes
+# from IIS instead — avoiding a doubled prefix.
+#
+# ── One-time setup required in the repository ──────────────────────────────────────────────
+# 1. Create/confirm an Entra app registration (service principal) with the "Website
+#    Contributor" (or Contributor) role on resource group `samples-testmc-rg-itn-01`.
+# 2. Add a GitHub federated credential (OIDC) on that app registration for this repo, e.g.
+#    subject: repo:diginsight/samples:environment:testmc
+# 3. Define these repository/environment secrets:
+#      AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
+# 4. (Recommended) Create a GitHub Environment named "testmc".
+#
+# Note: this workflow does NOT set identity/Key Vault settings (AzureAd*, AzureKeyVault__Uri,
+# etc.). Those must already be configured on the App Service for sign-in / the protected API
+# to work; without a ClientId the /api endpoints return 500 while the public SPA still loads.
+
+name: Deploy web samples (testmc)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/30.01 Web/01.01_BlazorSample/**'
+      - 'src/30.01 Web/02.01_ReactSample/**'
+      - '.github/workflows/deploy-websamples-testmc.yml'
+
+permissions:
+  id-token: write   # required for Azure OIDC login
+  contents: read
+
+env:
+  AZURE_WEBAPP_NAME: samples-testmc-app-itn-01
+  AZURE_RESOURCE_GROUP: samples-testmc-rg-itn-01
+  DOTNET_VERSION: '10.0.x'
+  NODE_VERSION: '20'
+  BLAZOR_API: 'src/30.01 Web/01.01_BlazorSample/BlazorApp.Api/BlazorApp.Api.csproj'
+  REACT_API: 'src/30.01 Web/02.01_ReactSample/ReactApp.Api/ReactApp.Api.csproj'
+  REACT_CLIENT_DIR: 'src/30.01 Web/02.01_ReactSample/ReactApp.Client'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: testmc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # ── Build the React SPA (Vite). ReactApp.Api serves this from its wwwroot at runtime. ──
+      - name: Build React client
+        working-directory: ${{ env.REACT_CLIENT_DIR }}
+        run: |
+          npm ci
+          npm run build
+
+      # ── Publish the Blazor sample (hosted: BlazorApp.Api bundles BlazorApp.Client). ──
+      - name: Publish Blazor sample
+        run: dotnet publish "${{ env.BLAZOR_API }}" -c Release -o publish/blazorapp
+
+      # ── Publish the React API and drop the built SPA into its wwwroot. ──
+      - name: Publish React sample
+        run: |
+          dotnet publish "${{ env.REACT_API }}" -c Release -o publish/reactapp
+          mkdir -p publish/reactapp/wwwroot
+          cp -r "${{ env.REACT_CLIENT_DIR }}/dist/." publish/reactapp/wwwroot/
+
+      - name: Zip deployment package
+        run: |
+          cd publish
+          zip -r ../deploy.zip . >/dev/null
+          echo "Package contents:"
+          ls -la blazorapp reactapp reactapp/wwwroot
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # ── Configure virtual applications (/blazorapp, /reactapp) + clear per-app path base. ──
+      - name: Configure App Service (virtual applications + settings)
+        run: |
+          set -euo pipefail
+          cat > virtualapps.json <<'JSON'
+          {
+            "properties": {
+              "virtualApplications": [
+                { "virtualPath": "/",          "physicalPath": "site\\wwwroot",           "preloadEnabled": false },
+                { "virtualPath": "/blazorapp", "physicalPath": "site\\wwwroot\\blazorapp", "preloadEnabled": true },
+                { "virtualPath": "/reactapp",  "physicalPath": "site\\wwwroot\\reactapp",  "preloadEnabled": true }
+              ]
+            }
+          }
+          JSON
+
+          az rest --method PATCH \
+            --uri "https://management.azure.com/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers/Microsoft.Web/sites/${AZURE_WEBAPP_NAME}/config/web?api-version=2023-12-01" \
+            --headers "Content-Type=application/json" \
+            --body @virtualapps.json
+
+          # IIS supplies the path base per virtual application, so clear the app-level override.
+          az webapp config appsettings set \
+            -g "${AZURE_RESOURCE_GROUP}" -n "${AZURE_WEBAPP_NAME}" \
+            --settings AppHosting__PathBase="" \
+            --output none
+
+      - name: Deploy package to App Service
+        run: |
+          az webapp deploy \
+            --resource-group "${AZURE_RESOURCE_GROUP}" \
+            --name "${AZURE_WEBAPP_NAME}" \
+            --src-path deploy.zip \
+            --type zip \
+            --clean true \
+            --restart true
+
+      - name: Summary
+        run: |
+          {
+            echo "### Deployed to testmc"
+            echo ""
+            echo "- Blazor: https://${AZURE_WEBAPP_NAME}.azurewebsites.net/blazorapp"
+            echo "- React:  https://${AZURE_WEBAPP_NAME}.azurewebsites.net/reactapp"
+          } >> "$GITHUB_STEP_SUMMARY"

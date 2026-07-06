@@ -13,8 +13,10 @@
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:7252;http://localhost:5206",
+      "launchBrowser": true,
+      "launchUrl": "blazorapp",
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "applicationUrl": "https://localhost:7259;http://localhost:5206",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -22,8 +24,10 @@
     "https - Testmc": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:7252;http://localhost:5206",
+      "launchBrowser": true,
+      "launchUrl": "blazorapp",
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "applicationUrl": "https://localhost:7259;http://localhost:5206",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "AppsettingsEnvironmentName": "Testmc",

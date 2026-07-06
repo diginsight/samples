@@ -16,6 +16,7 @@ import {
 import { Bot48Regular } from "@fluentui/react-icons";
 import { getMsalInstance } from "./auth/msalInstance";
 import { getLoginRequest } from "./auth/authConfig";
+import { basePath } from "./api/clientConfigApi";
 import { appTheme } from "./theme/appTheme";
 import Layout from "./components/Layout";
 import AgentPage from "./pages/AgentPage";
@@ -114,7 +115,7 @@ export default function App({
         <LoginScreen isAuthConfigured={isAuthConfigured} />
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
-        <BrowserRouter>
+        <BrowserRouter basename={basePath || "/"}>
           <Routes>
             <Route element={<Layout />}>
               <Route path="/agent" element={<AgentPage />} />

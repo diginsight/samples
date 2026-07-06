@@ -47,7 +47,7 @@ else
         try
         {
             var client = HttpClientFactory.CreateClient("BlazorApp.Api");
-            forecasts = await client.GetFromJsonAsync<WeatherForecast[]>("weatherforecast");
+            forecasts = await client.GetFromJsonAsync<WeatherForecast[]>("api/weatherforecast");
         }
         catch (AccessTokenNotAvailableException exception)
         {

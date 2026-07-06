@@ -8,7 +8,7 @@ namespace BlazorApp.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class WeatherForecastController : ControllerBase
     {

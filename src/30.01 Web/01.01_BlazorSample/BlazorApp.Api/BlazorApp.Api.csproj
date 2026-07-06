@@ -53,6 +53,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlazorApp.Models\BlazorApp.Models.csproj" />
+    <!-- Host the Blazor WebAssembly client (BlazorApp.Client) from this API so the SPA and the
+         API are served from a single origin under the configured virtual path. -->
+    <ProjectReference Include="..\BlazorApp.Client\BlazorApp.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.9" />
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,14 @@ namespace BlazorApp.Client
 
             // Retrieve the app registration (client id / authority) from the server (BlazorApp.Api)
             // so that no identity value needs to be stored in the client application.
+            // The API that serves this client also exposes the config/API endpoints under the same
+            // virtual path, so default the base URL to the app's own base address (which already
+            // includes the configured "/{pathBase}"). An explicit ServerConfig:BaseUrl still overrides.
             var serverConfigBaseUrl = builder.Configuration["ServerConfig:BaseUrl"];
+            if (string.IsNullOrWhiteSpace(serverConfigBaseUrl))
+            {
+                serverConfigBaseUrl = builder.HostEnvironment.BaseAddress;
+            }
             var authEndpoint = builder.Configuration["ServerConfig:AuthEndpoint"] ?? "api/clientconfig/auth";
             var serverAuthConfig = await TryLoadServerAuthConfigAsync(serverConfigBaseUrl, authEndpoint);
 
