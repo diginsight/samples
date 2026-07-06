@@ -40,6 +40,7 @@
     <Project Path="30.01 Web/01.02_BlazorSample/BlazorAspireApp/BlazorAspireApp.ServiceDefaults/BlazorAspireApp.ServiceDefaults.csproj" />
     <Project Path="30.01 Web/01.02_BlazorSample/BlazorAspireApp/BlazorAspireApp.Web/BlazorAspireApp.Web.csproj" />
   </Folder>
+  <Folder Name="/90.01 AzureBilling/05.01_ReactSample/" />
   <Folder Name="/Json2Csv/" />
   <Folder Name="/Solution Items/">
     <File Path="Directory.Build.props" />
