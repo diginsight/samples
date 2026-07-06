@@ -85,15 +85,15 @@ jobs:
           npm run build
 
       # ── Publish the Blazor sample (hosted: BlazorApp.Api bundles BlazorApp.Client). ──
-      # RestorePackagesWithLockFile=false avoids NU1403 hash mismatches on SDK-bundled WASM packs
-      # when the runner's .NET SDK differs from the one that generated packages.lock.json.
+      # RestoreForceEvaluate re-evaluates the lock files, avoiding NU1403 hash mismatches on
+      # SDK-bundled WASM packs when the runner's .NET SDK differs from the one that generated them.
       - name: Publish Blazor sample
-        run: dotnet publish "${{ env.BLAZOR_API }}" -c Release -o publish/blazorapp -p:RestorePackagesWithLockFile=false
+        run: dotnet publish "${{ env.BLAZOR_API }}" -c Release -o publish/blazorapp -p:RestoreForceEvaluate=true
 
       # ── Publish the React API and drop the built SPA into its wwwroot. ──
       - name: Publish React sample
         run: |
-          dotnet publish "${{ env.REACT_API }}" -c Release -o publish/reactapp -p:RestorePackagesWithLockFile=false
+          dotnet publish "${{ env.REACT_API }}" -c Release -o publish/reactapp -p:RestoreForceEvaluate=true
           mkdir -p publish/reactapp/wwwroot
           cp -r "${{ env.REACT_CLIENT_DIR }}/dist/." publish/reactapp/wwwroot/
 
