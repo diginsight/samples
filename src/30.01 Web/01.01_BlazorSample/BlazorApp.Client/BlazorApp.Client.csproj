@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+    <!-- Disable WASM asset fingerprinting so index.html uses stable asset names (dotnet.js,
+         blazor.webassembly.js) and needs no runtime import-map resolution. This lets the API host
+         serve index.html (with a rewritten base href) under a virtual path without breaking boot. -->
+    <WasmFingerprintAssets>false</WasmFingerprintAssets>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
 

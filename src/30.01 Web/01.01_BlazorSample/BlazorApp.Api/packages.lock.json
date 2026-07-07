@@ -258,6 +258,12 @@
           "OpenTelemetry.Api": "[1.15.3, 2.0.0)"
         }
       },
+      "Swashbuckle.AspNetCore.SwaggerUI": {
+        "type": "Direct",
+        "requested": "[10.2.3, )",
+        "resolved": "10.2.3",
+        "contentHash": "nthWONRs/FJ4yyG206g1cC52WEG8EqrjuMWjGdR+5XG7lbjFto6NqcI9EMICgVFom/UivIjUVwI76ZHbHwTPfQ=="
+      },
       "Azure.Data.Tables": {
         "type": "Transitive",
         "resolved": "12.11.0",

@@ -111,45 +111,6 @@ public class Program
             {
                 // Static assets (js/css/img) are public and served before authentication.
                 app.UseStaticFiles(new StaticFileOptions { FileProvider = spaFileProvider });
-
-                // Serve the SPA shell (index.html) for client-side navigation routes before auth so
-                // the public app can load; the /api endpoints below stay protected. The configured
-                // virtual path is injected: <base> resolves the relative Vite assets and
-                // window.__BASE_PATH__ drives the React Router basename and the API base URL.
-                app.Use(async (context, next) =>
-                {
-                    var path = context.Request.Path;
-                    if (!HttpMethods.IsGet(context.Request.Method)
-                        || path.StartsWithSegments("/api")
-                        || Path.HasExtension(path.Value))
-                    {
-                        await next();
-                        return;
-                    }
-
-                    var indexFile = spaFileProvider.GetFileInfo("index.html");
-                    if (!indexFile.Exists)
-                    {
-                        await next();
-                        return;
-                    }
-
-                    string html;
-                    await using (var stream = indexFile.CreateReadStream())
-                    using (var reader = new StreamReader(stream))
-                    {
-                        html = await reader.ReadToEndAsync();
-                    }
-
-                    string basePath = context.Request.PathBase.HasValue
-                        ? context.Request.PathBase.Value!.TrimEnd('/')
-                        : string.Empty;
-                    string injection = $"<base href=\"{basePath}/\" /><script>window.__BASE_PATH__=\"{basePath}\";</script>";
-                    html = html.Replace("<head>", "<head>" + injection);
-
-                    context.Response.ContentType = "text/html; charset=utf-8";
-                    await context.Response.WriteAsync(html);
-                });
             }
 
             app.UseRouting();
@@ -163,6 +124,35 @@ public class Program
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+            }
+
+            // SPA fallback: serve the React shell for client-side routes only (routing already
+            // handled the API and the static assets). The shell is read once at startup; per request
+            // the current path base is injected as <base href> (so the relative Vite assets resolve)
+            // and as window.__BASE_PATH__ (which drives the React Router basename and API base URL) —
+            // no request interception.
+            if (spaFileProvider is not null)
+            {
+                string shellHtml = string.Empty;
+                var shellFile = spaFileProvider.GetFileInfo("index.html");
+                if (shellFile.Exists)
+                {
+                    using (var shellStream = shellFile.CreateReadStream())
+                    using (var shellReader = new StreamReader(shellStream))
+                    {
+                        shellHtml = shellReader.ReadToEnd();
+                    }
+                }
+
+                app.MapFallback(async context =>
+                {
+                    string basePath = context.Request.PathBase.HasValue
+                        ? context.Request.PathBase.Value!.TrimEnd('/')
+                        : string.Empty;
+                    string injection = $"<base href=\"{basePath}/\" /><script>window.__BASE_PATH__=\"{basePath}\";</script>";
+                    context.Response.ContentType = "text/html; charset=utf-8";
+                    await context.Response.WriteAsync(shellHtml.Replace("<head>", "<head>" + injection));
+                });
             }
         }
 
