@@ -124,6 +124,22 @@ public class Program
                     : "/";
                 html = html.Replace("<base href=\"/\" />", $"<base href=\"{basePath}\" />");
 
+                // On publish the SDK leaves the fingerprint placeholder in index.html for the
+                // static-web-assets pipeline to resolve at runtime. Since we serve index.html
+                // ourselves, resolve the Blazor boot script to the actual fingerprinted file.
+                const string bootPlaceholder = "_framework/blazor.webassembly#[.{fingerprint}].js";
+                if (html.Contains(bootPlaceholder))
+                {
+                    var bootFile = environment.WebRootFileProvider.GetDirectoryContents("_framework")
+                        .FirstOrDefault(f => !f.IsDirectory
+                            && f.Name.StartsWith("blazor.webassembly.", StringComparison.Ordinal)
+                            && f.Name.EndsWith(".js", StringComparison.Ordinal));
+                    if (bootFile is not null)
+                    {
+                        html = html.Replace(bootPlaceholder, "_framework/" + bootFile.Name);
+                    }
+                }
+
                 context.Response.ContentType = "text/html; charset=utf-8";
                 await context.Response.WriteAsync(html);
             });
