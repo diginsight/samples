@@ -68,10 +68,9 @@ public class Program
             app = builder.Build();
             logger.LogDebug("Host built");
 
-            // Swagger UI + OpenAPI document are exposed in Development and can be toggled off
-            // via the IsSwaggerEnabled setting in appsettings.json.
-            bool swaggerEnabled = app.Environment.IsDevelopment()
-                && configuration.GetValue("IsSwaggerEnabled", true);
+            // Swagger UI + OpenAPI document. Enabled in every environment (including the deployed
+            // testmc app) and can be turned off via the IsSwaggerEnabled setting in appsettings.json.
+            bool swaggerEnabled = configuration.GetValue("IsSwaggerEnabled", true);
 
             // Host the SPA + API under a configurable virtual path (e.g. "/blazorapp") so both are
             // served from a single origin, mirroring the single App Service deployment.

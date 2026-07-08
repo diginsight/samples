@@ -88,6 +88,20 @@ public class Program
 
             app.UseHttpsRedirection();
 
+            // Swagger UI + OpenAPI document. Enabled in every environment (including the deployed
+            // testmc app); toggle via the IsSwaggerEnabled setting. Served under the API prefix:
+            //   document → {pathBase}/api/openapi/v1.json, UI → {pathBase}/api/swagger.
+            bool swaggerEnabled = configuration.GetValue("IsSwaggerEnabled", true);
+            if (swaggerEnabled)
+            {
+                app.MapOpenApi("/api/openapi/{documentName}.json");
+                app.UseSwaggerUI(options =>
+                {
+                    options.RoutePrefix = "api/swagger";
+                    options.SwaggerEndpoint("../openapi/v1.json", "ReactApp.Api v1");
+                });
+            }
+
             // Serve the built React SPA from a configurable folder so the SPA and API share a
             // single origin under "/{pathBase}".
             string spaRoot = configuration["AppHosting:SpaRoot"] ?? string.Empty;
@@ -121,10 +135,6 @@ public class Program
             app.UseAuthorization();
 
             app.MapControllers();
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-            }
 
             // SPA fallback: serve the React shell for client-side routes only (routing already
             // handled the API and the static assets). The shell is read once at startup; per request
