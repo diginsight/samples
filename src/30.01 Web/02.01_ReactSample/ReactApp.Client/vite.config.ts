@@ -10,6 +10,11 @@ export default defineConfig(({ command }) => ({
   server: {
     port: 5173,
     strictPort: true,
+    proxy: {
+      // Local dev: the SPA calls relative "/api/..."; forward it to ReactApp.Api (run separately
+      // on https://localhost:7262). No CORS needed since the browser sees a same-origin call.
+      '/api': { target: 'https://localhost:7262', changeOrigin: true, secure: false },
+    },
   },
   preview: {
     port: 4173,
