@@ -96,13 +96,14 @@ public class Program
             // extensionless "/swagger" GET is captured by the fallback and returns the Blazor shell.
             if (swaggerEnabled)
             {
-                app.MapOpenApi();
+                // Expose the API surface under the same "/api" prefix as the controllers:
+                //   document → {pathBase}/api/openapi/v1.json, UI → {pathBase}/api/swagger.
+                app.MapOpenApi("/api/openapi/{documentName}.json");
 
-                // The document is served (relative to the path base) at "openapi/v1.json". The UI
-                // page loads at "{pathBase}/swagger/index.html", so use a URL relative to it
-                // ("../openapi/v1.json") to resolve to "{pathBase}/openapi/v1.json" under any path base.
                 app.UseSwaggerUI(options =>
                 {
+                    options.RoutePrefix = "api/swagger";
+                    // Relative to "{pathBase}/api/swagger/index.html" → "{pathBase}/api/openapi/v1.json".
                     options.SwaggerEndpoint("../openapi/v1.json", "BlazorApp.Api v1");
                 });
             }
