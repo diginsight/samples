@@ -3,35 +3,96 @@ html, body {
 }
 
 /* ---------------------------------------------------------------------------
-   Theme tokens. Consumed by the layout / nav components. Bootstrap 5.3 handles
-   the content colors through the [data-bs-theme] attribute on <html> (set by
-   js/app-ui.js and the inline script in index.html); these variables cover the
-   sidebar / top bar, which sit outside Bootstrap's default surfaces.
+   Theme tokens. Each named theme (selected via the [data-theme] attribute on
+   <html>) coordinates the whole "chrome": the top bar, the left menu and the
+   accent. Bootstrap 5.3 handles the content surface through the paired
+   [data-bs-theme] attribute (light | dark), set together by js/app-ui.js.
    --------------------------------------------------------------------------- */
 :root {
-    --app-accent: #258cfb;
-    --app-sidebar-bg: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
-    --app-sidebar-brand-bg: rgba(0, 0, 0, 0.4);
-    --app-sidebar-fg: #d7d7d7;
-    --app-sidebar-fg-active: #ffffff;
-    --app-sidebar-active-bg: rgba(255, 255, 255, 0.37);
-    --app-sidebar-hover-bg: rgba(255, 255, 255, 0.1);
-    --app-topbar-bg: #f7f7f7;
-    --app-topbar-fg: inherit;
-    --app-topbar-border: #d6d5d5;
+    /* Shared light-theme sidebar surface (used by every light theme). */
+    --app-sidebar-bg: #f8f9fa;
+    --app-sidebar-fg: #343a40;
+    --app-sidebar-border: #e5e7eb;
+    --app-sidebar-separator: #e9ecef;
+    --app-sidebar-hover-bg: rgba(0, 0, 0, 0.04);
+    --app-topbar-fg: #ffffff;
+    --app-topbar-border: rgba(0, 0, 0, 0.12);
+
+    /* Default theme = Azure. */
+    --app-accent: #2563eb;
+    --app-topbar-bg: #2563eb;
+    --app-sidebar-fg-active: #2563eb;
+    --app-sidebar-active-bg: rgba(37, 99, 235, 0.12);
 }
 
+/* ---- Light themes (azure top bar + light menu) ---- */
+[data-theme="azure"] {
+    --app-accent: #2563eb;
+    --app-topbar-bg: #2563eb;
+    --app-sidebar-fg-active: #2563eb;
+    --app-sidebar-active-bg: rgba(37, 99, 235, 0.12);
+}
+
+[data-theme="emerald"] {
+    --app-accent: #059669;
+    --app-topbar-bg: #059669;
+    --app-sidebar-fg-active: #059669;
+    --app-sidebar-active-bg: rgba(5, 150, 105, 0.12);
+}
+
+[data-theme="teal"] {
+    --app-accent: #0d9488;
+    --app-topbar-bg: #0d9488;
+    --app-sidebar-fg-active: #0d9488;
+    --app-sidebar-active-bg: rgba(13, 148, 136, 0.12);
+}
+
+[data-theme="violet"] {
+    --app-accent: #7c3aed;
+    --app-topbar-bg: #7c3aed;
+    --app-sidebar-fg-active: #7c3aed;
+    --app-sidebar-active-bg: rgba(124, 58, 237, 0.12);
+}
+
+[data-theme="sunset"] {
+    --app-accent: #ea580c;
+    --app-topbar-bg: #ea580c;
+    --app-sidebar-fg-active: #ea580c;
+    --app-sidebar-active-bg: rgba(234, 88, 12, 0.12);
+}
+
+/* ---- Dark themes (paired with [data-bs-theme="dark"]) ---- */
 [data-bs-theme="dark"] {
-    --app-accent: #4dabf7;
-    --app-sidebar-bg: linear-gradient(180deg, #343a40 0%, #0d0d0d 100%);
-    --app-sidebar-brand-bg: rgba(0, 0, 0, 0.5);
-    --app-sidebar-fg: #c9c9c9;
+    --app-sidebar-fg: #cbd5e1;
+    --app-sidebar-border: rgba(255, 255, 255, 0.08);
+    --app-sidebar-separator: rgba(255, 255, 255, 0.07);
+    --app-sidebar-hover-bg: rgba(255, 255, 255, 0.06);
+    --app-topbar-fg: #e6e9ef;
+    --app-topbar-border: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="midnight"] {
+    --app-accent: #60a5fa;
+    --app-topbar-bg: #0f172a;
+    --app-sidebar-bg: #1e293b;
     --app-sidebar-fg-active: #ffffff;
-    --app-sidebar-active-bg: rgba(255, 255, 255, 0.18);
-    --app-sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-    --app-topbar-bg: #1b1b1b;
-    --app-topbar-fg: #e6e6e6;
-    --app-topbar-border: #333333;
+    --app-sidebar-active-bg: rgba(96, 165, 250, 0.18);
+}
+
+[data-theme="slate"] {
+    --app-accent: #9aa5b1;
+    --app-topbar-bg: #272b30;
+    --app-sidebar-bg: #2c3136;
+    --app-sidebar-fg-active: #ffffff;
+    --app-sidebar-active-bg: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="carbon"] {
+    --app-accent: #f59e0b;
+    --app-topbar-bg: #18181b;
+    --app-sidebar-bg: #1f1f23;
+    --app-sidebar-fg-active: #fafafa;
+    --app-sidebar-active-bg: rgba(245, 158, 11, 0.18);
 }
 
 /* Disable text selection / show the resize cursor while dragging the splitter. */
@@ -45,7 +106,7 @@ h1:focus {
 }
 
 a, .btn-link {
-    color: #0071c1;
+    color: var(--app-accent, #0071c1);
 }
 
 .btn-primary {

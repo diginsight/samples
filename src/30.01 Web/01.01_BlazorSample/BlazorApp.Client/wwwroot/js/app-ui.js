@@ -2,30 +2,53 @@
 window.appUi = (function () {
     "use strict";
 
-    const THEME_KEY = "app-theme";   // stored value: light | dark | auto
+    const THEME_KEY = "app-theme";   // stored value: one of THEME_MODES keys
     const WIDTH_KEY = "app-sidebar-width";
     const MIN_WIDTH = 150;
     const MAX_WIDTH = 600;
     const DEFAULT_WIDTH = 250;
 
+    // Theme id -> Bootstrap colour mode. Keep in sync with ThemeSelector.razor,
+    // the app.css [data-theme] blocks and the inline script in index.html.
+    const THEME_MODES = {
+        azure: "light",
+        emerald: "light",
+        teal: "light",
+        violet: "light",
+        sunset: "light",
+        midnight: "dark",
+        slate: "dark",
+        carbon: "dark"
+    };
+    const DEFAULT_THEME = "azure";
+
     function normalizeTheme(theme) {
-        return (theme === "dark" || theme === "auto") ? theme : "light";
+        return THEME_MODES[theme] ? theme : DEFAULT_THEME;
     }
 
-    function resolveMode(theme) {
-        if (theme === "auto") {
-            return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
-                ? "dark" : "light";
-        }
-        return theme === "dark" ? "dark" : "light";
+    // Match the browser chrome (address bar / PWA) to the current top-bar colour.
+    function updateThemeColorMeta() {
+        try {
+            const color = getComputedStyle(document.documentElement)
+                .getPropertyValue("--app-topbar-bg").trim();
+            if (!color) { return; }
+            let meta = document.querySelector('meta[name="theme-color"]');
+            if (!meta) {
+                meta = document.createElement("meta");
+                meta.setAttribute("name", "theme-color");
+                document.head.appendChild(meta);
+            }
+            meta.setAttribute("content", color);
+        } catch (e) { /* ignore */ }
     }
 
     function applyTheme(theme) {
         const t = normalizeTheme(theme);
         const html = document.documentElement;
         html.setAttribute("data-theme", t);
-        html.setAttribute("data-bs-theme", resolveMode(t));
+        html.setAttribute("data-bs-theme", THEME_MODES[t]);
         try { localStorage.setItem(THEME_KEY, t); } catch (e) { /* ignore */ }
+        updateThemeColorMeta();
         return t;
     }
 
@@ -33,24 +56,12 @@ window.appUi = (function () {
         try {
             return normalizeTheme(localStorage.getItem(THEME_KEY));
         } catch (e) {
-            return "light";
+            return DEFAULT_THEME;
         }
     }
 
-    // Re-apply the theme when the system preference changes while in "auto" mode.
-    if (window.matchMedia) {
-        const mq = window.matchMedia("(prefers-color-scheme: dark)");
-        const onChange = function () {
-            if (getTheme() === "auto") {
-                document.documentElement.setAttribute("data-bs-theme", resolveMode("auto"));
-            }
-        };
-        if (mq.addEventListener) {
-            mq.addEventListener("change", onChange);
-        } else if (mq.addListener) {
-            mq.addListener(onChange);
-        }
-    }
+    // Ensure the chrome colour is set for the theme applied by the inline boot script.
+    updateThemeColorMeta();
 
     function clampWidth(px) {
         return Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, px));

@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2563eb" />
     <title>BlazorApp.Client</title>
     <base href="/" />
     <link rel="preload" id="webassembly" />
@@ -19,14 +20,11 @@
         // Apply the saved theme and sidebar width before Blazor renders to avoid a flash.
         (function () {
             try {
+                var modes = { azure: "light", emerald: "light", teal: "light", violet: "light", sunset: "light", midnight: "dark", slate: "dark", carbon: "dark" };
                 var theme = localStorage.getItem("app-theme");
-                if (theme !== "dark" && theme !== "auto") { theme = "light"; }
-                var mode = theme;
-                if (theme === "auto") {
-                    mode = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
-                }
+                if (!modes[theme]) { theme = "azure"; }
                 document.documentElement.setAttribute("data-theme", theme);
-                document.documentElement.setAttribute("data-bs-theme", mode);
+                document.documentElement.setAttribute("data-bs-theme", modes[theme]);
                 var width = localStorage.getItem("app-sidebar-width");
                 if (width) { document.documentElement.style.setProperty("--sidebar-width", width); }
             } catch (e) { /* ignore */ }

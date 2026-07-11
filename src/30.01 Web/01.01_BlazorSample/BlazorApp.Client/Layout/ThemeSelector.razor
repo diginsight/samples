@@ -3,24 +3,26 @@
 <div class="dropdown theme-selector @(_open ? "show" : null)">
     <button class="btn btn-sm dropdown-toggle theme-toggle" type="button"
             @onclick="Toggle" @onclick:stopPropagation aria-expanded="@_open" title="Change theme">
-        @Icon(CurrentTheme.Id)
+        <span class="theme-swatch" style="background:@CurrentTheme.Swatch"></span>
         <span class="theme-label d-none d-sm-inline">@CurrentTheme.Label</span>
     </button>
     <ul class="dropdown-menu dropdown-menu-end @(_open ? "show" : null)">
-        <li><h6 class="dropdown-header">Theme</h6></li>
+        <li><h6 class="dropdown-header">Light</h6></li>
         @foreach (var theme in Themes)
         {
-            <li>
-                <button class="dropdown-item d-flex align-items-center @(theme.Id == _current ? "active" : null)"
-                        type="button" @onclick="() => SelectThemeAsync(theme.Id)">
-                    <span class="theme-icon me-2">@Icon(theme.Id)</span>
-                    <span class="flex-grow-1">@theme.Label</span>
-                    @if (theme.Id == _current)
-                    {
-                        <span class="ms-2">@CheckIcon</span>
-                    }
-                </button>
-            </li>
+            @if (theme.Mode == "light")
+            {
+                @ThemeItem(theme)
+            }
+        }
+        <li><hr class="dropdown-divider" /></li>
+        <li><h6 class="dropdown-header">Dark</h6></li>
+        @foreach (var theme in Themes)
+        {
+            @if (theme.Mode == "dark")
+            {
+                @ThemeItem(theme)
+            }
         }
     </ul>
 </div>
@@ -30,16 +32,23 @@
 }
 
 @code {
-    private sealed record ThemeOption(string Id, string Label);
+    private sealed record ThemeOption(string Id, string Label, string Mode, string Swatch);
 
+    // Keep the id -> mode mapping in sync with THEME_MODES in wwwroot/js/app-ui.js
+    // and the inline bootstrap script in wwwroot/index.html.
     private static readonly ThemeOption[] Themes =
     {
-        new("light", "Light"),
-        new("dark", "Dark"),
-        new("auto", "Auto"),
+        new("azure", "Azure", "light", "#2563eb"),
+        new("emerald", "Emerald", "light", "#059669"),
+        new("teal", "Teal", "light", "#0d9488"),
+        new("violet", "Violet", "light", "#7c3aed"),
+        new("sunset", "Sunset", "light", "#ea580c"),
+        new("midnight", "Midnight", "dark", "#0f172a"),
+        new("slate", "Slate", "dark", "#272b30"),
+        new("carbon", "Carbon", "dark", "#18181b"),
     };
 
-    private string _current = "light";
+    private string _current = "azure";
     private bool _open;
 
     private ThemeOption CurrentTheme =>
@@ -49,24 +58,23 @@
 
     private void Close() => _open = false;
 
-    private static readonly MarkupString SunIcon = new(
-        "<svg class=\"theme-svg\" viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z\"/></svg>");
-
-    private static readonly MarkupString MoonIcon = new(
-        "<svg class=\"theme-svg\" viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z\"/></svg>");
-
-    private static readonly MarkupString AutoIcon = new(
-        "<svg class=\"theme-svg\" viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z\"/></svg>");
+    private RenderFragment ThemeItem(ThemeOption theme) => __builder =>
+    {
+        <li>
+            <button class="dropdown-item d-flex align-items-center @(theme.Id == _current ? "active" : null)"
+                    type="button" @onclick="() => SelectThemeAsync(theme.Id)">
+                <span class="theme-swatch me-2" style="background:@theme.Swatch"></span>
+                <span class="flex-grow-1">@theme.Label</span>
+                @if (theme.Id == _current)
+                {
+                    <span class="theme-check ms-2">@CheckIcon</span>
+                }
+            </button>
+        </li>
+    };
 
     private static readonly MarkupString CheckIcon = new(
-        "<svg class=\"theme-svg\" viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z\"/></svg>");
-
-    private static MarkupString Icon(string id) => id switch
-    {
-        "dark" => MoonIcon,
-        "auto" => AutoIcon,
-        _ => SunIcon,
-    };
+        "<svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z\"/></svg>");
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
