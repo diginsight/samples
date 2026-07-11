@@ -101,28 +101,29 @@ namespace BlazorApp.Client
 
             using var configurationHttpClient = new HttpClient { BaseAddress = new Uri(serverConfigBaseUrl) };
 
-            // The API can take a while to start (Key Vault + OpenTelemetry init), so retry a few times
-            // instead of failing fast. Only accept a response that actually carries a client id.
-            for (var attempt = 1; attempt <= 6; attempt++)
+            // Best-effort, single, short attempt so the app (and the anonymous Home page) render
+            // fast. The auth config must NOT block startup: if the API is slow or unavailable the
+            // app simply starts with authentication disabled, and a later refresh (once the API is
+            // up) picks up the real configuration. Deliberately no retry loop here — retrying was
+            // what made a cold refresh hang for ~15s when the API was down.
+            try
             {
-                try
+                using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+                var config = await configurationHttpClient.GetFromJsonAsync<ClientAuthConfigResponse>(authEndpoint, cancellationTokenSource.Token);
+                if (!string.IsNullOrWhiteSpace(config?.ClientId))
                 {
-                    using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-                    var config = await configurationHttpClient.GetFromJsonAsync<ClientAuthConfigResponse>(authEndpoint, cancellationTokenSource.Token);
-                    if (!string.IsNullOrWhiteSpace(config?.ClientId))
-                    {
-                        return config;
-                    }
+                    return config;
                 }
-                catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
-                {
-                    // API not reachable yet; fall through and retry.
-                }
-
-                if (attempt < 6)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(2));
-                }
+            }
+            catch (Exception ex)
+            {
+                // API unreachable, timed out, or returned a non-config response (for example the SPA
+                // fallback HTML when the client runs standalone). Start without authentication rather
+                // than blocking or crashing startup. Use stdout (not Console.Error): in Blazor
+                // WebAssembly a write to stderr surfaces the yellow "unhandled error" banner, and this
+                // is an expected, handled condition — not an error.
+                Console.WriteLine(
+                    $"Server auth config at '{authEndpoint}' unavailable; starting without authentication. {ex.Message}");
             }
 
             return null;

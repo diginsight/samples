@@ -2,6 +2,44 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+/* ---------------------------------------------------------------------------
+   Theme tokens. Consumed by the layout / nav components. Bootstrap 5.3 handles
+   the content colors through the [data-bs-theme] attribute on <html> (set by
+   js/app-ui.js and the inline script in index.html); these variables cover the
+   sidebar / top bar, which sit outside Bootstrap's default surfaces.
+   --------------------------------------------------------------------------- */
+:root {
+    --app-accent: #258cfb;
+    --app-sidebar-bg: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    --app-sidebar-brand-bg: rgba(0, 0, 0, 0.4);
+    --app-sidebar-fg: #d7d7d7;
+    --app-sidebar-fg-active: #ffffff;
+    --app-sidebar-active-bg: rgba(255, 255, 255, 0.37);
+    --app-sidebar-hover-bg: rgba(255, 255, 255, 0.1);
+    --app-topbar-bg: #f7f7f7;
+    --app-topbar-fg: inherit;
+    --app-topbar-border: #d6d5d5;
+}
+
+[data-bs-theme="dark"] {
+    --app-accent: #4dabf7;
+    --app-sidebar-bg: linear-gradient(180deg, #343a40 0%, #0d0d0d 100%);
+    --app-sidebar-brand-bg: rgba(0, 0, 0, 0.5);
+    --app-sidebar-fg: #c9c9c9;
+    --app-sidebar-fg-active: #ffffff;
+    --app-sidebar-active-bg: rgba(255, 255, 255, 0.18);
+    --app-sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+    --app-topbar-bg: #1b1b1b;
+    --app-topbar-fg: #e6e6e6;
+    --app-topbar-border: #333333;
+}
+
+/* Disable text selection / show the resize cursor while dragging the splitter. */
+body.resizing {
+    cursor: col-resize;
+    user-select: none;
+}
+
 h1:focus {
     outline: none;
 }

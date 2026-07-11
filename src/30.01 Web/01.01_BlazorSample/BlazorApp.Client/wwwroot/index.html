@@ -15,6 +15,23 @@
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
     <script type="importmap"></script>
+    <script>
+        // Apply the saved theme and sidebar width before Blazor renders to avoid a flash.
+        (function () {
+            try {
+                var theme = localStorage.getItem("app-theme");
+                if (theme !== "dark" && theme !== "auto") { theme = "light"; }
+                var mode = theme;
+                if (theme === "auto") {
+                    mode = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+                }
+                document.documentElement.setAttribute("data-theme", theme);
+                document.documentElement.setAttribute("data-bs-theme", mode);
+                var width = localStorage.getItem("app-sidebar-width");
+                if (width) { document.documentElement.style.setProperty("--sidebar-width", width); }
+            } catch (e) { /* ignore */ }
+        })();
+    </script>
 </head>
 
 <body>
@@ -32,8 +49,32 @@
         <span class="dismiss">🗙</span>
     </div>
     <script src="_content/Microsoft.Authentication.WebAssembly.Msal/AuthenticationService.js"></script>
+    <script src="js/app-ui.js"></script>
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
+    <script>
+        // On localhost, never use the offline/PWA service worker: proactively unregister any
+        // previously registered worker (e.g. left over from a published build) and clear its
+        // caches. A stale cached worker serves an old app shell and can freeze the WebAssembly
+        // boot at the loading spinner, which a normal refresh does not fix. Register the caching
+        // service worker only for real (non-localhost) deployments.
+        (function () {
+            if (!('serviceWorker' in navigator)) { return; }
+            var host = location.hostname;
+            var isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '[::1]';
+            if (isLocalhost) {
+                navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    registrations.forEach(function (registration) { registration.unregister(); });
+                }).catch(function () { /* ignore */ });
+                if (window.caches && caches.keys) {
+                    caches.keys().then(function (keys) {
+                        keys.forEach(function (key) { caches.delete(key); });
+                    }).catch(function () { /* ignore */ });
+                }
+            } else {
+                navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });
+            }
+        })();
+    </script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
 using Azure.Data.Tables;
+using Azure.Identity;
 using System.Text.Json;
 //using TableStorageSampleAPI.Repositories;
 using Diginsight.Components.Azure.Extensions;
@@ -48,16 +49,10 @@ namespace TableStorageSampleAPI
                 logger.LogDebug("services.AddMicrosoftGraph();");
 
                 // Add Azure Table Storage services
-                builder.Services.AddSingleton<TableServiceClient>(sp =>
-                {
-                    var connectionString = configuration.GetConnectionString("AzureStorage");
-                    if (string.IsNullOrEmpty(connectionString))
-                    {
-                        // Use development storage emulator if no connection string is provided
-                        connectionString = "UseDevelopmentStorage=true";
-                    }
-                    return new TableServiceClient(connectionString);
-                });
+                // A bare https:// table endpoint uses Entra ID (DefaultAzureCredential);
+                // a full connection string / "UseDevelopmentStorage=true" uses key/emulator auth.
+                builder.Services.AddSingleton<TableServiceClient>(_ =>
+                    CreateTableServiceClient(configuration.GetConnectionString("AzureStorage"), logger));
                 logger.LogDebug("services.AddSingleton<TableServiceClient>();");
 
                 // Add Repository services - using generic repository with extension method
@@ -106,6 +101,34 @@ namespace TableStorageSampleAPI
 
             logger.LogDebug("before app.Run();");
             app.Run(); logger.LogDebug("app.Run();");
+        }
+
+        /// <summary>
+        /// Create a <see cref="TableServiceClient"/> supporting both classic connection strings
+        /// and AAD-only endpoints. The <paramref name="connectionString"/> may be:
+        ///   - a full "DefaultEndpointsProtocol=...;AccountName=...;AccountKey=...;" connection string, OR
+        ///   - "UseDevelopmentStorage=true" for the local Azurite/Storage emulator, OR
+        ///   - just a https:// table endpoint URL (then DefaultAzureCredential is used).
+        /// </summary>
+        private static TableServiceClient CreateTableServiceClient(string? connectionString, ILogger logger)
+        {
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                // Use development storage emulator if no connection string is provided
+                connectionString = "UseDevelopmentStorage=true";
+            }
+
+            var trimmed = connectionString.Trim();
+            if ((trimmed.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+                    || trimmed.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+                && Uri.IsWellFormedUriString(trimmed, UriKind.Absolute))
+            {
+                logger.LogInformation("Using AAD auth (DefaultAzureCredential) for table endpoint {endpoint}", trimmed);
+                return new TableServiceClient(new Uri(trimmed), new DefaultAzureCredential());
+            }
+
+            logger.LogDebug("Using connection-string auth for Azure Table Storage");
+            return new TableServiceClient(connectionString);
         }
     }
 }

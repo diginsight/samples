@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using BlazorApp.Client.Configuration
 @inject NavigationManager Navigation
+@inject ClientAuthBootstrapState AuthState
 
 <AuthorizeView>
     <Authorized>
@@ -7,7 +9,14 @@
         <button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/login">Log in</a>
+        @if (AuthState.IsAuthenticationConfigured)
+        {
+            <a href="authentication/login">Log in</a>
+        }
+        else
+        {
+            <span class="text-body-secondary small" title="The server did not provide an authentication configuration (the API may not be running).">Sign-in unavailable</span>
+        }
     </NotAuthorized>
 </AuthorizeView>
 

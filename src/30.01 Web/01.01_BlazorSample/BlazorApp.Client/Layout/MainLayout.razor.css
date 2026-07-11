@@ -1,77 +1,176 @@
 .page {
-    position: relative;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
-main {
-    flex: 1;
+/* -------- Full-width azure top bar (light font) -------- */
+.app-topbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 3.5rem;
+    padding: 0 1.25rem;
+    background: var(--app-topbar-bg, #2563eb);
+    color: var(--app-topbar-fg, #ffffff);
+    border-bottom: 1px solid var(--app-topbar-border, rgba(0, 0, 0, 0.1));
+    position: sticky;
+    top: 0;
+    z-index: 30;
+}
+
+.app-brand {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--app-topbar-fg, #ffffff);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.app-brand:hover {
+    color: var(--app-topbar-fg, #ffffff);
+    opacity: 0.9;
+}
+
+.app-topbar-fill {
+    flex: 1 1 auto;
+}
+
+.app-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.app-topbar-link {
+    color: var(--app-topbar-fg, #ffffff);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.app-topbar-link:hover {
+    text-decoration: underline;
+    color: var(--app-topbar-fg, #ffffff);
+}
+
+/* Make login links / buttons injected into the bar use the light top-bar colour. */
+.app-topbar-actions ::deep a,
+.app-topbar-actions ::deep .btn-link {
+    color: var(--app-topbar-fg, #ffffff);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.app-topbar-actions ::deep a:hover,
+.app-topbar-actions ::deep .btn-link:hover {
+    text-decoration: underline;
+    color: var(--app-topbar-fg, #ffffff);
+}
+
+/* Mobile hamburger (hidden on wide screens). */
+.nav-toggle {
+    display: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.nav-toggle-icon,
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+    display: block;
+    width: 1.1rem;
+    height: 2px;
+    background: var(--app-topbar-fg, #ffffff);
+    position: relative;
+}
+
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+    content: "";
+    position: absolute;
+    left: 0;
+}
+
+.nav-toggle-icon::before { top: -6px; }
+.nav-toggle-icon::after { top: 6px; }
+
+/* -------- Body: sidebar + content -------- */
+.app-body {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background: var(--app-sidebar-bg, #f8f9fa);
+    color: var(--app-sidebar-fg, #343a40);
+    border-right: 1px solid var(--app-sidebar-border, #e5e7eb);
 }
 
-.top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
+.sidebar-resizer {
+    display: none;
+    flex: 0 0 5px;
+    cursor: col-resize;
+    background-color: transparent;
+    transition: background-color 0.15s ease-in-out;
+    touch-action: none;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
-
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
-
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-@media (max-width: 640.98px) {
-    .top-row {
-        justify-content: space-between;
-    }
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
+.content {
+    flex: 1;
+    min-width: 0;
+    padding: 1.25rem 2rem;
 }
 
 @media (min-width: 641px) {
-    .page {
-        flex-direction: row;
+    .sidebar {
+        width: var(--sidebar-width, 250px);
+        flex: 0 0 var(--sidebar-width, 250px);
+        position: sticky;
+        top: 3.5rem;
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+
+    .sidebar-resizer {
+        display: block;
+        position: sticky;
+        top: 3.5rem;
+        height: calc(100vh - 3.5rem);
+        z-index: 2;
+    }
+
+    .sidebar-resizer:hover,
+    .sidebar-resizer:focus-visible {
+        background-color: var(--app-accent, #2563eb);
+        outline: none;
+    }
+}
+
+@media (max-width: 640.98px) {
+    .nav-toggle {
+        display: inline-flex;
+    }
+
+    .app-body {
+        flex-direction: column;
     }
 
     .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
+        width: 100%;
+        flex-basis: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--app-sidebar-border, #e5e7eb);
     }
 
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
-
-    .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
+    .sidebar.collapsed {
+        display: none;
     }
 }

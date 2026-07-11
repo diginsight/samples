@@ -1,17 +1,46 @@
 ﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS
+
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4 auth">
+    <header class="app-topbar">
+        <button class="nav-toggle" title="Toggle menu" aria-label="Toggle navigation" @onclick="ToggleNav">
+            <span class="nav-toggle-icon"></span>
+        </button>
+        <a class="app-brand" href="">BlazorApp.Client</a>
+        <div class="app-topbar-fill"></div>
+        <div class="app-topbar-actions">
+            <ThemeSelector />
             <LoginDisplay />
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <a class="app-topbar-link" href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
+    </header>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+    <div class="app-body">
+        <nav class="sidebar @(_navCollapsed ? "collapsed" : null)">
+            <NavMenu OnNavigate="CollapseNav" />
+        </nav>
+
+        <div class="sidebar-resizer" role="separator" aria-orientation="vertical" tabindex="0"
+             title="Drag to resize • double-click to reset"></div>
+
+        <main class="content">
+            <article>@Body</article>
+        </main>
+    </div>
 </div>
+
+@code {
+    private bool _navCollapsed = true;
+
+    private void ToggleNav() => _navCollapsed = !_navCollapsed;
+
+    private void CollapseNav() => _navCollapsed = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("appUi.initResizer");
+        }
+    }
+}

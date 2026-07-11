@@ -10,6 +10,13 @@
          serve index.html (with a rewritten base href) under a virtual path without breaking boot. -->
     <WasmFingerprintAssets>false</WasmFingerprintAssets>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <!-- The standalone Blazor WASM DevServer (Microsoft.AspNetCore.Components.WebAssembly.DevServer,
+         used by `dotnet run` on this project) serves an EMPTY body for gzip-precompressed _framework
+         assets (e.g. dotnet.js.gz), which leaves the app stuck at the "Loading" screen because the
+         browser always sends `Accept-Encoding: gzip`. Disabling Static Web Assets compression for
+         Debug makes the DevServer serve the raw assets, which it handles correctly. Release/publish
+         (the deployed app hosted by BlazorApp.Api) keeps compression for smaller payloads. -->
+    <CompressionEnabled Condition="'$(Configuration)' == 'Debug'">false</CompressionEnabled>
   </PropertyGroup>
 
   <ItemGroup>

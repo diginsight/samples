@@ -1,0 +1,55 @@
+.theme-selector {
+    display: inline-block;
+    position: relative;
+}
+
+/* The dropdown is toggled by the component (no Bootstrap JS), so ensure the menu
+   sits above the click-catching backdrop. */
+.theme-selector .dropdown-menu {
+    z-index: 1001;
+}
+
+.theme-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: transparent;
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--bs-border-color, #d6d5d5);
+    background-color: transparent;
+    color: inherit;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+    background-color: rgba(127, 127, 127, 0.12);
+}
+
+.theme-swatch {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    flex: 0 0 auto;
+}
+
+.theme-svg {
+    width: 1rem;
+    height: 1rem;
+    vertical-align: -0.15em;
+}
+
+.theme-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.theme-label {
+    font-size: 0.85rem;
+}
