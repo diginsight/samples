@@ -159,6 +159,27 @@
         display: inline-flex;
     }
 
+    /* Keep the top bar on a single tidy row on small screens. */
+    .app-topbar {
+        gap: 0.6rem;
+        padding: 0 0.75rem;
+    }
+
+    .app-topbar > * {
+        white-space: nowrap;
+    }
+
+    .app-brand {
+        font-size: 1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+    }
+
+    .app-topbar-actions {
+        gap: 0.9rem;
+    }
+
     .app-body {
         flex-direction: column;
     }

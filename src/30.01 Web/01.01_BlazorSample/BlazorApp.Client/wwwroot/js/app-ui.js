@@ -133,9 +133,51 @@ window.appUi = (function () {
         });
     }
 
+    // Position an open dropdown so it never overflows the viewport, regardless of
+    // where the toggle sits or how wide the browser is (an auto-flip like Popper):
+    //   - Prefer aligning the menu's LEFT edge to the toggle (menu grows to the right).
+    //   - If that would overflow the right edge, align the menu's RIGHT edge to the
+    //     toggle (menu grows to the left).
+    //   - If neither fits, pin to the viewport edge and cap the width.
+    // Also caps the height to the space below the toggle. Inline styles set here win
+    // over the stylesheet, so any CSS default alignment is just the pre-open fallback.
+    function positionDropdown(toggleEl, menuEl) {
+        if (!toggleEl || !menuEl) {
+            return;
+        }
+        const margin = 8;
+        const vw = document.documentElement.clientWidth;
+        const vh = document.documentElement.clientHeight;
+
+        // Reset before measuring.
+        menuEl.style.left = "auto";
+        menuEl.style.right = "auto";
+        menuEl.style.maxWidth = "";
+
+        const t = toggleEl.getBoundingClientRect();
+        const menuW = menuEl.offsetWidth;
+
+        if (t.left + menuW <= vw - margin) {
+            // Fits when left-aligned to the toggle.
+            menuEl.style.left = "0";
+        } else if (t.right - menuW >= margin) {
+            // Fits when right-aligned to the toggle.
+            menuEl.style.right = "0";
+        } else {
+            // Too wide for either side: pin to the right and clamp the width.
+            menuEl.style.right = "0";
+            menuEl.style.maxWidth = (vw - 2 * margin) + "px";
+        }
+
+        // Keep the menu inside the viewport vertically.
+        menuEl.style.maxHeight = Math.max(120, vh - t.bottom - margin) + "px";
+        menuEl.style.overflowY = "auto";
+    }
+
     return {
         applyTheme: applyTheme,
         getTheme: getTheme,
-        initResizer: initResizer
+        initResizer: initResizer,
+        positionDropdown: positionDropdown
     };
 })();

@@ -21,10 +21,17 @@
     background-color: transparent;
 }
 
-/* Toggled by the component (no Bootstrap JS): keep the menu above the backdrop. */
+/* Toggled by the component (no Bootstrap JS / Popper), so we must position the
+   menu ourselves. Bootstrap's .dropdown-menu-end only right-aligns when Popper
+   sets [data-bs-popper]; without it the menu keeps left:0 and overflows the
+   viewport's right edge. Force right alignment and cap the height. */
 .about-menu .dropdown-menu {
     z-index: 1001;
     min-width: 12rem;
+    right: 0;
+    left: auto;
+    max-height: calc(100vh - 4.5rem);
+    overflow-y: auto;
 }
 
 .about-backdrop {
@@ -48,4 +55,18 @@
     display: inline-flex;
     align-items: center;
     color: var(--app-accent, #2563eb);
+}
+
+/* MainLayout's ".app-topbar-actions ::deep a { color: white }" leaks into this
+   menu (it lives inside the top bar). Restore the normal dropdown link colour for
+   the "About" anchor so it is readable on the light menu surface. Theme entries
+   are <button>s, so they are unaffected. */
+.about-menu .dropdown-menu a.dropdown-item {
+    color: var(--bs-dropdown-link-color, #212529);
+}
+
+.about-menu .dropdown-menu a.dropdown-item:hover,
+.about-menu .dropdown-menu a.dropdown-item:focus {
+    color: var(--bs-dropdown-link-hover-color, #1e2125);
+    background-color: var(--bs-dropdown-link-hover-bg, rgba(0, 0, 0, 0.05));
 }
