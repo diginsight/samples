@@ -1,13 +1,17 @@
 @inject IJSRuntime JS
 
-<div class="dropdown theme-selector @(_open ? "show" : null)">
-    <button class="btn btn-sm dropdown-toggle theme-toggle" type="button"
-            @onclick="Toggle" @onclick:stopPropagation aria-expanded="@_open" title="Change theme">
-        <span class="theme-swatch" style="background:@CurrentTheme.Swatch"></span>
-        <span class="theme-label d-none d-sm-inline">@CurrentTheme.Label</span>
+<div class="dropdown about-menu @(_open ? "show" : null)">
+    <button class="btn btn-sm dropdown-toggle about-toggle" type="button"
+            @onclick="Toggle" @onclick:stopPropagation aria-expanded="@_open" title="About and theme">
+        About
     </button>
     <ul class="dropdown-menu dropdown-menu-end @(_open ? "show" : null)">
-        <li><h6 class="dropdown-header">Light</h6></li>
+        <li>
+            <a class="dropdown-item" href="https://learn.microsoft.com/aspnet/core/"
+               target="_blank" rel="noopener" @onclick="Close">About ASP.NET Core</a>
+        </li>
+        <li><hr class="dropdown-divider" /></li>
+        <li><h6 class="dropdown-header">Light theme</h6></li>
         @foreach (var theme in Themes)
         {
             @if (theme.Mode == "light")
@@ -16,7 +20,7 @@
             }
         }
         <li><hr class="dropdown-divider" /></li>
-        <li><h6 class="dropdown-header">Dark</h6></li>
+        <li><h6 class="dropdown-header">Dark theme</h6></li>
         @foreach (var theme in Themes)
         {
             @if (theme.Mode == "dark")
@@ -28,7 +32,7 @@
 </div>
 @if (_open)
 {
-    <div class="theme-backdrop" @onclick="Close"></div>
+    <div class="about-backdrop" @onclick="Close"></div>
 }
 
 @code {
@@ -50,9 +54,6 @@
 
     private string _current = "azure";
     private bool _open;
-
-    private ThemeOption CurrentTheme =>
-        Array.Find(Themes, t => t.Id == _current) ?? Themes[0];
 
     private void Toggle() => _open = !_open;
 
