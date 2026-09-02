@@ -60,7 +60,12 @@ BenchmarkDotNet.Artifacts/
 # .NET Core
 project.lock.json
 project.fragment.lock.json
-artifacts/
+# Scoped so artifacts/packages/.gitkeep stays tracked: git cannot re-include a path
+# whose parent directory is excluded, so the parent itself must never be excluded.
+/artifacts/*
+!/artifacts/packages/
+/artifacts/packages/*
+!/artifacts/packages/.gitkeep
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
@@ -200,6 +205,10 @@ PublishScripts/
 *.snupkg
 # The packages folder can be ignored because of Package Restore
 **/[Pp]ackages/*
+
+# This rule also matches artifacts/packages/, so the local-release marker must be
+# re-included after it, not before.
+!/artifacts/packages/.gitkeep
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
