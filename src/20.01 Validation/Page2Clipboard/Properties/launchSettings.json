@@ -92,7 +92,42 @@
       //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/use-prebuilt-form-recognizer-models/\" ",
       //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/work-form-recognizer/\" ",
       //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/ai-knowldge-mining/\" ",
-      "commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/security-monitoring-and-governance/\" ",
+      //"commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/security-monitoring-and-governance/\" ",
+      // GitHub Certified: Agentic AI Developer
+      // Developing in Agentic AI Systems Part 1 of 2
+      // https://learn.microsoft.com/en-us/training/modules/foundations-agentic-ai/
+      // https://learn.microsoft.com/en-us/training/modules/design-agent-architecture-integration/
+      // https://learn.microsoft.com/en-us/training/modules/agent-tooling-mcp-execution-environments/
+      // Developing in agentic AI systems part 2 of 2
+      // https://learn.microsoft.com/en-us/training/modules/multi-agent-systems-orchestration/
+      // https://learn.microsoft.com/en-us/training/modules/memory-state-evaluation/
+      // https://learn.microsoft.com/en-us/training/modules/governance-guardrails-operations/
+      // GitHub Actions
+      // Automate your workflow with GitHub Actions Part 1 of 2
+      // https://learn.microsoft.com/en-us/training/modules/github-actions-automate-tasks/
+      // https://learn.microsoft.com/en-us/training/modules/github-actions-ci/
+      // https://learn.microsoft.com/en-us/training/modules/github-actions-cd/
+      // https://learn.microsoft.com/en-us/training/modules/automate-github-using-github-script/
+      // Automate your workflow with GitHub Actions Part 2 of 2
+      // https://learn.microsoft.com/en-us/training/modules/github-actions-packages/
+      // https://learn.microsoft.com/en-us/training/modules/create-custom-github-actions/
+      // https://learn.microsoft.com/en-us/training/modules/manage-github-actions-enterprise/
+      // GitHub Administration
+      // GitHub fundamentals - Administration basics and product features Part 1 of 2
+      // https://learn.microsoft.com/en-us/training/modules/introduction-to-github/
+
+      // https://learn.microsoft.com/en-us/training/modules/github-introduction-administration/
+      // https://learn.microsoft.com/en-us/training/modules/github-introduction-products/
+      // https://learn.microsoft.com/en-us/training/modules/maintain-secure-repository-github/
+      // GitHub fundamentals - Administration basics and product features Part 2 of 2
+      // https://learn.microsoft.com/en-us/training/modules/manage-sensitive-data-security-policies/
+      // https://learn.microsoft.com/en-us/training/modules/authenticate-authorize-user-identities-github/
+      // https://learn.microsoft.com/en-us/training/modules/github-administration-for-enterprise-support-adoption/
+      // https://learn.microsoft.com/en-us/training/modules/manage-github-actions-enterprise/
+      // https://learn.microsoft.com/en-us/training/modules/github-actions-packages/
+
+
+      "commandLineArgs": " url -u \"https://learn.microsoft.com/en-us/training/modules/github-actions-packages/\" ",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
